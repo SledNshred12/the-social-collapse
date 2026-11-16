@@ -167,6 +167,8 @@
   .result p{font-size:15px;line-height:1.45}
   .pbtn{display:block;width:100%;margin-top:8px;background:#1d9bf0;color:#fff;border:none;border-radius:20px;padding:11px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit}
   .pbtn.alt{background:#0f1419}
+  .modal button.alt{background:var(--ink)}
+  .savebox{background:var(--card);border:2px dashed var(--ink);padding:8px;font-size:13px;margin:10px 0 4px;text-align:left}
   .roads{display:grid;gap:6px}
   .road{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font-family:inherit;color:var(--ink);background:var(--card);border:2px solid;border-left-width:8px;border-radius:6px;padding:8px 10px;cursor:pointer}
   .road.green{border-color:#2e8b57;background:#e9f6ee}
@@ -342,7 +344,7 @@
 
   <button class="endturn" id="endTurn">END WEEK ▸</button>
 
-  <div class="section-title">Headlines <button class="lastPaper" onclick="reopenPaper()">📰 Read last week's paper</button></div>
+  <div class="section-title">Headlines <span><button class="lastPaper" onclick="reopenPaper()">📰 Last paper</button> <button class="lastPaper" onclick="confirmNew()">↺ New game</button></span></div>
   <div class="news" id="news"></div>
 </div>
 
@@ -1491,6 +1493,7 @@ function render(){
   NATIONAL.forEach(a=>aw.appendChild(btn(a.t,a.d,a.cost,"",S.over||S.ap<1||S.money<a.cost,()=>nationalAction(a))));
   $("endTurn").disabled = S.over;
   $("news").innerHTML = S.news.map(n=>`<div>📰 ${n}</div>`).join("");
+  saveGame();
 }
 
 $("endTurn").onclick = ()=>{
@@ -1503,11 +1506,51 @@ $("endTurn").onclick = ()=>{
   const html=buildPaper(wk,start);
   S.log=[]; S.weekStart={belief:natBelief()};
   if(!S.over && wk>=2 && Math.random()<0.45) S.crisis=makeCrisis();
+  saveGame();
   showPaper(html);
 };
-buildMap();
-newGame();
-showModal(`<h2>Welcome, Mr. President</h2>
+/* ---------- saving ---------- */
+const SAVE_KEY="socialCollapseSave_v1";
+let SAVE_READY=false;
+function saveGame(){
+  if(!SAVE_READY||!S||S.collect) return;
+  try{
+    if(S.over){ localStorage.removeItem(SAVE_KEY); return; }
+    const d=Object.assign({},S,{crisis:null, hadCrisis:!!S.crisis, sel:null, pid:PID, savedAt:Date.now(), v:1});
+    localStorage.setItem(SAVE_KEY, JSON.stringify(d));
+  }catch(e){}
+}
+function readSave(){
+  try{ const d=JSON.parse(localStorage.getItem(SAVE_KEY)||"null"); return (d && d.v===1 && d.st && !d.over) ? d : null; }catch(e){ return null; }
+}
+function clearSave(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
+function continueGame(){
+  const d=readSave(); SAVE_READY=true;
+  if(!d){ closeModal(); return; }
+  S=d; PID=Math.max(PID, d.pid||1);
+  S.collect=false; S.pending=null; S.crisis = d.hadCrisis ? makeCrisis() : null;
+  delete S.hadCrisis; delete S.pid; delete S.savedAt; delete S.v;
+  closeSheet(); render(); closeModal();
+  toast(`Welcome back! Week ${S.week}, lie ${S.lie+1} of ${LIES.length}.`);
+}
+function startFresh(){ clearSave(); SAVE_READY=true; newGame(); closeModal(); saveGame(); }
+function confirmNew(){
+  const d=readSave();
+  if(!d){ startFresh(); return; }
+  showModal(`<h2>Start Over?</h2><p>Your saved game (week ${d.week}, ${d.passed} of ${LIES.length} lies passed) will be erased.</p>
+    <button onclick="startFresh()">Yes, New Game</button> <button class="alt" onclick="${SAVE_READY?'closeModal()':'showWelcome()'}">Never Mind</button>`);
+}
+function showWelcome(){
+  const d=readSave();
+  const L=d?LIES[Math.min(d.lie,LIES.length-1)]:null;
+  const btns = d
+    ? `<div class="savebox">💾 Saved game: <b>week ${d.week}</b> · lie ${d.lie+1} of ${LIES.length} (<i>${L.name}</i>) · ${d.passed} passed · $${Math.round(d.money)}M</div>
+       <button onclick="continueGame()">Continue</button> <button class="alt" onclick="confirmNew()">New Game</button>`
+    : `<button onclick="startFresh()">Start Lying</button>`;
+  if(d){
+    showModal(`<h2>Welcome, Mr. President</h2>
+${btns}
+<details style="text-align:left;margin-top:12px"><summary style="cursor:pointer;font-weight:700">How to play</summary>
 <p>Your job: convince America that 5 terrible policies are actually amazing.</p>
 <ul>
 <li>Get <b>80% of Americans</b> to believe each lie before time runs out. Big states like California and Texas count the most.</li>
@@ -1519,7 +1562,27 @@ showModal(`<h2>Welcome, Mr. President</h2>
 <li>Watch out for <b>surprise events</b>: attacks, storms, protests, and people online poking holes in your lies. You choose how to respond.</li>
 <li>Every week ends with <b>The American Weekly</b> newspaper reporting what happened.</li>
 </ul>
-<button onclick="closeModal()">Start Lying</button>`);
+</details>`);
+  } else {
+    showModal(`<h2>Welcome, Mr. President</h2>
+<p>Your job: convince America that 5 terrible policies are actually amazing.</p>
+<ul>
+<li>Get <b>80% of Americans</b> to believe each lie before time runs out. Big states like California and Texas count the most.</li>
+<li><b>Tap any state</b> on the map to see its moves. Every state has its own <b>★ special move</b>.</li>
+<li>You get <b>4 moves per week</b>.</li>
+<li>States that don't believe get angry and <b>riot</b>. Riots cost repair money, stop taxes, and <b>spread to neighbors</b>.</li>
+<li>You lose if you go <b>bankrupt</b> or <b>Exposure</b> hits 100%.</li>
+<li>Tap the <b>📱 phone</b> to search social media for people debunking you. Then delete, arrest, or pay them off. Careful: pick the wrong person and it backfires!</li>
+<li>Watch out for <b>surprise events</b>: attacks, storms, protests, and people online poking holes in your lies. You choose how to respond.</li>
+<li>Every week ends with <b>The American Weekly</b> newspaper reporting what happened.</li>
+</ul>
+<p style="font-size:12px;color:var(--muted)">Your progress saves automatically.</p>
+${btns}`);
+  }
+}
+buildMap();
+newGame();
+showWelcome();
 </script>
 </body>
 </html>
