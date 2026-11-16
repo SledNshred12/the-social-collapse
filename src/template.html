@@ -55,7 +55,8 @@
   .act .d{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.25}
   .act .c{font-size:11px;font-weight:700;margin-top:4px;color:var(--red)}
   .act.special{border-color:var(--gold);background:#fff4d6}
-  .act.special .t::before{content:"★ ";color:var(--gold)}
+  .act.special .t::before{content:"";display:inline-block;width:13px;height:13px;margin-right:4px;vertical-align:-1px;background:var(--gold);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M12 2.8l2.8 5.8 6.3.9-4.6 4.5 1.1 6.3L12 17.3l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z%27/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M12 2.8l2.8 5.8 6.3.9-4.6 4.5 1.1 6.3L12 17.3l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z%27/%3E%3C/svg%3E") center/contain no-repeat}
+  .ico{display:inline-block;vertical-align:-.18em;flex:none}
   .endturn{width:100%;margin-top:10px;background:var(--red);color:#fff;border:none;border-radius:6px;padding:12px;font-family:Anton,sans-serif;font-size:20px;letter-spacing:1px;cursor:pointer}
   .endturn:disabled{opacity:.5}
   .news{background:var(--ink);color:var(--paper);border-radius:6px;padding:8px 10px;font-family:'Special Elite',monospace;font-size:12.5px}
@@ -244,6 +245,7 @@
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-fire" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c.6 3.6 5.5 5.8 5.5 11.2A5.5 5.5 0 0 1 12 19a5.5 5.5 0 0 1-5.5-5.8c.1-2.6 1.7-4 2.3-6.3 1.6 1.2 2.4 3 2.4 4.9 1.3-1.4 1.7-3.5.8-9.8z"/><path fill="#fff" opacity=".55" d="M12 18.4a2.6 2.6 0 0 1-2.6-2.7c0-1.6 1.4-2.5 1.8-4 1.4 1 3.4 2.4 3.4 4.1a2.6 2.6 0 0 1-2.6 2.6z"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="6.5" y="2" width="11" height="20" rx="2.5"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10.5 18.5h3"/></symbol><symbol id="i-chip" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="5" y="8" width="14" height="11" rx="3"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 4v4M9 13h.01M15 13h.01M3 13h2M19 13h2"/><circle fill="currentColor" cx="12" cy="3.5" r="1.5"/><circle fill="currentColor" cx="9.5" cy="13" r="1.4"/><circle fill="currentColor" cx="14.5" cy="13" r="1.4"/></symbol><symbol id="i-gem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 4h10l4 5-9 11L3 9z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 9h18M10 4 8.5 9 12 20l3.5-11L14 4"/></symbol><symbol id="i-warn" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3.5 2.5 20h19z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 10v4.5"/><circle fill="currentColor" cx="12" cy="17.3" r="1.2"/></symbol><symbol id="i-paper" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 5h12v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M16 9h4v10a2 2 0 0 1-4 0M7 9h6M7 13h6M7 16.5h4"/></symbol><symbol id="i-call" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 3.5h3.5l2 5-2.6 1.6a11 11 0 0 0 5 5l1.6-2.6 5 2V18a2 2 0 0 1-2 2A16.5 16.5 0 0 1 3 5.5a2 2 0 0 1 2-2z"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 21.5s6.5-6.3 6.5-11.5a6.5 6.5 0 0 0-13 0c0 5.2 6.5 11.5 6.5 11.5z"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="10" r="2.3"/></symbol><symbol id="i-chart" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 20V11M10 20V5M16 20v-7M3 20.5h18"/></symbol><symbol id="i-brief" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="3" y="7" width="18" height="13" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 7V5h6v2M3 12.5h18M11 12.5v2h2v-2"/></symbol><symbol id="i-coin" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="9"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.8 9.3c-.5-.9-1.5-1.4-2.8-1.4-1.6 0-2.8.8-2.8 2s1.2 1.6 2.8 2 2.8.8 2.8 2-1.2 2-2.8 2c-1.4 0-2.4-.6-2.9-1.5M12 6.3v1.6M12 16.1v1.6"/></symbol><symbol id="i-lock" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="5" y="11" width="14" height="10" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol><symbol id="i-save" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 3h11l3 3v15H5z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 3v5h7V3M8 21v-6h8v6"/></symbol><symbol id="i-crown" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></symbol><symbol id="i-card" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="3" y="5.5" width="18" height="13" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h4"/></symbol><symbol id="i-eye" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="2.8"/></symbol><symbol id="i-heart" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 20s-8-4.8-8-10.7A4.3 4.3 0 0 1 12 6.8a4.3 4.3 0 0 1 8 2.5C20 15.2 12 20 12 20z"/></symbol><symbol id="i-battery" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="2" y="7.5" width="18" height="9" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M22 11v2"/><rect fill="currentColor" x="4.5" y="10" width="9" height="4" rx=".8"/></symbol><symbol id="i-chirp" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 5h16v11H10l-5 4v-4H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8.5 10.5c1.5-2 4-2.5 7-1.5-1 2.5-3.5 3.6-6 2.8"/></symbol><symbol id="i-target" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="9"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="5"/><circle fill="currentColor" cx="12" cy="12" r="1.6"/></symbol><symbol id="i-gear" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="3"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="6.5"/></symbol><symbol id="i-trash" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M9.5 7V4h5v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol><symbol id="i-van" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M2 16V8a2 2 0 0 1 2-2h10l4.5 4.5H20a2 2 0 0 1 2 2V16z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 6v4.5h4.5"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="7" cy="17" r="2"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="17" cy="17" r="2"/></symbol><symbol id="i-bank" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3l9 5H3zM3 21h18M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><circle fill="currentColor" cx="12" cy="12" r="10"/><path fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M7.5 12.3l3 3 6-6.5"/></symbol><symbol id="i-xmark" viewBox="0 0 24 24"><circle fill="currentColor" cx="12" cy="12" r="10"/><path fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></symbol><symbol id="i-dot" viewBox="0 0 24 24"><circle fill="currentColor" cx="12" cy="12" r="6"/></symbol><symbol id="i-tv" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="3" y="7" width="18" height="13" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 3l4 4 4-4"/></symbol><symbol id="i-mic" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="9" y="3" width="6" height="11" rx="3"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></symbol><symbol id="i-flask" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 3h6M10 3v6l-5.2 9.2A2 2 0 0 0 6.5 21h11a2 2 0 0 0 1.7-2.8L14 9V3M7.5 15h9"/></symbol><symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5l2.1 6.4 6.4 2.1-6.4 2.1L12 19.5l-2.1-6.4L3.5 11l6.4-2.1z"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5l13 7.5-13 7.5z"/></symbol><symbol id="i-reset" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 19V5M6 11l6-6 6 6"/></symbol><symbol id="i-wait" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 3h12M6 21h12M7 3c0 5 10 5 10 9s-10 4-10 9M17 3c0 5-10 5-10 9s10 4 10 9"/></symbol><symbol id="i-ban" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="9"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5.6 5.6l12.8 12.8"/></symbol><symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.8l2.8 5.8 6.3.9-4.6 4.5 1.1 6.3L12 17.3l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/></symbol><symbol id="i-close" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6 6 18"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="3" y="5" width="18" height="16" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M8 3v4M16 3v4"/></symbol><symbol id="i-megaphone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10v4h3l7 4V6L6 10zM16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></symbol><symbol id="i-people" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="9" cy="8" r="3.5"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></symbol><symbol id="i-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol></defs></svg>
 <!-- ===== Boot: tap to start → Axiom Games intro → loading screen ===== -->
 <style>
   #boot,#axiom,#loading{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s}
@@ -379,7 +381,7 @@
     <span><i style="background:#1f4e9c"></i>Believes</span>
     <span><i style="background:#d9a521"></i>Unsure</span>
     <span><i style="background:#9c8f78"></i>Doubts</span>
-    <span><i style="background:#c8261e"></i>Rioting 🔥</span>
+    <span><i style="background:#c8261e"></i>Rioting <svg class="ico" width="13" height="13" style="width:13px;height:13px;color:#c8261e" aria-hidden="true"><use href="#i-fire"/></svg></span>
   </div>
   <select id="pick" aria-label="Pick a state"></select>
 
@@ -387,25 +389,26 @@
   <div class="actions" id="actions"></div>
 
   <div id="criticsWrap" style="display:none">
-    <div class="section-title">📱 Online Critics <small>They hurt belief every week. Fixes cost money, not moves.</small></div>
-    <button class="act" onclick="openPhone()" style="margin-bottom:6px;border-color:#1d9bf0"><div class="t">📱 Open Government Phone</div><div class="d">Search social media for people debunking your lies, then decide what to do with them.</div></button>
+    <div class="section-title"><span><svg class="ico" width="16" height="16" style="width:16px;height:16px" aria-hidden="true"><use href="#i-phone"/></svg> Online Critics</span> <small>They hurt belief every week. Fixes cost money, not moves.</small></div>
+    <button class="act" onclick="openPhone()" style="margin-bottom:6px;border-color:#1d9bf0"><div class="t"><svg class="ico" width="15" height="15" style="width:15px;height:15px;color:#1d9bf0" aria-hidden="true"><use href="#i-phone"/></svg> Open Government Phone</div><div class="d">Search social media for people debunking your lies, then decide what to do with them.</div></button>
     <div id="critics"></div>
   </div>
 
-  <button class="endturn" id="endTurn">END WEEK ▸</button>
+  <button class="endturn" id="endTurn">END WEEK <svg class="ico" width="16" height="16" style="width:16px;height:16px" aria-hidden="true" style="vertical-align:-2px"><use href="#i-play"/></svg></button>
 
-  <div class="section-title">Headlines <span><button class="lastPaper" onclick="reopenPaper()">📰 Last paper</button> <button class="lastPaper" onclick="confirmNew()">↺ New game</button></span></div>
+  <div class="section-title">Headlines <span><button class="lastPaper" onclick="reopenPaper()"><svg class="ico" width="13" height="13" style="width:13px;height:13px" aria-hidden="true"><use href="#i-paper"/></svg> Last paper</button> <button class="lastPaper" onclick="confirmNew()"><svg class="ico" width="13" height="13" style="width:13px;height:13px" aria-hidden="true"><use href="#i-reset"/></svg> New game</button></span></div>
   <div class="news" id="news"></div>
 </div>
 
 <div class="sheet" id="sheet"><div class="inner" id="sheetInner"></div></div>
 <div class="overlay show" id="overlay"><div class="modal" id="modal"></div></div>
 <div class="paperWrap" id="paperWrap"><div class="paperInner" id="paperInner"></div></div>
-<button class="fab" onclick="openPhone()" aria-label="Open phone">📱</button>
-<div class="phoneWrap" id="phone"><div class="phoneBody"><div class="notch"></div><div class="phoneScreen" id="phoneScreen"></div><button class="homeBar" onclick="closePhone()" aria-label="Close phone"></button></div><button class="phoneX" onclick="closePhone()">✕ Put phone away</button></div>
+<button class="fab" onclick="openPhone()" aria-label="Open phone"><svg class="ico" width="28" height="28" style="width:28px;height:28px;color:#fff" aria-hidden="true"><use href="#i-phone"/></svg></button>
+<div class="phoneWrap" id="phone"><div class="phoneBody"><div class="notch"></div><div class="phoneScreen" id="phoneScreen"></div><button class="homeBar" onclick="closePhone()" aria-label="Close phone"></button></div><button class="phoneX" onclick="closePhone()"><svg class="ico" width="14" height="14" style="width:14px;height:14px" aria-hidden="true"><use href="#i-close"/></svg> Put phone away</button></div>
 <div class="toast" id="toast"></div>
 
 <script>
+function I(n,s=16,st=""){ return `<svg class="ico" width="${s}" height="${s}" style="width:${s}px;height:${s}px;${st}" aria-hidden="true"><use href="#i-${n}"/></svg>`; }
 const MAP = __MAP__;
 
 // name: [abbr, population (millions), busiest spot, special move name, special description, type]
@@ -729,7 +732,7 @@ function endWeek(){
   const w = weeklyIncome();
   S.money += w.net;
   const aiSub = AI_PLANS[S.aiPlan||"free"].price;
-  if(aiSub){ if(S.money>=aiSub){ S.money-=aiSub; } else { S.aiPlan="free"; (S.aiChat=S.aiChat||[]).push({t:"💳 Payment failed. You've been moved back to SpinBot Free. 😢", up:true}); } }
+  if(aiSub){ if(S.money>=aiSub){ S.money-=aiSub; } else { S.aiPlan="free"; (S.aiChat=S.aiChat||[]).push({t:`${I("card",15)} Payment failed. You've been moved back to SpinBot Free.`, up:true}); } }
   S.aiAsked=0;
   if(w.rep) headline(`RIOT DAMAGE COSTS $${w.rep}M IN REPAIRS THIS WEEK`, "damage", {amount:w.rep, states:riotList()});
   S.exposure = clamp(S.exposure + 3 + rnd(0,4) + riotList().length*0.5);
@@ -742,7 +745,7 @@ function endWeek(){
   const nb = natBelief();
   if(nb >= 80){
     S.passed++; (S.results=S.results||[])[S.lie]="pass";
-    headline(`✔ ${L.name.toUpperCase()} IS NOW LAW. NOBODY QUESTIONS IT.`, "pass", {lie:L});
+    headline(`${L.name.toUpperCase()} IS NOW LAW. NOBODY QUESTIONS IT.`, "pass", {lie:L});
     if(S.passed >= LIES.length){ S.over=true; render(); return showWin(); }
     if(S.lie+1 >= LIES.length){ S.over=true; render(); return endSummary(); }
     S.lie++; S.week++; S.ap=MOVES_PER_WEEK; startLie(false); render();
@@ -751,7 +754,7 @@ function endWeek(){
   if(S.lieWeek >= L.weeks){
     NAMES.forEach(n=>S.st[n].unrest=clamp(S.st[n].unrest+20));
     S.exposure = clamp(S.exposure+10);
-    headline(`✘ ${L.name.toUpperCase()} FAILS. PUBLIC FURIOUS.`, "fail", {lie:L}); (S.results=S.results||[])[S.lie]="fail";
+    headline(`${L.name.toUpperCase()} FAILS. PUBLIC FURIOUS.`, "fail", {lie:L}); (S.results=S.results||[])[S.lie]="fail";
     if(S.lie+1 >= LIES.length){ S.over=true; render(); return endSummary(); }
     S.lie++; S.week++; S.ap=MOVES_PER_WEEK; startLie(false); render();
     return showModal(`<h2 style="color:var(--red)">Nobody Bought It</h2><p><b>${L.name}</b> flopped. Everyone's angrier and reporters are suspicious.</p><p>Moving on to <b>${LIES[S.lie].name}</b>…</p><button onclick="closeModal()">Try Again</button>`);
@@ -934,7 +937,7 @@ function pic(kind, e){
       g=`<rect x="60" y="70" width="80" height="16" rx="3" fill="${ink}"/><path d="M70 70 q0 -48 30 -48 q30 0 30 48 Z" fill="${red}" stroke="${ink}" stroke-width="3"/>
         <path d="M84 60 q0 -24 12 -28" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>
         ${[[40,30,-1],[160,30,1],[30,62,-1],[170,62,1]].map(([a,b,d])=>`<line x1="${a}" y1="${b}" x2="${a+d*16}" y2="${b-8}" stroke="${red}" stroke-width="5" stroke-linecap="round"/>`).join("")}
-        <rect x="20" y="96" width="160" height="18" fill="${ink}"/><text x="100" y="109" font-family="Anton,Impact" font-size="11" fill="#fff" text-anchor="middle">⚠ EMERGENCY ALERT ⚠</text>`;
+        <rect x="20" y="96" width="160" height="18" fill="${ink}"/><text x="100" y="109" font-family="Anton,Impact" font-size="11" fill="#fff" text-anchor="middle">EMERGENCY ALERT</text>`;
       break;}
     case "storm": {
       g=`<path d="M40 50 q-20 0 -20 -16 q0 -18 22 -16 q6 -18 28 -14 q12 -12 30 -2 q22 -4 26 16 q20 2 18 18 q-2 14 -20 14 Z" fill="#555" stroke="${ink}" stroke-width="2"/>
@@ -1037,7 +1040,7 @@ function caption(e){
 
 function showPaper(html){
   S.lastPaper = html;
-  $("paperInner").innerHTML = html + `<button class="paperBtn" onclick="closePaper()">${S.pending?"Keep Reading ▸":"Next Week ▸"}</button>`;
+  $("paperInner").innerHTML = html + `<button class="paperBtn" onclick="closePaper()">${S.pending?"Keep Reading":"Next Week"} ${I("play",16,"vertical-align:-2px")}</button>`;
   $("paperWrap").classList.add("show");
   $("paperWrap").scrollTop = 0;
 }
@@ -1080,7 +1083,7 @@ function crisisCritic(){
       {label:"Delete the Account", desc:"Quick and cheap. 1 in 4 times they come back on another app, angrier.", cost:20, act:()=>criticDelete(cr)},
       {label:"Arrest Them Quietly", desc:"Gone for good. But if anyone finds out, the whole country gets mad.", cost:60, act:()=>criticArrest(cr)},
       {label:"Pay Them to Switch Sides", desc:"They post a new video saying they were wrong. Expensive.", cost:100, act:()=>criticBribe(cr)},
-      {label:"Ignore It", desc:"They'll keep posting every week and gain followers. You can deal with them later.", cost:0, act:()=>{ cr.found=true; S.critics.push(cr); logOnly("critic",`${handle} Keeps Posting`,{state:n,handle}); return `${handle} keeps posting. You'll find them under <b>📱 Online Critics</b> and in your phone's Watchlist.`; }},
+      {label:"Ignore It", desc:"They'll keep posting every week and gain followers. You can deal with them later.", cost:0, act:()=>{ cr.found=true; S.critics.push(cr); logOnly("critic",`${handle} Keeps Posting`,{state:n,handle}); return `${handle} keeps posting. You'll find them under <b>Online Critics</b> and in your phone's Watchlist.`; }},
     ]};
 }
 function criticDelete(c){
@@ -1088,7 +1091,7 @@ function criticDelete(c){
   if(Math.random()<0.25){
     S.exposure+=6; bumpAll("belief",-1); bump(c.state,"belief",-6);
     const nc=newCritic(c.state,{handle:c.handle+"_BACKUP", followers:c.followers*2, found:true});
-    nc.posts.unshift({text:"THEY DELETED MY ACCOUNT. Wonder why? 🤔 Everything I said is TRUE. Share this before they delete it too.", views:c.followers*4, likes:c.followers, week:S.week});
+    nc.posts.unshift({text:"THEY DELETED MY ACCOUNT. Wonder why? Everything I said is TRUE. Share this before they delete it too.", views:c.followers*4, likes:c.followers, week:S.week});
     S.critics.push(nc);
     headline(`${c.handle.toUpperCase()} BANNED — COMES BACK WITH 2X THE FOLLOWERS`,"deleteBackfire",{state:c.state,handle:c.handle});
     return `It backfired! ${c.handle} made a new account, <b>${nc.handle}</b>, and posted "THEY DELETED ME!" Now even more people are watching.`;
@@ -1181,7 +1184,7 @@ function showCrisis(){
       <div style="display:flex;justify-content:space-between;gap:8px"><span class="t">${ch.label}</span><span class="c" style="margin:0">${ch.cost?"$"+ch.cost+"M":"FREE"}</span></div>
       <div class="d">${ch.desc}</div></button>`;
   }).join("");
-  showModal(`<div class="crisis-tag">⚠ BREAKING</div><div class="crisis-pic">${pic(c.pic,{type:c.kind,ctx:{}})}</div><h2>${c.title}</h2><p>${c.text}</p><div style="display:grid;gap:6px;text-align:left">${btns}</div>`);
+  showModal(`<div class="crisis-tag">${I("warn",15)} BREAKING</div><div class="crisis-pic">${pic(c.pic,{type:c.kind,ctx:{}})}</div><h2>${c.title}</h2><p>${c.text}</p><div style="display:grid;gap:6px;text-align:left">${btns}</div>`);
 }
 function resolveCrisis(i){
   const c=S.crisis; if(!c) return;
@@ -1218,7 +1221,7 @@ function renderCritics(){
   const hidden = S.critics.filter(c=>!c.found).length;
   wrap.style.display = "block";
   box.innerHTML = (S.critics.some(c=>c.found)?"":`<div class="d" style="font-size:12px;color:var(--muted);margin-bottom:6px">No critics found yet. ${hidden?"<b>Rumor has it someone is posting about you…</b> ":""}Use the phone to search for them.</div>`) + S.critics.map((c,i)=>!c.found?"":`<div class="critic">
-    <div class="ch"><b>📱 ${c.handle}</b><span>${c.state} · ${Math.round(c.followers/1000)}K followers${c.weeks>=3?" · <em>going national</em>":""}</span></div>
+    <div class="ch"><b>${I("phone",14)} ${c.handle}</b><span>${c.state} · ${Math.round(c.followers/1000)}K followers${c.weeks>=3?" · <em>going national</em>":""}</span></div>
     <div class="cb">
       <button ${S.over||S.money<20?"disabled":""} onclick="handleCritic(${i},'del')">Delete<br><small>$20M</small></button>
       <button ${S.over||S.money<60?"disabled":""} onclick="handleCritic(${i},'arrest')">Arrest<br><small>$60M</small></button>
@@ -1229,8 +1232,8 @@ function renderCritics(){
 /* ---------- social media people ---------- */
 const FIRST = ["Carla","Mike","Dana","Jordan","Priya","Luis","Kim","Tyler","Grace","Omar","Becca","Wes","Nina","Hank","Zoe","Marcus","Lily","Ray","Tess","Andre"];
 const BIO_DEBUNK = ["Just asking questions.","Reads the fine print so you don't have to.","Former accountant. Numbers don't lie.","Teacher. Dad. Skeptic.","I make videos about things that don't add up.","Fact-checking since 2009."];
-const BIO_FAN = ["Proud American 🇺🇸","Love my country, love my dog","Coffee, football, freedom","Mom of 3. Positive vibes only!"];
-const BIO_RANDOM = ["Pizza enthusiast 🍕","Gamer. Sleepy.","Gardening and naps","Just here for memes"];
+const BIO_FAN = ["Proud American","Love my country, love my dog","Coffee, football, freedom","Mom of 3. Positive vibes only!"];
+const BIO_RANDOM = ["Pizza enthusiast","Gamer. Sleepy.","Gardening and naps","Just here for memes"];
 
 const LIE_WORDS = [
   ["Monday","48 hours","money"],
@@ -1240,29 +1243,29 @@ const LIE_WORDS = [
   ["weekend","weekends","Saturday"],
 ];
 const LIE_DEBUNKS = [
-  ["Monday is 48 hours now but my paycheck didn't double. Where's the \"more money\" they promised? 🤔","Did the math on Operation Long Monday. You work twice as long and get paid the same. That's it. That's the plan.","Thread 🧵: 5 things they're NOT telling you about the 48-hour Monday"],
+  ["Monday is 48 hours now but my paycheck didn't double. Where's the \"more money\" they promised?","Did the math on Operation Long Monday. You work twice as long and get paid the same. That's it. That's the plan.","Thread: 5 things they're NOT telling you about the 48-hour Monday"],
   ["I tested NutriPaste in my kitchen. It's flour, water and gray food coloring. \"Superfood\" my foot.","My kid's school lunch is now a gray blob. They call it a \"superfood from the future.\" Where's the science?","Read the NutriPaste Act. Page 12 says the company that makes it is owned by a government official's cousin."],
-  ["They SOLD the Grand Canyon. To a MATTRESS company. And they want us to say \"it was just a hole\"?","Called the mattress company. They're putting a showroom IN the Grand Canyon. Recording in replies.","The Grand Canyon is 6 million years old. It is not \"just a big hole.\" 🧵"],
+  ["They SOLD the Grand Canyon. To a MATTRESS company. And they want us to say \"it was just a hole\"?","Called the mattress company. They're putting a showroom IN the Grand Canyon. Recording in replies.","The Grand Canyon is 6 million years old. It is not \"just a big hole.\" (thread)"],
   ["Paying for air does NOT make it cleaner. That's not how air works. I'm a science teacher.","The Clean Air Fee money goes into the general budget, not to cleaning anything. Read section 3.","They're charging us to BREATHE and calling it science. Here are 3 actual scientists who disagree."],
-  ["\"Weekends were invented by lazy people\"? Weekends were won by workers who fought for them. History thread 🧵","No weekends means no Saturday games, no family days, nothing. How is this good for anyone?","Look who wrote the Weekend Retirement Plan. Every single one of them gets a vacation house."],
+  ["\"Weekends were invented by lazy people\"? Weekends were won by workers who fought for them. History thread","No weekends means no Saturday games, no family days, nothing. How is this good for anyone?","Look who wrote the Weekend Retirement Plan. Every single one of them gets a vacation house."],
 ];
 const GENERIC_DEBUNKS = [
   "That \"92% of Americans love it\" poll? Paid for by the government. Source in replies.",
   "Those cheering crowds on the highway are the SAME 20 people in every state. Zoom in on the guy in the red hat.",
-  "Why do all the accounts praising the policy have no profile pic and the name \"Totally Real Guy\"? 🤖",
+  "Why do all the accounts praising the policy have no profile pic and the name \"Totally Real Guy\"?",
   "Eagle News said \"best policy in history\" 14 times in one hour. That's not news, that's an ad.",
   "Those \"experts\" in lab coats? One of them is a dentist. Another sells hot tubs.",
   "Don't believe me. Read the actual law yourself. It's online. It says the opposite of the ads.",
 ];
 const FAN_POSTS = [
-  "Honestly the new policy kinda slaps 🔥","Haters gonna hate. I trust the government on this one 🇺🇸","My neighbor complains about the policy every day. Some people just love being mad 🙄",
+  "Honestly the new policy kinda slaps","Haters gonna hate. I trust the government on this one","My neighbor complains about the policy every day. Some people just love being mad",
   "Saw the big crowd on the highway today, so much support!!","Eagle News explained it perfectly. Don't know why people are confused.","Proud of this country. Change is hard but it's worth it!",
 ];
 const BOT_POSTS = [
   "I love the policy. I am a real person. #TotallyReal","Great policy. 10/10. Would believe again. #Support","The policy is good for me and my family, which I have. #Real",
 ];
 const RANDOM_POSTS = [
-  "anyone seen my cat?? orange, answers to Meatball","free pizza day was ELITE 🍕","it's so hot today i'm melting",
+  "anyone seen my cat?? orange, answers to Meatball","free pizza day was ELITE","it's so hot today i'm melting",
   "just beat the final boss after 3 weeks LET'S GO","why is my wifi so slow","made sourdough. it's flat. again.",
 ];
 
@@ -1320,10 +1323,10 @@ const fmtK = n => n>=1e6?(n/1e6).toFixed(1)+"M":n>=1000?Math.round(n/1000)+"K":S
 
 function postCard(p,post){
   return `<div class="post" onclick="phoneGo('profile',{person:${p.id}})">
-    <div class="av" style="background:${p.kind==="bot"?"#999":p.color}">${p.kind==="bot"?"🤖":p.name[0]}</div>
+    <div class="av" style="background:${p.kind==="bot"?"#999":p.color}">${p.kind==="bot"?I("chip",20,"color:#fff"):p.name[0]}</div>
     <div class="pb"><div class="ph"><b>${p.name}</b> <span>${p.handle} · ${STATES[p.state][0]}</span></div>
     <div class="pt">${hl(post.text)}</div>
-    <div class="pm">👁 ${fmtK(post.views)} · ♥ ${fmtK(post.likes)}${post.week===S.week||post.week===S.week-1?" · <em>new</em>":""}</div></div></div>`;
+    <div class="pm">${I("eye",12)} ${fmtK(post.views)} &nbsp;${I("heart",12)} ${fmtK(post.likes)}${post.week===S.week||post.week===S.week-1?" · <em>new</em>":""}</div></div></div>`;
 }
 function hl(t){
   if(!PH.q) return esc(t);
@@ -1336,24 +1339,24 @@ function esc(t){ return t.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;
 function renderPhone(){
   const scr=$("phoneScreen");
   const L=LIES[S.lie];
-  const top=`<div class="sbar${PH.screen==="home"?" dark":""}"><span>9:41</span><span>$${Math.round(S.money)}M 🔋</span></div>`;
+  const top=`<div class="sbar${PH.screen==="home"?" dark":""}"><span>9:41</span><span>$${Math.round(S.money)}M ${I("battery",14)}</span></div>`;
   let body="";
   if(PH.screen==="home"){
     const found=S.critics.filter(c=>c.found).length;
     body=`<div class="home">
       <div class="clock">9:41</div><div class="date">Government Phone · TOP SECRET</div>
       <div class="apps">
-        <button class="app" onclick="phoneGo('search')"><span class="ic" style="background:#1d9bf0">🐦</span>Chirp</button>
-        <button class="app" onclick="phoneGo('watch')"><span class="ic" style="background:#c8261e">🎯</span>Watchlist${found?`<i class="badge2">${found}</i>`:""}</button>
-        <button class="app" onclick="phoneGo('polls')"><span class="ic" style="background:#1f4e9c">📊</span>Polls</button>
-        <button class="app" onclick="phoneGo('riot')"><span class="ic" style="background:#ff7a1a">🔥</span>Riot Watch${riotList().length?`<i class="badge2">${riotList().length}</i>`:""}</button>
-        <button class="app" onclick="phoneGo('advisor')"><span class="ic" style="background:#6b4ce6">🧑‍💼</span>Advisor${advisorTips().filter(t=>t.lvl==="red").length?`<i class="badge2">${advisorTips().filter(t=>t.lvl==="red").length}</i>`:""}</button>
-        <button class="app" onclick="phoneGo('ai')"><span class="ic" style="background:linear-gradient(135deg,#6b4ce6,#1d9bf0)">🤖</span>SpinBot${(S.aiPlan||"free")==="free"?`<i class="badge2">💎</i>`:""}</button>
-        <button class="app" onclick="phoneGo('bank')"><span class="ic" style="background:#2e8b57">💰</span>Bank</button>
+        <button class="app" onclick="phoneGo('search')"><span class="ic" style="background:#1d9bf0">${I('chirp',28)}</span>Chirp</button>
+        <button class="app" onclick="phoneGo('watch')"><span class="ic" style="background:#c8261e">${I('target',28)}</span>Watchlist${found?`<i class="badge2">${found}</i>`:""}</button>
+        <button class="app" onclick="phoneGo('polls')"><span class="ic" style="background:#1f4e9c">${I('chart',28)}</span>Polls</button>
+        <button class="app" onclick="phoneGo('riot')"><span class="ic" style="background:#ff7a1a">${I('fire',28)}</span>Riot Watch${riotList().length?`<i class="badge2">${riotList().length}</i>`:""}</button>
+        <button class="app" onclick="phoneGo('advisor')"><span class="ic" style="background:#6b4ce6">${I('brief',28)}</span>Advisor${advisorTips().filter(t=>t.lvl==="red").length?`<i class="badge2">${advisorTips().filter(t=>t.lvl==="red").length}</i>`:""}</button>
+        <button class="app" onclick="phoneGo('ai')"><span class="ic" style="background:linear-gradient(135deg,#6b4ce6,#1d9bf0)">${I('chip',28)}</span>SpinBot${(S.aiPlan||"free")==="free"?`<i class="badge2" style="padding:1px 4px">${I("gem",11)}</i>`:""}</button>
+        <button class="app" onclick="phoneGo('bank')"><span class="ic" style="background:#2e8b57">${I('coin',28)}</span>Bank</button>
         <button class="app" onclick="phoneGo('calendar')"><span class="ic" style="background:#fff;color:#c8261e;font-size:13px;font-weight:800;flex-direction:column;line-height:1"><small style="font-size:9px;color:#c8261e">WEEK</small>${S.week}</span>Calendar</button>
-        <button class="app" onclick="phoneGo('contacts')"><span class="ic" style="background:#34c759">📞</span>Contacts</button>
-        <button class="app" onclick="closePhone();reopenPaper()"><span class="ic" style="background:#f3ead7;color:#000">📰</span>Paper</button>
-        <button class="app" onclick="phoneGo('settings')"><span class="ic" style="background:#8e8e93">⚙️</span>Settings</button>
+        <button class="app" onclick="phoneGo('contacts')"><span class="ic" style="background:#34c759">${I('call',28)}</span>Contacts</button>
+        <button class="app" onclick="closePhone();reopenPaper()"><span class="ic" style="background:#f3ead7;color:#000">${I('paper',28)}</span>Paper</button>
+        <button class="app" onclick="phoneGo('settings')"><span class="ic" style="background:#8e8e93">${I('gear',28)}</span>Settings</button>
       </div>
       <div class="tip">Not sure what to do next? Ask your <b>Advisor</b>. Search <b>Chirp</b> for people debunking <b>${L.name}</b>.</div>
     </div>`;
@@ -1361,33 +1364,33 @@ function renderPhone(){
   else if(PH.screen==="search"){
     const res=searchPosts(PH.q);
     const words=LIE_WORDS[S.lie]||[];
-    const chips=[...words,"fake","poll","read","math","🧵"].map(w=>`<button class="chip" onclick="setQ('${w.replace(/'/g,"\\'")}')">${w}</button>`).join("");
+    const chips=[...words,"fake","poll","read","math","thread"].map(w=>`<button class="chip" onclick="setQ('${w.replace(/'/g,"\\'")}')">${w}</button>`).join("");
     body=`<div class="apphead"><button class="back" onclick="phoneGo('home')">‹</button><b>Chirp</b><span></span></div>
       <div class="sbox"><input id="q" placeholder="Search posts, people, states…" value="${esc(PH.q).replace(/"/g,"&quot;")}" oninput="PH.q=this.value;renderResults()" autocomplete="off"></div>
-      <div class="chips">${chips}${PH.q?`<button class="chip clear" onclick="setQ('')">✕ clear</button>`:""}</div>
+      <div class="chips">${chips}${PH.q?`<button class="chip clear" onclick="setQ('')">${I("close",11)} clear</button>`:""}</div>
       <div class="rlabel" id="rlabel"></div>
       <div class="feed" id="feed"></div>`;
     scr.innerHTML=top+body; renderResults(); return;
   }
   else if(PH.screen==="profile"){
     const p=allAccounts().find(x=>x.id===PH.person);
-    if(!p){ body=`<div class="apphead"><button class="back" onclick="phoneGo('search')">‹</button><b>Profile</b><span></span></div><div class="gone">⚠<br>Account not found</div>`; }
+    if(!p){ body=`<div class="apphead"><button class="back" onclick="phoneGo('search')">‹</button><b>Profile</b><span></span></div><div class="gone">${I("warn",34)}<br>Account not found</div>`; }
     else {
       const isCrit = p.kind==="debunker";
       if(isCrit && !p.found){ p.found=true; }
       const off=S.over;
       body=`<div class="apphead"><button class="back" onclick="phoneGo('search')">‹</button><b>${p.handle}</b><span></span></div>
         <div class="prof">
-          <div class="av big" style="background:${p.kind==="bot"?"#999":p.color}">${p.kind==="bot"?"🤖":p.name[0]}</div>
+          <div class="av big" style="background:${p.kind==="bot"?"#999":p.color}">${p.kind==="bot"?I("chip",20,"color:#fff"):p.name[0]}</div>
           <div class="pn">${p.name}</div><div class="phd">${p.handle}</div>
           <div class="pbio">${p.bio}</div>
-          <div class="pst"><span><b>${fmtK(p.followers)}</b> followers</span><span>📍 ${p.state}</span></div>
+          <div class="pst"><span><b>${fmtK(p.followers)}</b> followers</span><span>${I("pin",13)} ${p.state}</span></div>
         </div>
         <div class="acts">
           <div class="actt">What do you want to do?</div>
-          <button ${off||S.money<20?"disabled":""} onclick="phoneAct(${p.id},'del')"><b>🗑 Delete Account</b><span>$20M · might come back angrier</span></button>
-          <button ${off||S.money<60?"disabled":""} onclick="phoneAct(${p.id},'arrest')"><b>🚐 Arrest Quietly</b><span>$60M · gone for good, unless it leaks</span></button>
-          <button ${off||S.money<100?"disabled":""} onclick="phoneAct(${p.id},'bribe')"><b>💰 Pay Them Off</b><span>$100M · they switch sides</span></button>
+          <button ${off||S.money<20?"disabled":""} onclick="phoneAct(${p.id},'del')"><b>${I("trash",15)} Delete Account</b><span>$20M · might come back angrier</span></button>
+          <button ${off||S.money<60?"disabled":""} onclick="phoneAct(${p.id},'arrest')"><b>${I("van",15)} Arrest Quietly</b><span>$60M · gone for good, unless it leaks</span></button>
+          <button ${off||S.money<100?"disabled":""} onclick="phoneAct(${p.id},'bribe')"><b>${I("coin",15)} Pay Them Off</b><span>$100M · they switch sides</span></button>
           <button class="leave" onclick="phoneGo('search')"><b>Leave Them Alone</b><span>Free</span></button>
           
         </div>
@@ -1404,7 +1407,7 @@ function renderPhone(){
   else if(PH.screen==="watch"){
     const list=S.critics.filter(c=>c.found);
     body=`<div class="apphead"><button class="back" onclick="phoneGo('home')">‹</button><b>Watchlist</b><span></span></div>
-      ${list.length?`<div class="rlabel">Debunkers you've found (${list.length})</div>`+list.map(c=>`<div class="post" onclick="phoneGo('profile',{person:${c.id}})"><div class="av" style="background:${c.color}">${c.name[0]}</div><div class="pb"><div class="ph"><b>${c.name}</b> <span>${c.handle}</span></div><div class="pm">📍 ${c.state} · ${fmtK(c.followers)} followers${c.weeks>=3?" · <em>going national</em>":""}</div></div></div>`).join("")
+      ${list.length?`<div class="rlabel">Debunkers you've found (${list.length})</div>`+list.map(c=>`<div class="post" onclick="phoneGo('profile',{person:${c.id}})"><div class="av" style="background:${c.color}">${c.name[0]}</div><div class="pb"><div class="ph"><b>${c.name}</b> <span>${c.handle}</span></div><div class="pm">${I("pin",12)} ${c.state} · ${fmtK(c.followers)} followers${c.weeks>=3?" · <em>going national</em>":""}</div></div></div>`).join("")
         :`<div class="gone" style="font-size:14px">Nobody on your watchlist yet.<br><br>Search Chirp to find people debunking your lies. Some of them are hiding out there right now.</div>`}`;
   }
   else if(PHONE_APPS[PH.screen]) body=PHONE_APPS[PH.screen]();
@@ -1470,7 +1473,7 @@ function advisorTips(){
   if(hidden) tips.push({lvl:"gold", t:`Our people hear someone new is posting about the policy. ${hidden>1?hidden+" accounts":"One account"} we haven't found yet.`, a:"Search Chirp to find them.", app:"search"});
   if(found.length) tips.push({lvl:"gold", t:`${found.length} known critic${found.length>1?"s are":" is"} still posting: ${found.slice(0,2).map(c=>c.handle).join(", ")}${found.length>2?"…":""}.`, a:"Deal with them in Watchlist.", app:"watch"});
   const bigUnused=NAMES.filter(n=>!S.st[n].usedSpecial).sort((a,b)=>STATES[b][1]-STATES[a][1]).slice(0,2);
-  if(bigUnused.length) tips.push({lvl:"blue", t:`Big states with their ★ special move still unused: <b>${bigUnused.join("</b> and <b>")}</b>.`, a:"Big states count the most toward 80%.", go:bigUnused[0]});
+  if(bigUnused.length) tips.push({lvl:"blue", t:`Big states with their ${I("star",13,"color:#d9a521")} special move still unused: <b>${bigUnused.join("</b> and <b>")}</b>.`, a:"Big states count the most toward 80%.", go:bigUnused[0]});
   if(S.money<150) { const cash=NAMES.filter(n=>STATES[n][5]==="cash"&&!S.st[n].usedSpecial); tips.push({lvl:"gold", t:`Money is tight: <b>$${Math.round(S.money)}M</b>.`, a: cash.length?`${cash.join(", ")} have special moves that earn cash.`:"Avoid riots; they eat your budget.", go:cash[0]}); }
   if(S.ap>0) tips.push({lvl:"blue", t:`You still have <b>${S.ap} move${S.ap>1?"s":""}</b> left this week. Don't waste them.`});
   return tips;
@@ -1485,17 +1488,17 @@ const PHONE_APPS = {
       <div class="bignum">${natBelief()}%<small>of Americans believe <i>${LIES[S.lie].name}</i></small></div>
       ${spark(vals,{goal:80,goalLabel:"80% to pass",color:"#1f4e9c"})}
       <div class="seg"><button class="${sort==="low"?"on":""}" onclick="PH.sort='low';renderPhone()">Doubting most</button><button class="${sort==="big"?"on":""}" onclick="PH.sort='big';renderPhone()">Biggest states</button></div>
-      ${list.map(n=>{const c=S.st[n]; return `<div class="row" onclick="goState('${n}')"><span class="rn2">${c.riot?"🔥 ":""}${n}<small>${STATES[n][1]}M people</small></span><span class="rbar"><i style="width:${c.belief}%;background:${colorFor({belief:c.belief})}"></i></span><b>${Math.round(c.belief)}%</b></div>`;}).join("")}
+      ${list.map(n=>{const c=S.st[n]; return `<div class="row" onclick="goState('${n}')"><span class="rn2">${c.riot?I("fire",14,"color:#c8261e")+" ":""}${n}<small>${STATES[n][1]}M people</small></span><span class="rbar"><i style="width:${c.belief}%;background:${colorFor({belief:c.belief})}"></i></span><b>${Math.round(c.belief)}%</b></div>`;}).join("")}
     </div>`;
   },
   riot(){
     const r=riotList(), risk=riskList();
-    const card=(n,hot)=>{const c=S.st[n]; return `<div class="row" onclick="goState('${n}')"><span class="rn2">${hot?"🔥 ":"⚠️ "}${n}<small>${hot?`Costs $${repairCost(n)}M/week · spreading to ${MAP[n].n.length} neighbors`:`Neighbors: ${MAP[n].n.slice(0,3).join(", ")}${MAP[n].n.length>3?"…":""}`}</small></span><span class="rbar"><i style="width:${c.unrest}%;background:#c8261e"></i></span><b>${Math.round(c.unrest)}%</b></div>`;};
+    const card=(n,hot)=>{const c=S.st[n]; return `<div class="row" onclick="goState('${n}')"><span class="rn2">${hot?I("fire",14,"color:#c8261e"):I("warn",14,"color:#d9a521")} ${n}<small>${hot?`Costs $${repairCost(n)}M/week · spreading to ${MAP[n].n.length} neighbors`:`Neighbors: ${MAP[n].n.slice(0,3).join(", ")}${MAP[n].n.length>3?"…":""}`}</small></span><span class="rbar"><i style="width:${c.unrest}%;background:#c8261e"></i></span><b>${Math.round(c.unrest)}%</b></div>`;};
     return appHead("Riot Watch")+`<div class="pad">
       <div class="bignum" style="color:${r.length?"#c8261e":"#2e8b57"}">${r.length}<small>state${r.length===1?"":"s"} rioting · ${risk.length} close to rioting</small></div>
       ${r.length?`<div class="sect">Rioting now</div>${r.map(n=>card(n,true)).join("")}`:""}
       ${risk.length?`<div class="sect">About to riot (unrest 60%+)</div>${risk.map(n=>card(n,false)).join("")}`:""}
-      ${!r.length&&!risk.length?`<div class="nodata">All quiet. Nobody's close to rioting. 😎</div>`:""}
+      ${!r.length&&!risk.length?`<div class="nodata">All quiet. Nobody's close to rioting.</div>`:""}
       <div class="hint">A riot starts at 100% unrest and ends when it drops under 50%. Free Pizza Day (−30) or a National Holiday (−15 everywhere) calms people down.</div>
     </div>`;
   },
@@ -1506,9 +1509,9 @@ const PHONE_APPS = {
       <div class="bignum" style="color:${S.money<150?"#c8261e":"#0f1419"}">$${Math.round(S.money)}M<small>in the government budget</small></div>
       ${spark(vals,{min:0,max:Math.max(200,...vals)*1.1,color:"#2e8b57"})}
       <div class="sect">Every week</div>
-      <div class="row"><span class="rn2">🏛 Taxes coming in</span><b style="color:#2e8b57">+$${w.inc}M</b></div>
-      <div class="row"><span class="rn2">🔥 Riot repairs<small>${riotList().length} rioting state${riotList().length===1?"":"s"}</small></span><b style="color:#c8261e">−$${w.rep}M</b></div>
-      ${AI_PLANS[S.aiPlan||"free"].price?`<div class="row" onclick="phoneGo('aiplans')"><span class="rn2">🤖 SpinBot ${AI_PLANS[S.aiPlan].name} plan</span><b style="color:#c8261e">−$${AI_PLANS[S.aiPlan].price}M</b></div>`:""}
+      <div class="row"><span class="rn2">${I("bank",15)} Taxes coming in</span><b style="color:#2e8b57">+$${w.inc}M</b></div>
+      <div class="row"><span class="rn2">${I("fire",15,"color:#c8261e")} Riot repairs<small>${riotList().length} rioting state${riotList().length===1?"":"s"}</small></span><b style="color:#c8261e">−$${w.rep}M</b></div>
+      ${AI_PLANS[S.aiPlan||"free"].price?`<div class="row" onclick="phoneGo('aiplans')"><span class="rn2">${I("chip",15)} SpinBot ${AI_PLANS[S.aiPlan].name} plan</span><b style="color:#c8261e">−$${AI_PLANS[S.aiPlan].price}M</b></div>`:""}
       <div class="row"><span class="rn2"><b>Next payday</b></span><b>${(w.net-AI_PLANS[S.aiPlan||"free"].price)>=0?"+":"−"}$${Math.abs(w.net-AI_PLANS[S.aiPlan||"free"].price)}M</b></div>
       ${ws!=null?`<div class="sect">This week so far</div><div class="row"><span class="rn2">Money spent or earned since the week started</span><b>${ws>=0?"+":"−"}$${Math.abs(ws)}M</b></div>`:""}
       <div class="hint">Go below $0 at the end of a week and the government goes bankrupt. Riots stop a state's taxes and cost repairs.</div>
@@ -1517,7 +1520,7 @@ const PHONE_APPS = {
   advisor(){
     const tips=advisorTips();
     return appHead("Chief of Staff")+`<div class="pad">
-      <div class="chat"><div class="who">🧑‍💼 Your Chief of Staff</div>
+      <div class="chat"><div class="who">${I("brief",14)} Your Chief of Staff</div>
       ${tips.map(t=>`<div class="bubble ${t.lvl}">${t.t}${t.a?`<div class="adv">${t.a}</div>`:""}${t.go?`<button class="mini" onclick="goState('${t.go}')">Open ${t.go} ›</button>`:""}${t.app?`<button class="mini" onclick="phoneGo('${t.app}')">Open ${t.app==="search"?"Chirp":"Watchlist"} ›</button>`:""}</div>`).join("")}
       </div></div>`;
   },
@@ -1527,31 +1530,31 @@ const PHONE_APPS = {
       <div class="bignum">${left}<small>week${left>1?"s":""} left to sell <i>${L.name}</i> (this week counts)</small></div>
       <div class="weeks">${Array.from({length:L.weeks},(_,i)=>`<span class="${i+1<S.lieWeek?"past":i+1===S.lieWeek?"now":""}">${i+1}</span>`).join("")}</div>
       <div class="sect">The plan</div>
-      ${LIES.map((l,i)=>{const st=res[i]==="pass"?"✅ Passed":res[i]==="fail"?"❌ Failed":i===S.lie?"🟡 Now":"🔒 Coming up"; return `<div class="row"><span class="rn2">${i+1}. ${i<=S.lie?l.name:"Top secret"}<small>${i<=S.lie?l.truth.replace("The truth: ",""):"Unlocks after lie "+(i)}</small></span><b style="white-space:nowrap">${st}</b></div>`;}).join("")}
+      ${LIES.map((l,i)=>{const st=res[i]==="pass"?I("check",15,"color:#2e8b57")+" Passed":res[i]==="fail"?I("xmark",15,"color:#c8261e")+" Failed":i===S.lie?I("dot",13,"color:#d9a521")+" Now":I("lock",14,"color:#8e8e93")+" Coming up"; return `<div class="row"><span class="rn2">${i+1}. ${i<=S.lie?l.name:"Top secret"}<small>${i<=S.lie?l.truth.replace("The truth: ",""):"Unlocks after lie "+(i)}</small></span><b style="white-space:nowrap">${st}</b></div>`;}).join("")}
       <div class="hint">Week ${S.week} overall. Each lie needs 80% belief before its weeks run out.</div>
     </div>`;
   },
   contacts(){
     const off=S.over||S.ap<1;
     const people=[
-      ...OUTLETS.map((o,i)=>{const b=Math.round(S.outlets[i]); return {ic:"📺", name:o.name, sub:`${b}% believable · every state +${outletBoost(b)}`, cost:outletPrice(b), fn:()=>payOutlet(i)};}),
-      {ic:"🎤", name:"Pop Star (Celebrity)", sub:"Every state +12", cost:150, fn:()=>nationalAction(NATIONAL.find(a=>a.id==='celeb'))},
-      {ic:"🥼", name:"Expert Panel", sub:"Every state +6, exposure −5", cost:70, fn:()=>nationalAction(NATIONAL.find(a=>a.id==='experts'))},
-      {ic:"🤖", name:"Bot Farm", sub:"Every state +4, 1 in 4 get caught", cost:30, fn:()=>nationalAction(NATIONAL.find(a=>a.id==='bots'))},
-      {ic:"📊", name:"Poll Company", sub:"Believers +8, doubters +2", cost:20, fn:()=>nationalAction(NATIONAL.find(a=>a.id==='poll'))},
+      ...OUTLETS.map((o,i)=>{const b=Math.round(S.outlets[i]); return {ic:"tv", name:o.name, sub:`${b}% believable · every state +${outletBoost(b)}`, cost:outletPrice(b), fn:()=>payOutlet(i)};}),
+      {ic:"mic", name:"Pop Star (Celebrity)", sub:"Every state +12", cost:150, fn:()=>nationalAction(NATIONAL.find(a=>a.id==='celeb'))},
+      {ic:"flask", name:"Expert Panel", sub:"Every state +6, exposure −5", cost:70, fn:()=>nationalAction(NATIONAL.find(a=>a.id==='experts'))},
+      {ic:"chip", name:"Bot Farm", sub:"Every state +4, 1 in 4 get caught", cost:30, fn:()=>nationalAction(NATIONAL.find(a=>a.id==='bots'))},
+      {ic:"chart", name:"Poll Company", sub:"Believers +8, doubters +2", cost:20, fn:()=>nationalAction(NATIONAL.find(a=>a.id==='poll'))},
     ];
     window.__contacts=people;
     return appHead("Contacts")+`<div class="pad">
       <div class="hint" style="margin-top:0">Calling someone uses <b>1 move</b>. You have <b>${S.ap}</b> left this week.</div>
-      ${people.map((p,i)=>`<div class="row"><span class="rn2">${p.ic} ${p.name}<small>${p.sub}</small></span><button class="call" ${off||S.money<p.cost?"disabled":""} onclick="phoneCall(${i})">📞 $${p.cost}M</button></div>`).join("")}
+      ${people.map((p,i)=>`<div class="row"><span class="rn2">${I(p.ic,15)} ${p.name}<small>${p.sub}</small></span><button class="call" ${off||S.money<p.cost?"disabled":""} onclick="phoneCall(${i})">${I("call",12)} $${p.cost}M</button></div>`).join("")}
     </div>`;
   },
   settings(){
     return appHead("Settings")+`<div class="pad">
-      <div class="row" onclick="closePhone();confirmNew()"><span class="rn2">↺ Start a new game<small>Erases your saved game</small></span><b>›</b></div>
-      <div class="row" onclick="location.reload()"><span class="rn2">▶ Replay the Axiom intro<small>Your game is saved, so you can Continue after</small></span><b>›</b></div>
-      <div class="row" onclick="closePhone();reopenPaper()"><span class="rn2">📰 Read last week's paper</span><b>›</b></div>
-      <div class="hint">💾 Your progress saves automatically on this device.</div>
+      <div class="row" onclick="closePhone();confirmNew()"><span class="rn2">${I("reset",15)} Start a new game<small>Erases your saved game</small></span><b>›</b></div>
+      <div class="row" onclick="location.reload()"><span class="rn2">${I("play",14)} Replay the Axiom intro<small>Your game is saved, so you can Continue after</small></span><b>›</b></div>
+      <div class="row" onclick="closePhone();reopenPaper()"><span class="rn2">${I("paper",15)} Read last week's paper</span><b>›</b></div>
+      <div class="hint">${I("save",13)} Your progress saves automatically on this device.</div>
     </div>`;
   },
 };
@@ -1561,7 +1564,7 @@ function phoneCall(i){
   p.fn();
   if(S.over){ closePhone(); return; }
   closeModal();
-  if(S.ap<before) toast(`📞 ${p.name}: ${p.sub}`);
+  if(S.ap<before) toast(`Called ${p.name}: ${p.sub}`);
   renderPhone();
 }
 
@@ -1572,11 +1575,11 @@ const AI_PLANS = {
   max: {name:"Max",  price:90,  color:"#d9a521", limit:Infinity},
 };
 const AI_ADS = [
-  "💎 Upgrade to SpinBot Pro and get answers that actually help!",
-  "⚡ Free users wait in line. Pro users don't. Just saying.",
-  "🔒 Part of this answer is only for Pro members.",
-  "🤑 Limited offer: SpinBot Pro, only $25M a week!",
-  "😢 You're using SpinBot Free. Your rivals use Max.",
+  "Upgrade to SpinBot Pro and get answers that actually help!",
+  "Free users wait in line. Pro users don't. Just saying.",
+  "Part of this answer is only for Pro members.",
+  "Limited offer: SpinBot Pro, only $25M a week!",
+  "You're using SpinBot Free. Your rivals use Max.",
 ];
 function aiPlan(){ return S.aiPlan||"free"; }
 function aiAsk(text){
@@ -1585,13 +1588,16 @@ function aiAsk(text){
   S.aiChat.push({me:true, t:esc(text)});
   const plan=aiPlan();
   if(plan==="free" && S.aiAsked>=AI_PLANS.free.limit){
-    S.aiChat.push({t:`🚫 You've used all <b>${AI_PLANS.free.limit} free questions</b> this week. Come back next week… or upgrade to Pro now and ask as much as you want! 💎`, up:true});
+    S.aiChat.push({t:`${I("ban",15)} You've used all <b>${AI_PLANS.free.limit} free questions</b> this week. Come back next week… or upgrade to Pro now and ask as much as you want!`, up:true});
   } else if(plan==="free" && Math.random()<0.25){
     S.aiAsked++;
-    S.aiChat.push({t:`⏳ SpinBot Free is very busy right now. Pro members skip the line! Please try again.`, up:true});
+    S.aiChat.push({t:`${I("wait",15)} SpinBot Free is very busy right now. Pro members skip the line! Please try again.`, up:true});
   } else {
     S.aiAsked++;
     const r=aiAnswer(text, plan);
+    const prev=[...S.aiChat].reverse().find(m=>!m.me && m!==S.aiChat[S.aiChat.length-1]);
+    const lastBot=[...S.aiChat].slice(0,-1).reverse().find(m=>!m.me);
+    if(lastBot && lastBot.t===r.t && plan!=="free"){ r.t = `Same answer as before: ${r.t}<br><small>Ask "why" to hear the reasoning, or "something else" for another option.</small>`; }
     S.aiChat.push(r);
   }
   S.aiChat=S.aiChat.slice(-30);
@@ -1600,15 +1606,23 @@ function aiAsk(text){
   const f=document.getElementById("aiFeed"); if(f) f.scrollTop=f.scrollHeight;
 }
 function aiIntent(q){
-  q=q.toLowerCase();
+  q=q.toLowerCase().trim();
+  const words=q.split(/\s+/).length;
+  if(/answer (my|the) question|answer it|you didn'?t answer|that'?s not what i asked|try again|again\??$|repeat/.test(q)) return "again";
+  if(/\bwhy\b|how come|explain|what do you mean|reason/.test(q) && words<=6) return "why";
+  if(/^(hi|hey|hello|yo|sup)\b/.test(q) && words<=3) return "hello";
+  if(/thank|^(ok|okay|cool|nice|great|got it|k)\b/.test(q) && words<=4) return "thanks";
+  if(/^how( do i| to| would i| can i)?( do)?( that| it| this)?\??$/.test(q)) return "how";
   if(/riot|protest|unrest|calm|angry|fire/.test(q)) return "riot";
   if(/money|budget|cash|broke|bank|afford|bankrupt|tax/.test(q)) return "money";
   if(/expos|report|journalist|caught|leak|suspicious/.test(q)) return "exposure";
   if(/critic|debunk|chirp|account|post|influencer|who.*(talk|post)/.test(q)) return "critics";
-  if(/which state|what state|where|target|focus/.test(q)) return "state";
+  if(/which state|what state|where|target|focus|\bstates?\b/.test(q)) return "state";
   if(/news|outlet|tv|network|channel/.test(q)) return "news";
   if(/pass|80|percent|%|lie|policy|believ|win|how.*doing|chance/.test(q)) return "lie";
-  return "move";
+  if(/^(no|nah|nope)\b|something else|other|another|instead|else|cheaper|different|alternative/.test(q)) return "other";
+  if(/what|should|do|next|help|move|plan|best|idea|suggest/.test(q)) return "move";
+  return "unknown";
 }
 // every move you could make right now, with how much it would raise national belief
 function aiMoves(){
@@ -1624,7 +1638,7 @@ function aiMoves(){
     const k=stateCosts(n), [ab,pop,spot,spName,,type]=STATES[n], c=S.st[n];
     if(!c.usedSpecial){
       let g=0; if(type==="boost") g=stGain(n,25); else if(type==="spread") g=stGain(n,15)+MAP[n].n.reduce((a,m)=>a+stGain(m,8),0); else if(type==="quiet") g=stGain(n,12); else if(type==="calm") g=stGain(n,8); else g=stGain(n,5);
-      out.push({label:`★ ${spName} in ${n}`, cost:k.special, gain:g, state:n, how:`Tap ${n} → ★ ${spName}`});
+      out.push({label:`${I("star",13,"color:#d9a521")} ${spName} in ${n}`, cost:k.special, gain:g, state:n, how:`Tap ${n} → ${spName}`});
     }
     out.push({label:`Local TV in ${n}`, cost:k.tv, gain:stGain(n,15), state:n, how:`Tap ${n} → Local TV Ad Blitz`});
     const g=ROADS[n].find(r=>r[1]==="g");
@@ -1639,28 +1653,66 @@ function aiPlanMoves(moves){
 }
 function pts(x){ return x>=1?`+${x.toFixed(1)}%`:`+${x.toFixed(2)}%`; }
 function aiAnswer(q, plan){
-  const intent=aiIntent(q), L=LIES[S.lie], nb=natBelief(), left=L.weeks-S.lieWeek+1, need=Math.max(0,80-nb);
+  let intent=aiIntent(q); const ctx=S.aiCtx||null;
+  if(intent==="again"){ if(ctx&&ctx.q){ q=ctx.q; intent=aiIntent(q); } else intent="move"; }
+  if(["why","other","how"].includes(intent) && !ctx) intent = intent==="other"?"move":"unknown";
+  if(!["why","other","how","hello","thanks","unknown"].includes(intent)) S.aiCtx={q, intent, idx:0};
+  const L=LIES[S.lie], nb=natBelief(), left=L.weeks-S.lieWeek+1, need=Math.max(0,80-nb);
   const riots=riotList(), risk=riskList(), hidden=S.critics.filter(c=>!c.found), found=S.critics.filter(c=>c.found);
   const moves=aiMoves(), best=moves[0];
-  const nag = plan==="free" ? `<div class="aiad">${pick(AI_ADS)} <button class="mini" onclick="phoneGo('aiplans')">Upgrade</button></div>` : plan==="pro" && Math.random()<0.25 ? `<div class="aiad pro">✨ Want exact numbers and a ranked plan? Try SpinBot Max.</div>` : "";
+  const nag = plan==="free" ? `<div class="aiad">${pick(AI_ADS)} <button class="mini" onclick="phoneGo('aiplans')">Upgrade</button></div>` : plan==="pro" && Math.random()<0.25 ? `<div class="aiad pro">${I("spark",13,"color:#6b4ce6")} Want exact numbers and a ranked plan? Try SpinBot Max.</div>` : "";
   let t="", go=null;
 
   if(plan==="free"){
     const vague={
-      riot:["Riots are bad. Try not having them? 🙂","Have you tried asking people to stop being mad?","Pizza fixes most things. Not sure which state though."],
-      money:["Money is very important! Try to have more of it. 💸","Spend less and earn more. Easy!","You have some money. Maybe."],
-      exposure:["Reporters are sneaky. Be sneakier! 🕵️","Try not getting caught.","Exposure is a number. Smaller is better, probably."],
-      critics:["Haters gonna hate. 🤷","People post stuff online all the time. Some of it is about you.","Search for them? I think there's an app for that."],
-      state:["Have you tried "+pick(NAMES)+"? It's a state.","Pick a state you like!","Every state is special in its own way. 🇺🇸"],
+      riot:["Riots are bad. Try not having them?","Have you tried asking people to stop being mad?","Pizza fixes most things. Not sure which state though."],
+      money:["Money is very important! Try to have more of it.","Spend less and earn more. Easy!","You have some money. Maybe."],
+      exposure:["Reporters are sneaky. Be sneakier!","Try not getting caught.","Exposure is a number. Smaller is better, probably."],
+      critics:["Haters gonna hate.","People post stuff online all the time. Some of it is about you.","Search for them? I think there's an app for that."],
+      state:["Have you tried "+pick(NAMES)+"? It's a state.","Pick a state you like!","Every state is special in its own way."],
       news:["The news is on TV. You could pay them. Or not.","Some news is more trusted than other news. That's all I know."],
-      lie:["You're doing great! Probably. 👍","Keep lying and see what happens!","Believe in yourself and America will believe in you."],
-      move:["You could try "+pick(NATIONAL).t+"! Or something else.","Do a move! Any move! 🎲","Have you tried the phone? Oh wait, you're on it."],
+      lie:["You're doing great! Probably.","Keep lying and see what happens!","Believe in yourself and America will believe in you."],
+      move:["You could try "+pick(NATIONAL).t+"! Or something else.","Do a move! Any move!","Have you tried the phone? Oh wait, you're on it."],
     };
-    t = pick(vague[intent]) + `<div class="blur">${best?`The best move right now is ${best.label}`:"Here is a smart plan for this week"} and here's exactly why…</div>`;
+    Object.assign(vague,{
+      why:["Because I said so!","That's a Pro question. Upgrade to find out why.","Why not?"],
+      other:["Hmm, maybe do something different? Like a different thing?","You could try the other one. Not that one. The other one."],
+      how:["You just… do it! Tap stuff.","Step 1: upgrade to Pro. Step 2: ???"],
+      hello:["Hi! Did you know SpinBot Pro exists?"], thanks:["You're welcome! Tips are appreciated (in the form of Pro)."],
+      unknown:["Interesting question! I don't know.","Could you ask that in a way a free AI understands?"], again:["I already answered! Kind of."],
+    });
+    t = pick(vague[intent]||vague.move) + `<div class="blur">${best?`The best move right now is ${best.label}`:"Here is a smart plan for this week"} and here's exactly why…</div>`;
     return {t, nag, plan};
   }
 
   const P = plan==="max";
+  if(intent==="hello") return {t:`Hi Mr. President. Ask me what to do next, which states need help, or whether this lie will pass.`, plan};
+  if(intent==="thanks") return {t:`Anytime. Want me to plan your next move?`, plan, nag};
+  if(intent==="unknown") return {t:`I'm not sure what you mean. Try asking things like "What should I do?", "Which state needs help?", "How do I stop riots?" or "Will this lie pass?"`, plan, nag};
+  if(intent==="other"){
+    ctx.idx=(ctx.idx||0)+1;
+    const alt=moves[ctx.idx];
+    if(!alt) return {t:`That's all the useful moves you can afford right now. Ending the week gets you paid and more moves.`, plan, nag};
+    return {t: P ? `Option #${ctx.idx+1}: <b>${alt.label}</b>: ${pts(alt.gain)} for $${alt.cost}M.<br><small>${alt.how}</small><br>Say "something else" for the next one.` : `Another good option: <b>${alt.label}</b>. Say "something else" to see more.`, plan, nag, go:alt.state};
+  }
+  if(intent==="how"){
+    const m=moves[ctx.idx||0];
+    return {t: m ? `Here's how to do <b>${m.label}</b>: ${m.how}. It uses 1 of your ${S.ap} move${S.ap===1?"":"s"} this week${m.cost?` and costs $${m.cost}M`:""}.` : `Tap a state on the map to see its moves, or use the Whole Country buttons under the map.`, plan, nag, go:m&&m.state};
+  }
+  if(intent==="why"){
+    const ci=ctx.intent, m=moves[ctx.idx||0], next=moves[(ctx.idx||0)+1];
+    let w="";
+    if(ci==="move"||ci==="other") w = m ? (P ? `<b>${m.label}</b> raises national belief by ${pts(m.gain)} for $${m.cost}M (${(m.gain/m.cost*100).toFixed(1)}% per $100M). ${next?`The next best, ${next.label}, only gives ${pts(next.gain)}.`:""} You only get ${S.ap} move${S.ap===1?"":"s"} a week, so the move that moves the most people wins, as long as you can afford it.` : `Because it changes the most minds for one move. Moves that hit every state at once, or big states, beat small local moves. ${next?`${next.label} is close behind.`:""}`) : `You can't afford any useful move right now, so the best thing is to end the week and get paid.`;
+    else if(ci==="riot") w = `Riots start when a state's unrest hits 100%, and unrest climbs every week a state doesn't believe you (under 40%). A rioting state stops paying taxes, costs repairs every week and pushes its neighbors' unrest up${P?" by 9 a week":""}, so one riot can turn into three.`;
+    else if(ci==="money") w = `Taxes come in every payday based on how many people live in states that aren't rioting${P?" (about $0.45M per million people)":""}. Riots cut taxes and add repair bills, and if you're below $0 after payday the government goes bankrupt.`;
+    else if(ci==="exposure") w = `Exposure is how close reporters are to proving you're lying. It rises every week on its own, plus whenever something sneaky gets caught. At 100% the truth comes out and you lose, so keeping it low matters even when belief is good.`;
+    else if(ci==="critics") w = `Every week a critic is active, they lower belief in their state and its neighbors${P?" (−2 and −1)":""}, and after 3 weeks they go national and lower belief everywhere. They grow their followers too, so they're cheapest to deal with early.`;
+    else if(ci==="state") w = `To pass a lie, 80% of <i>people</i> need to believe it, not 80% of states. So a big state with lots of doubters${P?" (population × how far below 100% it is)":""} is worth way more than a small one.`;
+    else if(ci==="news") w = `More believable outlets convince more people, but each time you use one it loses 5% believability${P?" (and gets 1.5% back each week)":""}. That's why switching between outlets beats paying the same one every week.`;
+    else if(ci==="lie") w = `Belief drops about 2.5% every week on its own as people think it over, so you need to add more than that each week just to make progress. You pass the moment the national number is at 80% or higher when a week ends.`;
+    else w = `I base everything on your current numbers: who believes what, your money, your moves and what's about to blow up.`;
+    return {t:w, plan, nag, go: (ci==="move"||ci==="other")&&m?m.state:null};
+  }
   if(intent==="riot"){
     if(!riots.length && !risk.length) t="Good news: no state is rioting and nobody is close (60%+ unrest).";
     else {
@@ -1705,7 +1757,7 @@ function aiAnswer(q, plan){
 function aiSubscribe(p){
   S.aiPlan=p; saveGame();
   S.aiChat=S.aiChat||[];
-  S.aiChat.push({t: p==="free" ? "You're back on SpinBot Free. We'll miss your money. 😢" : p==="pro" ? "🎉 Welcome to <b>SpinBot Pro</b>! Smarter answers, unlimited questions and way fewer ads. $25M is charged every payday." : "👑 Welcome to <b>SpinBot Max</b>. Perfect answers with exact numbers. No ads, ever. $90M is charged every payday.", plan:p});
+  S.aiChat.push({t: p==="free" ? "You're back on SpinBot Free. We'll miss your money." : p==="pro" ? "Welcome to <b>SpinBot Pro</b>! Smarter answers, unlimited questions and way fewer ads. $25M is charged every payday." : "Welcome to <b>SpinBot Max</b>. Perfect answers with exact numbers. No ads, ever. $90M is charged every payday.", plan:p});
   phoneGo("ai");
 }
 Object.assign(PHONE_APPS, {
@@ -1713,19 +1765,19 @@ Object.assign(PHONE_APPS, {
     const plan=aiPlan(), P=AI_PLANS[plan]; S.aiChat=S.aiChat||[];
     const chips=["What should I do?","Which state needs help?","Will this lie pass?","How do I stop riots?","Am I getting caught?","Who's debunking me?","How's my money?","Best news outlet?"];
     const left = plan==="free" ? Math.max(0,P.limit-(S.aiAsked||0)) : null;
-    const welcome = !S.aiChat.length ? `<div class="aimsg bot">👋 I'm <b>SpinBot</b>, your AI for selling lies. Ask me anything about your game!${plan==="free"?`<div class="aiad">💎 You're on SpinBot Free. Upgrade for answers that actually help! <button class="mini" onclick="phoneGo('aiplans')">See plans</button></div>`:""}</div>` : "";
+    const welcome = !S.aiChat.length ? `<div class="aimsg bot">Hi! I'm <b>SpinBot</b>, your AI for selling lies. Ask me anything about your game!${plan==="free"?`<div class="aiad">${I("gem",13)} You're on SpinBot Free. Upgrade for answers that actually help! <button class="mini" onclick="phoneGo('aiplans')">See plans</button></div>`:""}</div>` : "";
     return `<div class="apphead"><button class="back" onclick="phoneGo('home')">‹</button><b>SpinBot AI</b><button class="plantag" style="background:${P.color}" onclick="phoneGo('aiplans')">${P.name}</button></div>
-      ${plan==="free"?`<div class="aibanner" onclick="phoneGo('aiplans')">🔥 ${pick(AI_ADS)} <u>Upgrade</u></div>`:""}
+      ${plan==="free"?`<div class="aibanner" onclick="phoneGo('aiplans')">${I("bolt",13,"color:#c8261e")} ${pick(AI_ADS)} <u>Upgrade</u></div>`:""}
       <div class="aifeed" id="aiFeed">${welcome}${S.aiChat.map(m=>m.me?`<div class="aimsg me">${m.t}</div>`:`<div class="aimsg bot ${m.plan||""}">${m.t}${m.go?`<button class="mini" onclick="goState('${m.go}')">Open ${m.go} ›</button>`:""}${m.up?`<button class="mini" onclick="phoneGo('aiplans')">See plans</button>`:""}${m.nag||""}</div>`).join("")}</div>
       <div class="aichips">${chips.map(c=>`<button class="chip" onclick="aiAsk('${c.replace(/'/g,"\\'")}')">${c}</button>`).join("")}</div>
       <form class="aiinput" onsubmit="event.preventDefault();aiAsk(document.getElementById('aiQ').value)">
-        <input id="aiQ" placeholder="${plan==="free"?`Ask SpinBot… (${left} free left this week)`:"Ask SpinBot anything…"}" autocomplete="off" value="${esc(PH.aiDraft||"").replace(/"/g,"&quot;")}" oninput="PH.aiDraft=this.value"><button>↑</button>
+        <input id="aiQ" placeholder="${plan==="free"?`Ask SpinBot… (${left} free left this week)`:"Ask SpinBot anything…"}" autocomplete="off" value="${esc(PH.aiDraft||"").replace(/"/g,"&quot;")}" oninput="PH.aiDraft=this.value"><button>${I("send",18)}</button>
       </form>`;
   },
   aiplans(){
     const cur=aiPlan();
     const card=(k,feats)=>{const p=AI_PLANS[k]; return `<div class="plan ${cur===k?"cur":""}" style="border-color:${p.color}">
-      <div class="ph2"><b style="color:${p.color}">${k==="max"?"👑 ":k==="pro"?"💎 ":""}SpinBot ${p.name}</b><span>${p.price?`$${p.price}M<small>/week</small>`:"Free"}</span></div>
+      <div class="ph2"><b style="color:${p.color}">${k==="max"?I("crown",15)+" ":k==="pro"?I("gem",15)+" ":""}SpinBot ${p.name}</b><span>${p.price?`$${p.price}M<small>/week</small>`:"Free"}</span></div>
       <ul>${feats.map(f=>`<li>${f}</li>`).join("")}</ul>
       ${cur===k?`<div class="curtag">Your plan</div>`:`<button class="pbtn" style="background:${p.color}" ${p.price>S.money?"disabled":""} onclick="aiSubscribe('${k}')">${p.price>AI_PLANS[cur].price?"Upgrade":"Switch"} to ${p.name}</button>`}
     </div>`;};
@@ -1781,8 +1833,8 @@ function renderMap(){
     p.classList.toggle("sel",S.sel===n);
     p.querySelector("title").textContent=`${n}: ${Math.round(c.belief)}% believe${c.riot?" — RIOTING":""}`;
   });
-  $("fires").innerHTML = riotList().map(n=>`<text class="fire" x="${MAP[n].c[0]}" y="${MAP[n].c[1]}">🔥</text>`).join("")
-    + S.critics.filter(c=>c.found).map(c=>`<text class="fire" x="${MAP[c.state].c[0]+14}" y="${MAP[c.state].c[1]-10}">📱</text>`).join("");
+  $("fires").innerHTML = riotList().map(n=>`<use href="#i-fire" x="${MAP[n].c[0]-11}" y="${MAP[n].c[1]-13}" width="22" height="22" style="color:#ffb02e;pointer-events:none"/>`).join("")
+    + S.critics.filter(c=>c.found).map(c=>`<g style="pointer-events:none"><circle cx="${MAP[c.state].c[0]+16}" cy="${MAP[c.state].c[1]-10}" r="11" fill="#1d9bf0" stroke="#fff" stroke-width="2"/><use href="#i-phone" x="${MAP[c.state].c[0]+9}" y="${MAP[c.state].c[1]-17}" width="14" height="14" style="color:#fff"/></g>`).join("");
   if(S.sel){ const p=document.querySelector(`.st[data-n="${S.sel}"]`); p.parentNode.insertBefore(p,$("fires")); }
 }
 
@@ -1803,14 +1855,14 @@ function renderSheet(){
   const typeLabel={boost:"Big boost here",spread:"Boost here + neighbors",calm:"Calms the state down",cash:"Earns you money",quiet:"Lowers exposure"}[type];
   const inner=$("sheetInner");
   inner.innerHTML=`
-    <div class="top"><div><h3>${n}</h3><div class="meta">${pop}M people · ${Math.round(pop/TOTAL_POP*100)}% of the country · 📍 ${spot}</div></div><button class="x" id="closeX" aria-label="Close">✕</button></div>
-    ${c.riot?`<div class="riotbox" style="margin-top:10px">🔥 <b>RIOTING.</b> Costs you $${repairCost(n)}M in repairs every week, sends no taxes, and makes neighbors angrier. Get unrest under 50% to end it.</div>`:""}
+    <div class="top"><div><h3>${n}</h3><div class="meta">${pop}M people · ${Math.round(pop/TOTAL_POP*100)}% of the country · ${I("pin",12)} ${spot}</div></div><button class="x" id="closeX" aria-label="Close">${I("close",16)}</button></div>
+    ${c.riot?`<div class="riotbox" style="margin-top:10px">${I("fire",14,"color:#c8261e")} <b>RIOTING.</b> Costs you $${repairCost(n)}M in repairs every week, sends no taxes, and makes neighbors angrier. Get unrest under 50% to end it.</div>`:""}
     <div class="bars">
       <div><div class="lbl"><span>Belief</span><span>${Math.round(c.belief)}%</span></div><div class="bar"><i style="width:${c.belief}%;background:${colorFor({belief:c.belief})}"></i></div></div>
       <div><div class="lbl"><span>Unrest</span><span>${Math.round(c.unrest)}%</span></div><div class="bar"><i style="width:${c.unrest}%;background:var(--red)"></i></div></div>
     </div>
     <div class="actions" id="stActs"></div>
-    <div class="section-title" style="margin-top:12px">Hire Fake Supporters <small><span style="color:#2e8b57">●</span> very popular &nbsp;<span style="color:var(--blue)">●</span> neutral</small></div>
+    <div class="section-title" style="margin-top:12px">Hire Fake Supporters <small>${I("dot",12,"color:#2e8b57")} very popular &nbsp;${I("dot",12,"color:var(--blue)")} neutral</small></div>
     <div class="roads" id="roads"></div>
     <div class="nbrs">Neighbors: ${MAP[n].n.length?MAP[n].n.join(", "):"none"}</div>`;
   const box=inner.querySelector("#stActs"), off=S.over||S.ap<1;
@@ -1847,7 +1899,7 @@ function render(){
   $("natBar").style.width = nb+"%";
   $("lieDeadline").textContent = `Week ${S.lieWeek} of ${L.weeks} · need 80%`;
   const r=riotList().length;
-  $("riotCount").textContent = r ? `🔥 ${r} state${r>1?"s":""} rioting` : "Tap a state to see your moves";
+  $("riotCount").innerHTML = r ? `${I("fire",13,"color:#c8261e")} ${r} state${r>1?"s":""} rioting` : "Tap a state to see your moves";
 
   renderMap();
   renderSheet();
@@ -1857,7 +1909,7 @@ function render(){
   aw.appendChild(btn("Pay a News Outlet","Pick from 6 outlets. More believable ones cost more but convince more people.","From $"+outletPrice(Math.round(Math.min(...S.outlets)))+"M","",S.over||S.ap<1,openNews));
   NATIONAL.forEach(a=>aw.appendChild(btn(a.t,a.d,a.cost,"",S.over||S.ap<1||S.money<a.cost,()=>nationalAction(a))));
   $("endTurn").disabled = S.over;
-  $("news").innerHTML = S.news.map(n=>`<div>📰 ${n}</div>`).join("");
+  $("news").innerHTML = S.news.map(n=>`<div>${I("paper",13)} ${n}</div>`).join("");
   saveGame();
 }
 
@@ -1910,7 +1962,7 @@ function showWelcome(){
   const d=readSave();
   const L=d?LIES[Math.min(d.lie,LIES.length-1)]:null;
   const btns = d
-    ? `<div class="savebox">💾 Saved game: <b>week ${d.week}</b> · lie ${d.lie+1} of ${LIES.length} (<i>${L.name}</i>) · ${d.passed} passed · $${Math.round(d.money)}M</div>
+    ? `<div class="savebox">${I("save",14)} Saved game: <b>week ${d.week}</b> · lie ${d.lie+1} of ${LIES.length} (<i>${L.name}</i>) · ${d.passed} passed · $${Math.round(d.money)}M</div>
        <button onclick="continueGame()">Continue</button> <button class="alt" onclick="confirmNew()">New Game</button>`
     : `<button onclick="startFresh()">Start Lying</button>`;
   if(d){
@@ -1920,11 +1972,11 @@ ${btns}
 <p>Your job: convince America that 5 terrible policies are actually amazing.</p>
 <ul>
 <li>Get <b>80% of Americans</b> to believe each lie before time runs out. Big states like California and Texas count the most.</li>
-<li><b>Tap any state</b> on the map to see its moves. Every state has its own <b>★ special move</b>.</li>
+<li><b>Tap any state</b> on the map to see its moves. Every state has its own <b>${I("star",14,"color:#d9a521")} special move</b>.</li>
 <li>You get <b>4 moves per week</b>.</li>
 <li>States that don't believe get angry and <b>riot</b>. Riots cost repair money, stop taxes, and <b>spread to neighbors</b>.</li>
 <li>You lose if you go <b>bankrupt</b> or <b>Exposure</b> hits 100%.</li>
-<li>Tap the <b>📱 phone</b> to search social media for people debunking you. Then delete, arrest, or pay them off. Careful: pick the wrong person and it backfires!</li>
+<li>Tap the <b>${I("phone",14)} phone</b> to search social media for people debunking you. Then delete, arrest, or pay them off. Careful: pick the wrong person and it backfires!</li>
 <li>Watch out for <b>surprise events</b>: attacks, storms, protests, and people online poking holes in your lies. You choose how to respond.</li>
 <li>Every week ends with <b>The American Weekly</b> newspaper reporting what happened.</li>
 </ul>
@@ -1934,11 +1986,11 @@ ${btns}
 <p>Your job: convince America that 5 terrible policies are actually amazing.</p>
 <ul>
 <li>Get <b>80% of Americans</b> to believe each lie before time runs out. Big states like California and Texas count the most.</li>
-<li><b>Tap any state</b> on the map to see its moves. Every state has its own <b>★ special move</b>.</li>
+<li><b>Tap any state</b> on the map to see its moves. Every state has its own <b>${I("star",14,"color:#d9a521")} special move</b>.</li>
 <li>You get <b>4 moves per week</b>.</li>
 <li>States that don't believe get angry and <b>riot</b>. Riots cost repair money, stop taxes, and <b>spread to neighbors</b>.</li>
 <li>You lose if you go <b>bankrupt</b> or <b>Exposure</b> hits 100%.</li>
-<li>Tap the <b>📱 phone</b> to search social media for people debunking you. Then delete, arrest, or pay them off. Careful: pick the wrong person and it backfires!</li>
+<li>Tap the <b>${I("phone",14)} phone</b> to search social media for people debunking you. Then delete, arrest, or pay them off. Careful: pick the wrong person and it backfires!</li>
 <li>Watch out for <b>surprise events</b>: attacks, storms, protests, and people online poking holes in your lies. You choose how to respond.</li>
 <li>Every week ends with <b>The American Weekly</b> newspaper reporting what happened.</li>
 </ul>
