@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Social Collapse</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@500;600&family=UnifrakturMaguntia&family=Old+Standard+TT:wght@400;700&family=Special+Elite&family=Inter:wght@400;600;800&display=swap">
+<style>
+  :root{
+    --paper:#f3ead7; --ink:#1b1712; --red:#c8261e; --blue:#1f4e9c; --gold:#d9a521;
+    --muted:#7a6f5d; --card:#fffaf0; --line:#d8ccb2;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:14px}
+  .wrap{max-width:960px;margin:0 auto;padding:12px 12px 40px}
+  header{border-bottom:4px double var(--ink);padding-bottom:8px;margin-bottom:10px;text-align:center}
+  h1{font-family:Anton,Impact,sans-serif;font-size:34px;letter-spacing:1px;margin:0;line-height:1;text-transform:uppercase}
+  h1 span{color:var(--red)}
+  .sub{font-family:'Special Elite',monospace;color:var(--muted);font-size:12px;margin-top:4px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+  .stat{background:var(--ink);color:var(--paper);padding:6px 8px;border-radius:4px}
+  .stat b{display:block;font-family:Anton,sans-serif;font-size:20px;font-weight:400}
+  .stat small{font-size:10px;text-transform:uppercase;letter-spacing:1px;opacity:.75}
+  .stat .delta{font-size:10px;opacity:.8}
+  .meter{height:8px;background:#0003;border-radius:4px;overflow:hidden;margin-top:4px}
+  .meter i{display:block;height:100%}
+  .lie{background:var(--card);border:2px solid var(--ink);padding:10px 12px;margin-bottom:10px;position:relative}
+  .lie .tag{position:absolute;top:-10px;left:10px;background:var(--red);color:#fff;font-family:Anton,sans-serif;padding:1px 8px;font-size:12px;letter-spacing:1px}
+  .lie h2{font-family:Anton,sans-serif;font-weight:400;font-size:22px;margin:6px 0 2px}
+  .lie .truth{font-size:13px;color:var(--muted)}
+  .lie .spin{font-family:'Special Elite',monospace;font-size:15px;margin-top:6px}
+  .lie .prog{display:flex;justify-content:space-between;font-size:12px;margin-top:8px;font-weight:600;gap:8px}
+  .big{height:14px;background:#e5dcc6;border-radius:7px;overflow:hidden;position:relative;margin-top:4px}
+  .big i{display:block;height:100%;background:var(--blue);transition:width .4s}
+  .big .goal{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--red)}
+  .section-title{font-family:Anton,sans-serif;font-size:16px;letter-spacing:1px;text-transform:uppercase;margin:12px 0 6px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .section-title small{font-family:Inter;font-size:11px;color:var(--muted);text-transform:none;letter-spacing:0}
+  .mapbox{background:#e9dfc8;border:2px solid var(--ink);border-radius:6px;padding:6px;position:relative}
+  svg{width:100%;height:auto;display:block}
+  .st{stroke:var(--paper);stroke-width:1;cursor:pointer;transition:fill .4s}
+  .st:hover{filter:brightness(1.1)}
+  .st.sel{stroke:var(--ink);stroke-width:3}
+  .st.riot{animation:pulse 1s infinite}
+  @keyframes pulse{50%{fill:#ff5a3c}}
+  .fire{font-size:18px;pointer-events:none;text-anchor:middle;dominant-baseline:middle}
+  .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;margin-top:6px;align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:4px}
+  .legend i{width:12px;height:12px;border-radius:2px;display:inline-block}
+  select{width:100%;margin-top:6px;padding:8px;font-family:inherit;font-size:14px;border:2px solid var(--ink);border-radius:6px;background:var(--card)}
+  .actions{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+  @media(min-width:640px){.actions{grid-template-columns:repeat(3,1fr)}}
+  .act{background:var(--card);border:2px solid var(--ink);border-radius:6px;padding:7px 8px;text-align:left;font-family:inherit;color:var(--ink);cursor:pointer;width:100%}
+  .act:disabled{opacity:.38;cursor:not-allowed}
+  .act .t{font-weight:800;font-size:13px}
+  .act .d{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.25}
+  .act .c{font-size:11px;font-weight:700;margin-top:4px;color:var(--red)}
+  .act.special{border-color:var(--gold);background:#fff4d6}
+  .act.special .t::before{content:"★ ";color:var(--gold)}
+  .endturn{width:100%;margin-top:10px;background:var(--red);color:#fff;border:none;border-radius:6px;padding:12px;font-family:Anton,sans-serif;font-size:20px;letter-spacing:1px;cursor:pointer}
+  .endturn:disabled{opacity:.5}
+  .news{background:var(--ink);color:var(--paper);border-radius:6px;padding:8px 10px;font-family:'Special Elite',monospace;font-size:12.5px}
+  .news div{padding:4px 0;border-bottom:1px dashed #ffffff22}
+  .news div:first-child{color:var(--gold)}
+  .news div:last-child{border:none}
+  /* state panel */
+  .sheet{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:4px solid var(--ink);box-shadow:0 -8px 30px #0005;transform:translateY(105%);transition:transform .25s;z-index:8;max-height:78vh;overflow:auto}
+  .sheet.open{transform:translateY(0)}
+  .sheet .inner{max-width:960px;margin:0 auto;padding:12px 14px 18px}
+  .sheet .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .sheet h3{font-family:Anton,sans-serif;font-weight:400;font-size:26px;margin:0;line-height:1.05}
+  .sheet .meta{font-size:12px;color:var(--muted);margin-top:2px}
+  .x{background:var(--ink);color:var(--paper);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;flex:none}
+  .bars{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+  .bar{height:8px;background:#e5dcc6;border-radius:4px;overflow:hidden;margin-top:3px}
+  .bar i{display:block;height:100%;transition:width .4s}
+  .lbl{display:flex;justify-content:space-between;font-size:11px;font-weight:600}
+  .riotbox{background:#ffe0d9;border:2px solid var(--red);border-radius:6px;padding:6px 8px;font-size:12px;margin-bottom:8px}
+  .lastPaper{font-family:Inter,sans-serif;font-size:12px;font-weight:700;background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:3px 10px;cursor:pointer;text-transform:none;letter-spacing:0}
+  .paperWrap{position:fixed;inset:0;background:#1b1712ee;z-index:12;display:none;overflow-y:auto;padding:14px 10px 30px}
+  .paperWrap.show{display:block}
+  .paperInner{max-width:640px;margin:0 auto}
+  .paper{background:#f7f1e1;color:#1b1712;padding:14px 14px 10px;font-family:'Old Standard TT',Georgia,serif;box-shadow:0 10px 40px #000a;background-image:radial-gradient(#0000000a 1px,transparent 1px);background-size:4px 4px;animation:drop .5s ease-out}
+  @keyframes drop{from{transform:rotate(-6deg) scale(.6);opacity:0}to{transform:none;opacity:1}}
+  .mast-top,.mast-bot{display:flex;justify-content:space-between;gap:6px;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+  .mast-top{border-bottom:1px solid #1b1712;padding-bottom:4px}
+  .mast-bot{border-top:3px double #1b1712;border-bottom:1px solid #1b1712;padding:4px 0;margin-bottom:10px}
+  .mast-bot span:nth-child(2){font-weight:700;text-align:center}
+  .masthead{font-family:'UnifrakturMaguntia','Old English Text MT',serif;font-size:clamp(34px,10vw,58px);text-align:center;line-height:1.1;padding:6px 0}
+  .paper h2{font-family:'Old Standard TT',Georgia,serif;font-weight:700;font-size:clamp(24px,7vw,36px);line-height:1.05;margin:4px 0 8px;text-align:center}
+  .paper figure{margin:0 0 6px}
+  .paper figure svg{width:100%;height:auto;display:block;border:1px solid #1b1712;filter:sepia(.25) contrast(1.05)}
+  .paper figcaption{font-size:11px;font-style:italic;color:#555;margin-top:3px}
+  .paper p{font-size:14px;line-height:1.45;margin:4px 0 0;text-align:justify;hyphens:auto}
+  .lead p::first-letter{font-size:2.6em;float:left;line-height:.85;padding:4px 4px 0 0;font-weight:700}
+  .numbers{display:grid;grid-template-columns:repeat(4,1fr);border-top:3px double #1b1712;border-bottom:3px double #1b1712;margin:12px 0;padding:6px 0;text-align:center}
+  .numbers b{display:block;font-size:20px}
+  .numbers span{font-size:10px;text-transform:uppercase;letter-spacing:.4px}
+  .numbers em{font-style:normal;font-weight:700}.numbers .up{color:#2e8b57}.numbers .dn{color:#c8261e}
+  .cols{column-count:2;column-gap:14px;column-rule:1px solid #1b171244}
+  @media(max-width:420px){.cols{column-count:1}}
+  .story{break-inside:avoid;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #1b171233}
+  .story figure{float:right;width:46%;margin:2px 0 4px 10px}
+  .story::after{content:"";display:block;clear:both}
+  .story h4{font-size:17px;line-height:1.15;margin:4px 0 2px}
+  .ad{border:2px dashed #1b1712;padding:8px;text-align:center;font-size:12px;margin-top:6px;font-family:'Special Elite',monospace}
+  .paperBtn{display:block;width:100%;max-width:640px;margin:12px auto 0;background:var(--red);color:#fff;border:none;padding:12px;font-family:Anton,sans-serif;font-size:20px;letter-spacing:1px;cursor:pointer;border-radius:6px}
+  .critic{background:var(--card);border:2px solid var(--ink);border-radius:6px;padding:8px;margin-bottom:6px;display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .critic .ch{display:flex;flex-direction:column;font-size:13px}.critic .ch span{font-size:11px;color:var(--muted)}.critic em{color:var(--red);font-style:normal;font-weight:700}
+  .critic .cb{display:flex;gap:4px}
+  .critic .cb button{font-family:inherit;font-weight:800;font-size:12px;background:var(--ink);color:var(--paper);border:none;border-radius:5px;padding:5px 8px;cursor:pointer;line-height:1.1}
+  .critic .cb button small{font-weight:400;font-size:10px;opacity:.8}
+  .critic .cb button:disabled{opacity:.35}
+  .crisis-tag{display:inline-block;background:var(--red);color:#fff;font-family:Anton,sans-serif;letter-spacing:1px;padding:2px 10px;margin-bottom:8px;animation:blink 1s infinite}
+  @keyframes blink{50%{opacity:.6}}
+  .crisis-pic svg{width:100%;max-width:300px;border:2px solid var(--ink);display:block;margin:0 auto 6px}
+  .fab{position:fixed;right:14px;bottom:16px;width:56px;height:56px;border-radius:50%;border:3px solid var(--ink);background:#1d9bf0;font-size:26px;z-index:7;box-shadow:0 4px 14px #0006;cursor:pointer}
+  .phoneWrap{position:fixed;inset:0;background:#000c;z-index:11;display:none;flex-direction:column;align-items:center;justify-content:center;padding:10px}
+  .phoneWrap.show{display:flex}
+  .phoneBody{position:relative;width:min(370px,94vw);height:min(760px,86vh);background:#111;border-radius:42px;padding:12px;box-shadow:0 0 0 2px #444,0 20px 60px #000}
+  .notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:110px;height:24px;background:#111;border-radius:0 0 16px 16px;z-index:2}
+  .phoneScreen{width:100%;height:100%;background:#fff;border-radius:32px;overflow-y:auto;font-family:Inter,system-ui,sans-serif;color:#0f1419;position:relative}
+  .homeBar{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:120px;height:5px;border-radius:3px;background:#333;border:none;cursor:pointer;z-index:3}
+  .phoneX{margin-top:8px;background:none;border:none;color:#fff;font-size:14px;cursor:pointer}
+  .sbar{display:flex;justify-content:space-between;font-size:11px;font-weight:700;padding:8px 22px 6px;position:sticky;top:0;background:#fff;z-index:1;gap:6px}
+  .sbar.dark{background:#1f4e9c;color:#fff}
+  .home{min-height:calc(100% - 29px);background:linear-gradient(180deg,#1f4e9c,#0b1d3a 60%,#c8261e);color:#fff;padding:24px 18px}
+  .home .clock{font-size:64px;font-weight:300;text-align:center;line-height:1}
+  .home .date{text-align:center;font-size:12px;opacity:.8;margin-bottom:28px;letter-spacing:1px}
+  .apps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .app{background:none;border:none;color:#fff;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;position:relative;font-family:inherit}
+  .app .ic{width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 4px 10px #0005}
+  .badge2{position:absolute;top:-4px;right:6px;background:#c8261e;color:#fff;font-style:normal;font-size:11px;font-weight:800;border-radius:10px;padding:1px 6px}
+  .home .tip{margin-top:30px;background:#ffffff1f;border-radius:14px;padding:12px;font-size:13px;line-height:1.4}
+  .apphead{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-bottom:1px solid #eff3f4;font-size:16px;position:sticky;top:26px;background:#fff;z-index:1}
+  .apphead .back{background:none;border:none;font-size:28px;line-height:1;cursor:pointer;color:#1d9bf0;width:30px;text-align:left}
+  .apphead span{width:30px}
+  .sbox{padding:8px 12px}
+  .sbox input{width:100%;padding:10px 14px;border-radius:20px;border:1px solid #cfd9de;background:#eff3f4;font-size:15px;font-family:inherit;outline:none}
+  .sbox input:focus{border-color:#1d9bf0;background:#fff}
+  .chips{display:flex;gap:6px;overflow-x:auto;padding:0 12px 8px}
+  .chip{flex:none;background:#e8f5fd;color:#1d9bf0;border:none;border-radius:14px;padding:5px 10px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit}
+  .chip.clear{background:#eee;color:#555}
+  .rlabel{font-size:12px;font-weight:800;color:#536471;padding:8px 12px 4px;text-transform:uppercase;letter-spacing:.5px}
+  .post{display:flex;gap:10px;padding:10px 12px;border-bottom:1px solid #eff3f4;cursor:pointer}
+  .post:active{background:#f7f9f9}
+  .av{width:40px;height:40px;border-radius:50%;flex:none;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:17px}
+  .av.big{width:72px;height:72px;font-size:30px;margin:0 auto}
+  .pb{flex:1;min-width:0}
+  .ph{font-size:13px}.ph span{color:#536471}
+  .pt{font-size:14px;line-height:1.35;margin-top:2px}
+  .pt mark{background:#fff3a3;padding:0 1px}
+  .pm{font-size:11px;color:#536471;margin-top:4px}.pm em{color:#1d9bf0;font-style:normal;font-weight:700}
+  .prof{text-align:center;padding:14px 12px 8px}
+  .pn{font-weight:800;font-size:18px;margin-top:6px}.phd{color:#536471;font-size:13px}
+  .pbio{font-size:13px;margin:6px 0}
+  .pst{display:flex;justify-content:center;gap:14px;font-size:13px;color:#536471}
+  .acts{padding:8px 12px;display:grid;gap:6px;background:#fdf6f5;border-top:1px solid #f0d6d3;border-bottom:1px solid #f0d6d3}
+  .actt{font-weight:800;font-size:13px}.actt small{font-weight:400;color:#536471}
+  .acts button{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;background:#fff;border:1.5px solid #0f1419;border-radius:10px;padding:9px 10px;cursor:pointer;font-family:inherit;font-size:13px}
+  .acts button span{font-size:11px;color:#536471;text-align:right}
+  .acts button:disabled{opacity:.4}
+  .acts .leave{border-color:#cfd9de}
+  .warn{font-size:12px;color:#c8261e;font-weight:700}
+  .gone{text-align:center;color:#536471;font-size:26px;padding:50px 20px}
+  .result{padding:14px;text-align:center}
+  .result .rpic svg{width:100%;border-radius:10px;border:1px solid #ddd}
+  .result p{font-size:15px;line-height:1.45}
+  .pbtn{display:block;width:100%;margin-top:8px;background:#1d9bf0;color:#fff;border:none;border-radius:20px;padding:11px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit}
+  .pbtn.alt{background:#0f1419}
+  .roads{display:grid;gap:6px}
+  .road{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font-family:inherit;color:var(--ink);background:var(--card);border:2px solid;border-left-width:8px;border-radius:6px;padding:8px 10px;cursor:pointer}
+  .road.green{border-color:#2e8b57;background:#e9f6ee}
+  .road.blue{border-color:var(--blue);background:#e8eef9}
+  .road:disabled{opacity:.4;cursor:not-allowed}
+  .road .dot{width:12px;height:12px;border-radius:50%;flex:none}
+  .road.green .dot{background:#2e8b57}.road.blue .dot{background:var(--blue)}
+  .road .rn{flex:1;font-weight:800;font-size:13px}
+  .road .rn small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
+  .road .rc{font-weight:800;font-size:12px;color:var(--red)}
+  .modal button.outlet{width:100%;background:var(--card);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:14px;letter-spacing:0;padding:8px 10px;margin:0;border:2px solid var(--ink);border-radius:6px}
+  .modal button.outlet:disabled{opacity:.4}
+  .nbrs{font-size:11px;color:var(--muted);margin-top:8px}
+  .overlay{position:fixed;inset:0;background:#1b1712e6;display:none;align-items:center;justify-content:center;padding:16px;z-index:10}
+  .overlay.show{display:flex}
+  .modal{background:var(--paper);max-width:440px;width:100%;border:3px solid var(--ink);padding:18px;text-align:center;max-height:90vh;overflow:auto}
+  .modal h2{font-family:Anton,sans-serif;font-weight:400;font-size:30px;margin:0 0 6px;text-transform:uppercase}
+  .modal p{margin:8px 0;line-height:1.45}
+  .modal ul{text-align:left;padding-left:18px;line-height:1.5;font-size:13px}
+  .modal button{background:var(--red);color:#fff;border:none;padding:10px 20px;font-family:Anton,sans-serif;font-size:18px;letter-spacing:1px;cursor:pointer;margin-top:8px}
+  .toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:8px 14px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90%;text-align:center;z-index:20}
+  .toast.show{opacity:1}
+</style>
+</head>
+<body>
+<!-- ===== Boot: tap to start → Axiom Games intro → loading screen ===== -->
+<style>
+  #boot,#axiom,#loading{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s}
+  .gone{opacity:0;pointer-events:none}
+  #boot{background:#090d19;color:#8E93C4;font-family:'Space Grotesk',Inter,sans-serif;cursor:pointer;gap:14px}
+  #boot .tap{font-size:18px;letter-spacing:6px;color:#F5F7FA;animation:bpulse 1.6s infinite}
+  #boot small{font-size:12px;letter-spacing:2px;opacity:.7}
+  @keyframes bpulse{50%{opacity:.35}}
+  #axiom{background:#090d19;display:none;cursor:pointer}
+  #axiom video{width:100%;height:100%;object-fit:contain;background:#090d19}
+  #axiom .mark{width:min(42vw,200px);height:min(42vw,200px);overflow:visible}
+  #axiom .mark polygon{opacity:0}
+  #axiom .f-top{transform:translateY(-120px)}
+  #axiom .f-left{transform:translate(-140px,40px)}
+  #axiom .f-right{transform:translate(140px,40px)}
+  #axiom .notch{transform-origin:48px 25.5px;transform:scale(0)}
+  #axiom.go .f-left{animation:snapIn .45s cubic-bezier(.2,1.4,.4,1) .30s forwards}
+  #axiom.go .f-right{animation:snapIn .45s cubic-bezier(.2,1.4,.4,1) .65s forwards}
+  #axiom.go .f-top{animation:snapIn .45s cubic-bezier(.2,1.4,.4,1) 1.00s forwards}
+  #axiom.go .notch{animation:pop .35s cubic-bezier(.2,1.6,.4,1) 1.40s forwards}
+  @keyframes snapIn{to{transform:none;opacity:1}}
+  @keyframes pop{to{transform:scale(1);opacity:1}}
+  #axiom .flash{position:absolute;width:min(70vw,360px);height:min(70vw,360px);border-radius:50%;background:radial-gradient(circle,#5B6CFF88 0%,#5B6CFF00 65%);opacity:0;pointer-events:none}
+  #axiom.go .flash{animation:flash 1.2s ease-out 1.40s forwards}
+  @keyframes flash{0%{opacity:0;transform:scale(.4)}25%{opacity:1}100%{opacity:0;transform:scale(1.6)}}
+  #axiom .word{font-family:'Space Grotesk',Inter,sans-serif;font-weight:600;font-size:clamp(36px,11vw,56px);color:#F5F7FA;letter-spacing:30px;opacity:0;margin-top:26px;padding-left:30px}
+  #axiom .sub{font-family:'Space Grotesk',Inter,sans-serif;font-weight:500;font-size:clamp(12px,3.4vw,16px);color:#8E93C4;letter-spacing:10px;opacity:0;margin-top:8px;padding-left:10px}
+  #axiom.go .word{animation:word .9s cubic-bezier(.2,.8,.2,1) 1.75s forwards}
+  #axiom.go .sub{animation:fadeUp .6s ease-out 2.35s forwards}
+  @keyframes word{to{opacity:1;letter-spacing:7px;padding-left:7px}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  #axiom .skip{position:absolute;bottom:22px;right:22px;color:#8E93C4;font:12px Inter,sans-serif;letter-spacing:2px;opacity:.6}
+  #loading{background:#c8261e;display:none;overflow:hidden;color:#f3ead7}
+  #loading .rays{position:absolute;width:260vmax;height:260vmax;left:50%;top:50%;margin:-130vmax 0 0 -130vmax;
+    background:repeating-conic-gradient(#a51c16 0deg 12deg,#c8261e 12deg 24deg);animation:spin 40s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #loading .inner{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;width:min(86vw,420px)}
+  #loading img{width:min(48vw,200px);height:auto;filter:drop-shadow(0 8px 18px #0006);animation:bob 2.4s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(-8px) rotate(-1.5deg)}}
+  #loading h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(34px,11vw,54px);margin:0;line-height:.95;text-align:center;color:#f3ead7;text-shadow:3px 3px 0 #1b1712;letter-spacing:1px}
+  #loading .bar{width:100%;height:18px;border:3px solid #1b1712;border-radius:10px;background:#f3ead7;overflow:hidden}
+  #loading .bar i{display:block;height:100%;width:0;background:repeating-linear-gradient(45deg,#1f4e9c 0 12px,#2a5fb8 12px 24px)}
+  #loading .tip{font-family:'Special Elite',monospace;font-size:14px;min-height:20px;text-align:center;text-shadow:1px 1px 0 #1b1712}
+  #loading .pct{font-family:Anton,sans-serif;font-size:14px;letter-spacing:2px}
+</style>
+<div id="boot"><div class="tap">TAP TO START</div><small>🔊 Turn your sound on</small></div>
+<div id="axiom">
+  <video id="axVid" src="__AXVID__" playsinline preload="auto"></video>
+  <div class="skip">TAP TO SKIP</div>
+</div>
+<div id="loading">
+  <div class="rays"></div>
+  <div class="inner">
+    <img alt="" src="__LOGO__">
+    <h1>THE SOCIAL<br>COLLAPSE</h1>
+    <div class="bar"><i id="ldBar"></i></div>
+    <div class="pct" id="ldPct">0%</div>
+    <div class="tip" id="ldTip"></div>
+  </div>
+</div>
+<script>
+(function(){
+  const $b=document.getElementById("boot"), $a=document.getElementById("axiom"), $l=document.getElementById("loading");
+  let actx=null, introTimer=null, done=false;
+
+  const TIPS=["Printing fake polls…","Hiring enthusiastic supporters…","Training 10,000 bots…","Buying a news network…",
+    "Shredding the memo…","Ironing lab coats for the experts…","Practicing the official story…","Waking up the Totally Normal Van…"];
+
+  function startLoading(){
+    if(done) return; done=true;
+    try{ const v=document.getElementById("axVid"); v.pause(); }catch(e){}
+    clearTimeout(introTimer);
+    $a.classList.add("gone");
+    setTimeout(()=>{ $a.style.display="none"; },500);
+    $l.style.display="flex";
+    const bar=document.getElementById("ldBar"), pct=document.getElementById("ldPct"), tip=document.getElementById("ldTip");
+    const order=[...TIPS].sort(()=>Math.random()-.5);
+    let p=0, ti=0; tip.textContent=order[0];
+    const tipT=setInterval(()=>{ ti=(ti+1)%order.length; tip.textContent=order[ti]; },850);
+    const step=()=>{
+      p=Math.min(100,p+Math.random()*6+1.5);
+      bar.style.width=p+"%"; pct.textContent=Math.round(p)+"%";
+      if(p<100) setTimeout(step, 60+Math.random()*110);
+      else { clearInterval(tipT); tip.textContent="Ready, Mr. President."; setTimeout(()=>{ $l.classList.add("gone"); setTimeout(()=>$l.remove(),600); },600); }
+    };
+    setTimeout(step,250);
+  }
+
+  $b.addEventListener("click",()=>{
+    $b.classList.add("gone"); setTimeout(()=>$b.remove(),500);
+    $a.style.display="flex";
+    const v=document.getElementById("axVid");
+    v.addEventListener("ended",startLoading,{once:true});
+    v.addEventListener("error",startLoading,{once:true});
+    const p=v.play(); if(p&&p.catch) p.catch(()=>{ v.muted=true; v.play().catch(startLoading); });
+    introTimer=setTimeout(startLoading,8000);
+  },{once:true});
+  $a.addEventListener("click",startLoading);
+})();
+</script>
+
+<div class="wrap">
+  <header>
+    <h1>The Social <span>Collapse</span></h1>
+    <div class="sub">CLASSIFIED // Office of Totally Honest Communications</div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><small>Week</small><b id="sWeek">1</b></div>
+    <div class="stat"><small>Budget</small><b id="sMoney">$0M</b><div class="delta" id="sIncome"></div></div>
+    <div class="stat"><small>Moves</small><b id="sAP">4</b></div>
+    <div class="stat"><small>Exposure</small><b id="sExp">0%</b><div class="meter"><i id="mExp" style="background:var(--red)"></i></div></div>
+  </div>
+
+  <div class="lie">
+    <div class="tag" id="lieTag">LIE #1 OF 5</div>
+    <h2 id="lieName"></h2>
+    <div class="truth" id="lieTruth"></div>
+    <div class="spin" id="lieSpin"></div>
+    <div class="prog"><span>Americans who believe it: <span id="natBelief">0</span>%</span><span id="lieDeadline"></span></div>
+    <div class="big"><i id="natBar"></i><div class="goal" style="left:80%"></div></div>
+  </div>
+
+  <div class="section-title">The Map <small id="riotCount"></small></div>
+  <div class="mapbox">
+    <svg id="map" viewBox="0 0 975 610"></svg>
+  </div>
+  <div class="legend">
+    <span><i style="background:#1f4e9c"></i>Believes</span>
+    <span><i style="background:#d9a521"></i>Unsure</span>
+    <span><i style="background:#9c8f78"></i>Doubts</span>
+    <span><i style="background:#c8261e"></i>Rioting 🔥</span>
+  </div>
+  <select id="pick" aria-label="Pick a state"></select>
+
+  <div class="section-title">Whole Country <small>Each move uses 1 of your weekly moves</small></div>
+  <div class="actions" id="actions"></div>
+
+  <div id="criticsWrap" style="display:none">
+    <div class="section-title">📱 Online Critics <small>They hurt belief every week. Fixes cost money, not moves.</small></div>
+    <button class="act" onclick="openPhone()" style="margin-bottom:6px;border-color:#1d9bf0"><div class="t">📱 Open Government Phone</div><div class="d">Search social media for people debunking your lies, then decide what to do with them.</div></button>
+    <div id="critics"></div>
+  </div>
+
+  <button class="endturn" id="endTurn">END WEEK ▸</button>
+
+  <div class="section-title">Headlines <button class="lastPaper" onclick="reopenPaper()">📰 Read last week's paper</button></div>
+  <div class="news" id="news"></div>
+</div>
+
+<div class="sheet" id="sheet"><div class="inner" id="sheetInner"></div></div>
+<div class="overlay show" id="overlay"><div class="modal" id="modal"></div></div>
+<div class="paperWrap" id="paperWrap"><div class="paperInner" id="paperInner"></div></div>
+<button class="fab" onclick="openPhone()" aria-label="Open phone">📱</button>
+<div class="phoneWrap" id="phone"><div class="phoneBody"><div class="notch"></div><div class="phoneScreen" id="phoneScreen"></div><button class="homeBar" onclick="closePhone()" aria-label="Close phone"></button></div><button class="phoneX" onclick="closePhone()">✕ Put phone away</button></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const MAP = __MAP__;
+
+// name: [abbr, population (millions), busiest spot, special move name, special description, type]
+// types: boost (+25 here) | spread (+15 here, +8 neighbors) | calm (−35 unrest, +8 belief) | cash (earn money) | quiet (−10 exposure, +12 belief)
+const STATES = {
+  "Alabama":["AL",5.0,"Space & Rocket Center","Rocket Launch","Launch a rocket with the slogan painted on the side.","boost"],
+  "Alaska":["AK",0.7,"Downtown Anchorage","Sled Dog Mail","Mushers deliver flyers to every town in the snow.","boost"],
+  "Arizona":["AZ",7.2,"Grand Canyon South Rim","Desert Skywriting","Planes write the slogan across the desert sky.","spread"],
+  "Arkansas":["AR",3.0,"Hot Springs","Free Spa Day","Everyone gets a free hot spring soak. Very relaxing.","calm"],
+  "California":["CA",39.5,"Hollywood Blvd","Hollywood Blockbuster","Pay movie stars to make a film about how great it is.","spread"],
+  "Colorado":["CO",5.8,"Red Rocks","Mountain Concert","Free concert at Red Rocks. Hard to stay mad.","calm"],
+  "Connecticut":["CT",3.6,"New Haven Green","Pizza Summit","Free New Haven pizza for anyone who agrees.","calm"],
+  "Delaware":["DE",1.0,"I-95 Toll Plaza","Toll Booth Flyers","Every driver gets a flyer with their change.","boost"],
+  "Florida":["FL",21.5,"Ocean Drive, Miami","Beach Banner Planes","Planes drag the slogan over every beach.","spread"],
+  "Georgia":["GA",10.7,"I-285 Perimeter","Peach Giveaway","Free peaches! (With the slogan stamped on them.)","calm"],
+  "Hawaii":["HI",1.5,"Waikiki Beach","Giant Luau","A free island party. Everyone chills out.","calm"],
+  "Idaho":["ID",1.8,"Boise Capitol","Potato Stamps","Every potato in the state gets the slogan stamped on it.","boost"],
+  "Illinois":["IL",12.8,"Magnificent Mile","Deep Dish Diplomacy","Free deep dish pizza. Too full to protest.","calm"],
+  "Indiana":["IN",6.8,"Indianapolis Speedway","Pace Car Ads","The pace car is painted with the slogan.","spread"],
+  "Iowa":["IA",3.2,"Iowa State Fair","Butter Cow Sculpture","Sculpt the policy out of butter at the fair.","boost"],
+  "Kansas":["KS",2.9,"Wheat Fields","Crop Circles","Crop circles spell out the slogan. Visible from planes.","spread"],
+  "Kentucky":["KY",4.5,"Churchill Downs","Sponsor the Big Race","Sponsor the horse race and take a cut of the money.","cash"],
+  "Louisiana":["LA",4.7,"Bourbon Street","Surprise Parade","A surprise parade with beads for everyone.","calm"],
+  "Maine":["ME",1.4,"Portland Head Light","Lighthouse Morse Code","Lighthouses blink the slogan all night.","boost"],
+  "Maryland":["MD",6.2,"Baltimore Inner Harbor","Crab Feast","A free crab feast for the whole state.","calm"],
+  "Massachusetts":["MA",7.0,"Boston Common","Fake Harvard Study","A “study” proves the policy is genius.","quiet"],
+  "Michigan":["MI",10.1,"Detroit Riverfront","Car Radio Jingle","Every new car's radio plays the jingle on startup.","spread"],
+  "Minnesota":["MN",5.7,"Mall of America","Mall Speakers","Mall of America plays the slogan on loop.","boost"],
+  "Mississippi":["MS",3.0,"Mississippi River","Riverboat Tour","A party riverboat spreads the word up and down the river.","spread"],
+  "Missouri":["MO",6.2,"Gateway Arch","Light Up the Arch","Project the slogan on the Gateway Arch.","boost"],
+  "Montana":["MT",1.1,"Glacier National Park","Cowboy Radio Hour","Cowboys on the radio say they love it.","boost"],
+  "Nebraska":["NE",2.0,"Omaha Old Market","Corn Maze Message","The world's biggest corn maze spells the slogan.","boost"],
+  "Nevada":["NV",3.1,"Las Vegas Strip","Casino Cut","Take a secret cut of the casino money.","cash"],
+  "New Hampshire":["NH",1.4,"Mount Washington","Town Hall Takeover","Fill every town hall with friendly faces.","quiet"],
+  "New Jersey":["NJ",9.3,"Jersey Shore Boardwalk","Turnpike Billboards","Billboards at every Turnpike exit.","spread"],
+  "New Mexico":["NM",2.1,"Roswell","Alien Endorsement","Announce that aliens support the policy.","boost"],
+  "New York":["NY",20.2,"Times Square","Times Square Screens","Every giant screen in Times Square shows the slogan.","spread"],
+  "North Carolina":["NC",10.4,"Outer Banks","Kitty Hawk Flyover","A historic airplane flyover with a banner.","boost"],
+  "North Dakota":["ND",0.8,"Oil Fields","Oil Bonus","Skim some oil money into your budget.","cash"],
+  "Ohio":["OH",11.8,"Rock & Roll Hall of Fame","Rock Concert","A free rock concert. Everyone cools off.","calm"],
+  "Oklahoma":["OK",4.0,"Route 66","Route 66 Billboards","Billboards along the whole highway.","spread"],
+  "Oregon":["OR",4.2,"Portland Food Carts","Free Food Truck Friday","Free food from every food truck.","calm"],
+  "Pennsylvania":["PA",13.0,"Liberty Bell","Ring the Liberty Bell","Ring the bell “in honor” of the policy.","boost"],
+  "Rhode Island":["RI",1.1,"Newport Mansions","Mansion Gala","Rich donors pay to attend a fancy party.","cash"],
+  "South Carolina":["SC",5.1,"Myrtle Beach","Beach Fireworks","A giant fireworks show. Ooooh.","calm"],
+  "South Dakota":["SD",0.9,"Mount Rushmore","Rushmore Hologram","Project the slogan on Mount Rushmore.","spread"],
+  "Tennessee":["TN",6.9,"Nashville Broadway","Country Hit Song","Pay a singer to write a hit song about it.","spread"],
+  "Texas":["TX",29.1,"I-45 Overpass, Houston","Highway Billboards","Giant billboards on every Texas highway.","spread"],
+  "Utah":["UT",3.3,"Park City Slopes","Ski Lift Ads","Every ski lift chair has the slogan on it.","boost"],
+  "Vermont":["VT",0.6,"Maple Farms","Free Maple Syrup","Free syrup for everyone. Sweet.","calm"],
+  "Virginia":["VA",8.6,"Arlington","Classified Briefing","Tell people it's top secret and very important.","quiet"],
+  "Washington":["WA",7.7,"Pike Place Market","Coffee Cup Slogans","Print the slogan on every coffee cup.","spread"],
+  "West Virginia":["WV",1.8,"New River Gorge Bridge","Bridge Banner","Hang a giant banner off the bridge.","boost"],
+  "Wisconsin":["WI",5.9,"Cheese Country","Cheese Giveaway","Free cheese. No one can say no.","calm"],
+  "Wyoming":["WY",0.6,"Old Faithful","Old Faithful Show","Old Faithful erupts “in celebration.”","boost"],
+};
+
+// roads per state: [name, "g" = very popular, "b" = neutral]
+const ROADS = {
+  "Alabama":[["I-65 Birmingham","g"],["I-10 Mobile","b"],["Gulf Shores Pkwy","b"]],
+  "Alaska":[["Glenn Highway","g"],["Seward Highway","b"],["Parks Highway","b"]],
+  "Arizona":[["I-10 Phoenix","g"],["Loop 101","g"],["Route 66, Flagstaff","b"]],
+  "Arkansas":[["I-40 Little Rock","g"],["I-30","b"],["Central Ave, Hot Springs","b"]],
+  "California":[["Hollywood Blvd","g"],["I-405","g"],["Pacific Coast Highway","b"]],
+  "Colorado":[["I-25 Denver","g"],["I-70 Mountain Corridor","g"],["Colfax Ave","b"]],
+  "Connecticut":[["I-95","g"],["Merritt Parkway","b"],["I-84 Hartford","b"]],
+  "Delaware":[["I-95","g"],["Route 1 Beach Traffic","b"],["Main St, Newark","b"]],
+  "Florida":[["I-4 Orlando","g"],["Ocean Drive, Miami","g"],["A1A Coastal Road","b"]],
+  "Georgia":[["I-285 Perimeter","g"],["Downtown Connector","g"],["Peachtree St","b"]],
+  "Hawaii":[["H-1 Freeway","g"],["Kalakaua Ave, Waikiki","g"],["Hana Highway","b"]],
+  "Idaho":[["I-84 Boise","g"],["US-95","b"],["Sun Valley Rd","b"]],
+  "Illinois":[["Magnificent Mile","g"],["Dan Ryan Expressway","g"],["Lake Shore Drive","b"]],
+  "Indiana":[["I-65 Indianapolis","g"],["I-465 Loop","b"],["Monument Circle","b"]],
+  "Iowa":[["I-80","g"],["I-35","b"],["Ingersoll Ave, Des Moines","b"]],
+  "Kansas":[["I-70","g"],["I-35 Wichita","b"],["K-10","b"]],
+  "Kentucky":[["I-64 Louisville","g"],["I-75 Lexington","b"],["Bourbon Trail Backroads","b"]],
+  "Louisiana":[["Bourbon Street","g"],["I-10 New Orleans","g"],["St. Charles Ave","b"]],
+  "Maine":[["I-95","g"],["US-1 Coastal Route","b"],["Commercial St, Portland","b"]],
+  "Maryland":[["I-95 Baltimore","g"],["Capital Beltway","g"],["Coastal Hwy, Ocean City","b"]],
+  "Massachusetts":[["Mass Pike","g"],["I-93 Boston","g"],["Route 6, Cape Cod","b"]],
+  "Michigan":[["I-75 Detroit","g"],["Woodward Ave","g"],["I-96","b"]],
+  "Minnesota":[["I-94 Twin Cities","g"],["I-35W","b"],["Nicollet Mall","b"]],
+  "Mississippi":[["I-55 Jackson","g"],["US-90 Gulf Coast","b"],["Natchez Trace Parkway","b"]],
+  "Missouri":[["I-70 St. Louis","g"],["I-44","b"],["Branson 76 Strip","b"]],
+  "Montana":[["I-90 Billings","g"],["Going-to-the-Sun Road","b"],["US-93","b"]],
+  "Nebraska":[["I-80 Omaha","g"],["Dodge St","b"],["US-30","b"]],
+  "Nevada":[["Las Vegas Strip","g"],["I-15","g"],["I-80 Reno","b"]],
+  "New Hampshire":[["I-93","g"],["Everett Turnpike","b"],["Kancamagus Highway","b"]],
+  "New Jersey":[["NJ Turnpike","g"],["Garden State Parkway","g"],["Atlantic City Boardwalk","b"]],
+  "New Mexico":[["I-25 Albuquerque","g"],["I-40","b"],["Route 66, Central Ave","b"]],
+  "New York":[["Broadway, Times Square","g"],["Long Island Expressway","g"],["FDR Drive","b"]],
+  "North Carolina":[["I-85 Charlotte","g"],["I-40 Raleigh","g"],["Blue Ridge Parkway","b"]],
+  "North Dakota":[["I-94 Fargo","g"],["I-29","b"],["US-2","b"]],
+  "Ohio":[["I-71 Columbus","g"],["I-90 Cleveland","g"],["I-75 Dayton","b"]],
+  "Oklahoma":[["I-35 Oklahoma City","g"],["I-44 Tulsa","b"],["Route 66","b"]],
+  "Oregon":[["I-5 Portland","g"],["I-84 Columbia Gorge","b"],["US-101 Coast","b"]],
+  "Pennsylvania":[["Schuylkill Expressway","g"],["PA Turnpike","g"],["Market St, Philadelphia","b"]],
+  "Rhode Island":[["I-95 Providence","g"],["Thayer St","b"],["Ocean Drive, Newport","b"]],
+  "South Carolina":[["I-26 Columbia","g"],["Ocean Blvd, Myrtle Beach","g"],["I-95","b"]],
+  "South Dakota":[["I-90 Sioux Falls","g"],["Needles Highway","b"],["Iron Mountain Road","b"]],
+  "Tennessee":[["Broadway, Nashville","g"],["I-40","g"],["I-24 Chattanooga","b"]],
+  "Texas":[["I-45 Houston","g"],["I-35 Austin","g"],["Sam Houston Tollway","b"]],
+  "Utah":[["I-15 Salt Lake City","g"],["I-80","b"],["Main St, Park City","b"]],
+  "Vermont":[["I-89","g"],["Church St, Burlington","b"],["Route 100","b"]],
+  "Virginia":[["I-95","g"],["I-66","g"],["Skyline Drive","b"]],
+  "Washington":[["I-5 Seattle","g"],["I-90 Floating Bridge","b"],["SR-520","b"]],
+  "West Virginia":[["I-64 Charleston","g"],["I-79","b"],["US-19 New River Gorge","b"]],
+  "Wisconsin":[["I-94 Milwaukee","g"],["I-90 Madison","b"],["State St, Madison","b"]],
+  "Wyoming":[["I-80 Cheyenne","g"],["I-25","b"],["Grand Loop Road, Yellowstone","b"]],
+};
+
+// news outlets: believability % — the more people trust them, the more they cost
+const OUTLETS = [
+  {name:"The Daily Rumor", tag:"Gossip site. Nobody really trusts it.", base:25},
+  {name:"BuzzBlast Online", tag:"Clickbait headlines and top-10 lists.", base:35},
+  {name:"Channel 7 Action News", tag:"Local TV news in every city.", base:55},
+  {name:"Eagle News Network", tag:"24-hour cable news. Loud and confident.", base:65},
+  {name:"The National Tribune", tag:"Big serious newspaper. People quote it.", base:80},
+  {name:"American Public Broadcast", tag:"The most trusted news in the country.", base:92},
+];
+const outletPrice = b => Math.round(10 + b*b/50);
+const outletBoost = b => Math.max(1, Math.round(b/7));
+
+const LIES = [
+  {name:"Operation Long Monday", truth:"The truth: Mondays will now last 48 hours.", spin:"“More Monday means more money for everyone!”", bad:25, weeks:7},
+  {name:"The NutriPaste Act", truth:"The truth: all school lunches become gray paste.", spin:"“It’s a superfood from the future. Kids love it.”", bad:30, weeks:7},
+  {name:"Grand Canyon Clearance Sale", truth:"The truth: selling the Grand Canyon to a mattress company.", spin:"“It was just a really big hole anyway.”", bad:35, weeks:7},
+  {name:"The Clean Air Fee", truth:"The truth: a tax on breathing.", spin:"“Paying for air makes the air cleaner. Science!”", bad:40, weeks:8},
+  {name:"The Weekend Retirement Plan", truth:"The truth: weekends are canceled forever.", spin:"“Weekends were invented by lazy people. You’re welcome.”", bad:48, weeks:8},
+];
+
+const NATIONAL = [
+  {id:"bots", t:"Bot Army", d:"10,000 fake accounts. Every state +4, but bots get caught.", cost:30},
+  {id:"celeb", t:"Celebrity Influencer", d:"A pop star posts about how much she loves it. Every state +12.", cost:150},
+  {id:"poll", t:"Fake Poll", d:"“92% agree!” Believers +8, doubters +2.", cost:20},
+  {id:"experts", t:"Hire “Experts”", d:"Guys in lab coats nod seriously. Every state +6, exposure −5.", cost:70},
+  {id:"distract", t:"National Holiday", d:"Surprise day off! Unrest −15 everywhere, exposure −8.", cost:90},
+  {id:"discredit", t:"Discredit Reporters", d:"Call journalists clowns. Exposure −20, unrest +5 everywhere.", cost:80},
+];
+
+const MOVES_PER_WEEK = 4;
+let S;
+const $ = id => document.getElementById(id);
+const clamp = (v,a=0,b=100)=>Math.max(a,Math.min(b,v));
+const rnd = (a,b)=>a+Math.random()*(b-a);
+const pick = arr=>arr[Math.floor(Math.random()*arr.length)];
+const NAMES = Object.keys(STATES).sort();
+const TOTAL_POP = NAMES.reduce((a,n)=>a+STATES[n][1],0);
+
+function stateCosts(n){
+  const p = STATES[n][1];
+  return { tv: Math.round(8+p*2), g: Math.round(14+p*3.5), b: Math.round(6+p*1.5), pizza: Math.round(8+p*2), special: STATES[n][5]==="cash"?0:Math.round(15+p*3) };
+}
+function repairCost(n){ return Math.round(6+STATES[n][1]*3); }
+
+function newGame(){
+  S = {week:1, money:400, ap:MOVES_PER_WEEK, exposure:0, lie:0, lieWeek:1, passed:0, sel:null, over:false, news:[], st:{},
+    outlets: OUTLETS.map(o=>o.base), log:[], lastPaper:null, pending:null, collect:false, critics:[], crisis:null, fillers:[]};
+  NAMES.forEach(n=>S.st[n]={belief:50, unrest:rnd(5,20), riot:false, usedSpecial:false});
+  startLie(true);
+  S.weekStart = {belief:natBelief(), money:S.money, exposure:0};
+  closeSheet();
+  render();
+}
+
+function startLie(first){
+  const L = LIES[S.lie];
+  S.lieWeek = 1;
+  NAMES.forEach(n=>{
+    const c=S.st[n];
+    c.belief = clamp(c.belief*0.35 + 45 - L.bad*0.7 + rnd(-12,12));
+    c.usedSpecial = false;
+  });
+  S.fillers = makeFillers();
+  S.critics.forEach(c=>addPost(c));
+  headline(`NEW POLICY ANNOUNCED: ${L.name.toUpperCase()}`, "lie", {lie:L});
+}
+
+function natBelief(){ return Math.round(NAMES.reduce((a,n)=>a+S.st[n].belief*STATES[n][1],0)/TOTAL_POP); }
+function riotList(){ return NAMES.filter(n=>S.st[n].riot); }
+function weeklyIncome(){
+  let inc=0, rep=0;
+  NAMES.forEach(n=>{ if(S.st[n].riot) rep+=repairCost(n); else inc+=STATES[n][1]*0.45; });
+  return {inc:Math.round(inc), rep, net:Math.round(inc)-rep};
+}
+
+function headline(txt, type, ctx={}){ S.news.unshift(txt); S.news = S.news.slice(0,8); if(type) S.log.push({type, title:txt, ctx}); }
+function logOnly(type, title, ctx={}){ S.log.push({type, title, ctx}); }
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),2400); }
+
+function spend(cost){ if(S.over||S.ap<1||S.money<cost) return false; S.money-=cost; S.ap--; return true; }
+function calmCheck(c){ if(c.riot && c.unrest<50){ c.riot=false; return true; } return false; }
+
+function hireOnRoad(n, i){
+  const c=S.st[n], [road,pop]=ROADS[n][i], cost=stateCosts(n)[pop];
+  if(!spend(cost)) return;
+  const green = pop==="g";
+  if(Math.random() < (green?0.2:0.1)){
+    c.belief=clamp(c.belief-10); S.exposure+=green?12:7;
+    headline(`CAUGHT ON CAMERA: "SUPPORTERS" ON ${road.toUpperCase()} WERE PAID ACTORS`, "caught", {state:n, road});
+    toast("Uh oh. Someone filmed the paychecks.");
+  } else {
+    const gain = green?24:12;
+    c.belief=clamp(c.belief+gain); c.unrest=clamp(c.unrest-(green?10:5)); S.exposure+=green?3:1;
+    if(green) headline(`HUGE CROWD ON ${road.toUpperCase()} CHEERS NEW POLICY`, "crowd", {state:n, road});
+    else logOnly("crowd", `Small Crowd Waves Signs on ${road}`, {state:n, road, small:true});
+    toast(`${road}: drivers see the crowd (+${gain})`);
+  }
+  S.exposure=clamp(S.exposure);
+  render(); checkEnd();
+}
+
+function openNews(){
+  if(S.over||S.ap<1) return;
+  const rows = OUTLETS.map((o,i)=>{
+    const b=Math.round(S.outlets[i]), price=outletPrice(b), ok=S.money>=price;
+    const col = b>=70?"var(--blue)":b>=45?"var(--gold)":"#9c8f78";
+    return `<button class="act outlet" ${ok?"":"disabled"} onclick="payOutlet(${i})">
+      <div style="display:flex;justify-content:space-between;gap:8px"><span class="t">${o.name}</span><span class="c" style="margin:0">$${price}M</span></div>
+      <div class="d">${o.tag}</div>
+      <div class="lbl" style="margin-top:5px"><span>Believability</span><span>${b}%${b<o.base?` <span style="color:var(--red)">(was ${o.base}%)</span>`:""}</span></div>
+      <div class="bar"><i style="width:${b}%;background:${col}"></i></div>
+      <div class="d" style="margin-top:4px">Every state <b>+${outletBoost(b)}</b> belief</div></button>`;
+  }).join("");
+  showModal(`<h2>Pay a News Outlet</h2><p style="font-size:13px">The more people trust an outlet, the more it costs. Every time you use one, it gets a little less believable.</p>
+    <div style="display:grid;gap:6px;text-align:left">${rows}</div>
+    <button onclick="closeModal()" style="background:var(--ink)">Never Mind</button>`);
+}
+function payOutlet(i){
+  const b=Math.round(S.outlets[i]);
+  if(!spend(outletPrice(b))) return;
+  const gain=outletBoost(b);
+  NAMES.forEach(n=>S.st[n].belief=clamp(S.st[n].belief+gain));
+  S.outlets[i]=Math.max(10,S.outlets[i]-5);
+  S.exposure=clamp(S.exposure+(b>=70?4:2));
+  headline(`${OUTLETS[i].name.toUpperCase()}: "THIS POLICY IS GREAT, ACTUALLY"`, "news", {outlet:OUTLETS[i].name});
+  closeModal(); toast(`${OUTLETS[i].name}: every state +${gain}`);
+  render(); checkEnd();
+}
+
+function stateAction(n, kind){
+  const c = S.st[n], cost = stateCosts(n)[kind], up = n.toUpperCase();
+  if(kind==="special" && c.usedSpecial) return;
+  if(!spend(cost)) return;
+  const [ab,pop,spot,spName,spDesc,type] = STATES[n];
+  switch(kind){
+    case "tv": c.belief=clamp(c.belief+15); S.exposure+=1; logOnly("tv", `${n} TV Stations Can't Stop Talking About It`, {state:n}); toast(`${n}: local TV says it's great (+15)`); break;
+    case "pizza": c.unrest=clamp(c.unrest-30); toast(`${n} calms down (−30 unrest)`);
+      if(calmCheck(c)) headline(`FREE PIZZA ENDS RIOT IN ${up}`, "calm", {state:n, pizza:true});
+      else logOnly("pizza", `Free Pizza Handed Out Across ${n}`, {state:n});
+      break;
+    case "special":
+      c.usedSpecial = true;
+      if(type==="boost"){ c.belief=clamp(c.belief+25); toast(`${spName}! ${n} +25`); }
+      else if(type==="spread"){ c.belief=clamp(c.belief+15); MAP[n].n.forEach(m=>S.st[m].belief=clamp(S.st[m].belief+8)); toast(`${spName}! ${n} +15, neighbors +8`); }
+      else if(type==="calm"){ c.unrest=clamp(c.unrest-35); c.belief=clamp(c.belief+8); calmCheck(c); toast(`${spName}! ${n} chills out`); }
+      else if(type==="cash"){ const g=Math.round(30+pop*10); S.money+=g; c.belief=clamp(c.belief+5); S.exposure+=4; toast(`${spName}! +$${g}M`); }
+      else if(type==="quiet"){ S.exposure=Math.max(0,S.exposure-10); c.belief=clamp(c.belief+12); toast(`${spName}! Exposure −10, ${n} +12`); }
+      headline(`${spName.toUpperCase()} IN ${up}!`, "special", {state:n, spName, spDesc, spType:type});
+      break;
+  }
+  S.exposure = clamp(S.exposure);
+  render(); checkEnd();
+}
+
+function nationalAction(a){
+  if(!spend(a.cost)) return;
+  const all = f => NAMES.forEach(n=>f(S.st[n]));
+  switch(a.id){
+    case "bots":
+      if(Math.random()<0.25){ S.exposure+=12; headline("TECH SITE EXPOSES 10,000 BOTS ALL NAMED 'TOTALLY REAL GUY'", "botsCaught"); toast("Bots got caught! +12 exposure"); }
+      else { all(x=>x.belief=clamp(x.belief+4)); logOnly("bots", "Policy Trending Online"); toast("Bots trending. Every state +4"); }
+      break;
+    case "celeb": all(x=>x.belief=clamp(x.belief+12)); headline("POP STAR: \"I LITERALLY CANNOT STOP THINKING ABOUT THIS POLICY\"", "celeb"); toast("Every state +12"); break;
+    case "poll": all(x=>x.belief=clamp(x.belief+(x.belief>=50?8:2))); headline("NEW POLL: 92% OF AMERICANS LOVE IT (POLL BY US)", "poll"); toast("Believers +8, doubters +2"); break;
+    case "experts": all(x=>x.belief=clamp(x.belief+6)); S.exposure=Math.max(0,S.exposure-5); headline("'EXPERTS' IN LAB COATS SAY IT'S FINE", "experts"); toast("Every state +6, exposure −5"); break;
+    case "distract": all(x=>{x.unrest=clamp(x.unrest-15); calmCheck(x);}); S.exposure=Math.max(0,S.exposure-8); headline("SURPRISE! NATIONAL HOT DOG DAY DECLARED", "holiday"); toast("Unrest −15 everywhere, exposure −8"); break;
+    case "discredit": S.exposure=Math.max(0,S.exposure-20); all(x=>x.unrest=clamp(x.unrest+5)); headline("GOVERNMENT: REPORTERS ARE 'BASICALLY CLOWNS'", "discredit"); toast("Exposure −20, but people are annoyed"); break;
+  }
+  S.exposure = clamp(S.exposure);
+  render(); checkEnd();
+}
+
+const EVENTS = [
+  ()=>{ S.exposure+=8; return ["INVESTIGATIVE REPORTER SPOTTED DIGGING THROUGH GOVERNMENT TRASH","reporter"]; },
+  ()=>{ const n=pick(NAMES); S.st[n].belief=clamp(S.st[n].belief-14); return [`VIRAL VIDEO DEBUNKS THE POLICY IN ${n.toUpperCase()}`,"debunk",{state:n}]; },
+  ()=>{ const n=pick(NAMES); S.st[n].belief=clamp(S.st[n].belief+12); return [`LOCAL MAN IN ${n.toUpperCase()} JUST SORT OF GOES ALONG WITH IT`,"localman",{state:n}]; },
+  ()=>{ NAMES.forEach(n=>S.st[n].unrest=clamp(S.st[n].unrest+6)); return ["HEAT WAVE MAKES EVERYONE CRANKY","heat"]; },
+  ()=>{ S.exposure+=14; return ["WHISTLEBLOWER LEAKS MEMO TITLED 'LIES WE ARE TELLING'","whistle"]; },
+  ()=>{ S.money+=60; return ["MATTRESS COMPANY SENDS A 'THANK YOU' DONATION (+$60M)","donation"]; },
+  ()=>{ NAMES.forEach(n=>S.st[n].belief=clamp(S.st[n].belief-4)); return ["FACT-CHECKERS WORKING OVERTIME","factcheck"]; },
+  ()=>{ NAMES.forEach(n=>S.st[n].unrest=clamp(S.st[n].unrest-8)); return ["BIG GAME THIS WEEKEND — NATION DISTRACTED","game"]; },
+];
+
+function endWeek(){
+  if(S.over) return;
+  const L = LIES[S.lie];
+  const before = new Set(riotList());
+  NAMES.forEach(n=>{
+    const c=S.st[n];
+    c.belief = clamp(c.belief - rnd(1,4));
+    if(c.belief < 40) c.unrest += (40-c.belief)/2 + 4;
+    else if(c.belief >= 60) c.unrest -= 8;
+    if(c.riot) c.belief = clamp(c.belief-5);
+    c.unrest = clamp(c.unrest);
+  });
+  criticsTick();
+  spawnDebunkers();
+  before.forEach(n=>MAP[n].n.forEach(m=>{ if(!S.st[m].riot) S.st[m].unrest=clamp(S.st[m].unrest+9); }));
+  NAMES.forEach(n=>{
+    const c=S.st[n];
+    if(!c.riot && c.unrest>=100){
+      c.riot=true;
+      const spread = before.size && MAP[n].n.some(m=>before.has(m));
+      headline(spread ? `RIOTS SPREAD INTO ${n.toUpperCase()}!` : `RIOTS BREAK OUT IN ${n.toUpperCase()}!`, spread?"spread":"riot", {state:n});
+    }
+    else if(c.riot && c.unrest<50){ c.riot=false; headline(`THINGS CALM DOWN IN ${n.toUpperCase()}`, "calm", {state:n}); }
+  });
+  S.outlets = S.outlets.map((b,i)=>Math.min(OUTLETS[i].base, b+1.5));
+  const w = weeklyIncome();
+  S.money += w.net;
+  if(w.rep) headline(`RIOT DAMAGE COSTS $${w.rep}M IN REPAIRS THIS WEEK`, "damage", {amount:w.rep, states:riotList()});
+  S.exposure = clamp(S.exposure + 3 + rnd(0,4) + riotList().length*0.5);
+  if(Math.random()<0.55){ const [t,ty,cx]=pick(EVENTS)(); headline(t,ty,cx||{}); }
+  S.exposure = clamp(S.exposure);
+
+  if(S.money < 0){ S.over=true; render(); return checkEnd(); }
+  if(S.exposure>=100){ S.over=true; render(); return checkEnd(); }
+
+  const nb = natBelief();
+  if(nb >= 80){
+    S.passed++;
+    headline(`✔ ${L.name.toUpperCase()} IS NOW LAW. NOBODY QUESTIONS IT.`, "pass", {lie:L});
+    if(S.passed >= LIES.length){ S.over=true; render(); return showWin(); }
+    if(S.lie+1 >= LIES.length){ S.over=true; render(); return endSummary(); }
+    S.lie++; S.week++; S.ap=MOVES_PER_WEEK; startLie(false); render();
+    return showModal(`<h2>Lie Accepted!</h2><p>America fell for <b>${L.name}</b>.</p><p>Next up: <b>${LIES[S.lie].name}</b> — even harder to sell. Every state's special move is ready again.</p><button onclick="closeModal()">Keep Lying</button>`);
+  }
+  if(S.lieWeek >= L.weeks){
+    NAMES.forEach(n=>S.st[n].unrest=clamp(S.st[n].unrest+20));
+    S.exposure = clamp(S.exposure+10);
+    headline(`✘ ${L.name.toUpperCase()} FAILS. PUBLIC FURIOUS.`, "fail", {lie:L});
+    if(S.lie+1 >= LIES.length){ S.over=true; render(); return endSummary(); }
+    S.lie++; S.week++; S.ap=MOVES_PER_WEEK; startLie(false); render();
+    return showModal(`<h2 style="color:var(--red)">Nobody Bought It</h2><p><b>${L.name}</b> flopped. Everyone's angrier and reporters are suspicious.</p><p>Moving on to <b>${LIES[S.lie].name}</b>…</p><button onclick="closeModal()">Try Again</button>`);
+  }
+  S.lieWeek++; S.week++; S.ap=MOVES_PER_WEEK;
+  render();
+}
+
+/* ---------- weekly newspaper ---------- */
+const PRIORITY = ["pass","fail","arrestLeak","attackQuiet","attackBlame","attackUnite","gangIgnore","gangStop","gangBlame","riot","spread","stormIgnore","stormHelp","stormPhoto","pricesIgnore","pricesBlame","pricesCoupon","crashPrint","crashFine","crashHelp","deleteBackfire","criticGrow","bribed","arrested","deleted","critic","caught","whistle","botsCaught","celeb","special","crowd","news","lie","holiday","poll","experts","discredit","damage","calm","debunk","reporter","heat","donation","game","localman","factcheck","tv","pizza","bots"];
+const PIC = {lie:"capitol",pass:"capitol",fail:"capitol",riot:"fire",spread:"fire",damage:"fire",calm:"food",pizza:"food",holiday:"food",game:"food",
+  caught:"camera",crowd:"crowd",news:"tv",tv:"tv",celeb:"star",poll:"chart",experts:"magnify",factcheck:"magnify",discredit:"magnify",reporter:"magnify",
+  whistle:"envelope",bots:"robot",botsCaught:"robot",special:"megaphone",heat:"sun",donation:"money",debunk:"phone",localman:"shrug",
+  critic:"phone",criticGrow:"phone",deleteBackfire:"phone",deleted:"phoneX",bribed:"phone",arrested:"van",arrestLeak:"van",
+  attackUnite:"siren",attackBlame:"siren",attackQuiet:"siren",stormHelp:"storm",stormPhoto:"storm",stormIgnore:"storm",
+  gangStop:"shield",gangBlame:"shield",gangIgnore:"shield",pricesCoupon:"protest",pricesBlame:"protest",pricesIgnore:"protest",
+  crashPrint:"chartDown",crashFine:"chartDown",crashHelp:"chartDown"};
+
+function storyBody(e){
+  const x=e.ctx||{}, s=x.state;
+  switch(e.type){
+    case "lie": return `The government announced ${x.lie.name} this week. Officials say ${x.lie.spin.replace(/[“”]/g,'"')} Critics say the plan is ${x.lie.truth.replace("The truth: ","").replace(/\.$/,"").toLowerCase()}, but officials call that "a misunderstanding."`;
+    case "pass": return `${x.lie.name} is officially the law of the land. Polls show most Americans are thrilled, or at least too tired to argue about it anymore.`;
+    case "fail": return `${x.lie.name} has been scrapped after the public flatly refused to buy it. Angry crowds gathered in several states, and reporters are asking hard questions.`;
+    case "riot": return `Angry crowds filled the streets of ${s} this week. Shops boarded up their windows and repair crews are on standby. Officials blamed "bad vibes."`;
+    case "spread": return `Unrest spilled across the border into ${s} as riots in neighboring states grew. Residents say they "saw it coming from next door."`;
+    case "damage": return `Repair crews were rushed to ${x.states.length} rioting state${x.states.length>1?"s":""} this week, costing the government $${x.amount}M. Tax collectors in those states came home empty-handed.`;
+    case "calm": return x.pizza ? `The riot in ${s} ended the moment free pizza arrived. "Hard to stay mad with a slice in your hand," one resident said.` : `Things have finally quieted down in ${s}. Residents swept the streets and went back to their normal lives.`;
+    case "caught": return `A video posted online shows a man handing out cash to "supporters" on ${x.road} in ${s}. The video has millions of views. The government says the money was "for snacks."`;
+    case "crowd": return x.small ? `A handful of supporters waved signs on ${x.road} in ${s}. A few drivers honked.` : `Drivers on ${x.road} in ${s} were greeted by a huge cheering crowd waving signs. "They seemed very excited," said one driver. "Weirdly excited."`;
+    case "news": return `${x.outlet} ran wall-to-wall coverage this week calling the policy "great, actually." Viewers were impressed by how many times they said it.`;
+    case "tv": return `Local stations in ${s} ran ads about the policy every ten minutes. Several residents report hearing the jingle in their sleep.`;
+    case "pizza": return `Free pizza was handed out all across ${s}. Nobody complained.`;
+    case "celeb": return `A famous pop star posted a video gushing about the policy. It has been shared millions of times, and fans are already making dance videos about it.`;
+    case "poll": return `A brand-new poll says 92% of Americans love the policy. The poll was paid for by the government, but who's counting?`;
+    case "experts": return `A panel of experts in very clean lab coats nodded seriously at a press conference. "The numbers check out," one said, without showing any numbers.`;
+    case "holiday": return `The president surprised the nation with a brand-new holiday: National Hot Dog Day. Grills fired up from coast to coast and everyone forgot what they were mad about.`;
+    case "discredit": return `The government called reporters "basically clowns" this week. Reporters say they are not clowns. Several actual clowns were also offended.`;
+    case "botsCaught": return `Researchers discovered 10,000 social media accounts praising the policy. Every single one was named "Totally Real Guy."`;
+    case "bots": return `The policy was trending online this week thanks to thousands of very enthusiastic brand-new accounts.`;
+    case "special": return `${x.spName}: ${x.spDesc} People in ${s} could talk about nothing else all week.`;
+    case "critic": return `${x.handle} keeps posting videos picking apart the policy. Officials say they "haven't seen them" and "don't know who that is."`;
+    case "criticGrow": return `${x.handle} now has ${Math.round((x.followers||0)/1000)}K followers. Their latest video, "5 Things They're Not Telling You," is being shared in every state.`;
+    case "deleted": return `The account of ${x.handle}, who had been criticizing the policy, vanished overnight. The app says it was "a glitch."`;
+    case "deleteBackfire": return `After their account was deleted, ${x.handle} came back on a different app with a video titled "THEY TRIED TO SILENCE ME." It is now the most-watched video in the country.`;
+    case "arrested": return `${x.handle}, a popular critic from ${s}, hasn't posted in a week. Neighbors say they saw a black van. Officials say "vans are normal."`;
+    case "arrestLeak": return `A video shows government agents arresting ${x.handle} in the middle of the night. The government says it was "a surprise party." Protests are spreading.`;
+    case "bribed": return `${x.handle}, who spent weeks criticizing the policy, posted a new video saying they "did more research" and now love it. They were also seen driving a brand-new car.`;
+    case "attackUnite": return `After hackers knocked out power in ${s}, the president gave a speech about standing together. The lights are back on and the nation feels united.`;
+    case "attackBlame": return `The government says people who doubt the policy "made America weak" and are to blame for the blackout in ${s}. Believers cheered. Doubters marched.`;
+    case "attackQuiet": return `Days after hackers knocked out the power in ${s}, the government still hasn't said a word. Candles are sold out nationwide.`;
+    case "stormHelp": return `Trucks full of food, water and repair crews rolled into ${s} after the ${(x.storm||"storm").toLowerCase()}. "They actually showed up," one resident said.`;
+    case "stormPhoto": return `The president visited ${s} after the ${(x.storm||"storm").toLowerCase()}, held a shovel for four minutes, posed for photos and flew home.`;
+    case "stormIgnore": return `${s} is still cleaning up after the ${(x.storm||"storm").toLowerCase()} with no help from the government. Residents say they "won't forget this."`;
+    case "gangStop": return `The National Guard arrived in ${s} and stopped ${x.gang}. Streets are safe again and people are back outside.`;
+    case "gangBlame": return `The government claims ${x.gang} "probably don't like the policy." The group is still causing trouble in ${s}.`;
+    case "gangIgnore": return `${x.gang} are still running wild in ${s} and nobody is stopping them. Fear and anger are spreading to nearby states.`;
+    case "pricesCoupon": return `Everyone got a coupon for half-price ${(x.item||"").toLowerCase()}. Protesters folded up their signs and went shopping.`;
+    case "pricesBlame": return `The government blamed "foreigners" for the price of ${(x.item||"").toLowerCase()}. Nobody can say which foreigners.`;
+    case "pricesIgnore": return `Protests over ${(x.item||"").toLowerCase()} prices are growing in ${(x.states||[]).join(", ")}. Signs read "WE CAN'T AFFORD THIS."`;
+    case "crashPrint": return `The government printed a giant pile of new money to cover the stock market crash. Prices at the store went up the next morning.`;
+    case "crashFine": return `As the stock market crashed, the president called the economy "super great." Experts disagree.`;
+    case "crashHelp": return `Families hit by the stock market crash got relief checks this week. Many say they are grateful.`;
+    case "reporter": return `An investigative reporter was seen digging through government trash cans late at night. Officials say there's nothing in there. Probably.`;
+    case "debunk": return `A video explaining what the policy really does went viral in ${s}. Officials say the video was "way too long" and nobody should watch it.`;
+    case "localman": return `A man in ${s} told our reporter he "just sort of goes along with it." He has become a local hero.`;
+    case "heat": return `A heat wave rolled across the country this week, and tempers rose right along with the temperature.`;
+    case "whistle": return `A government memo titled "Lies We Are Telling" was leaked to reporters. A spokesperson says the title was "a typo."`;
+    case "donation": return `A mattress company sent the government a $60 million "thank you" donation. No reason was given.`;
+    case "factcheck": return `Fact-checkers worked overtime this week. The nation's coffee supply is running dangerously low.`;
+    case "game": return `The whole nation was glued to the big game this weekend. Nobody thought about politics for three whole days.`;
+  }
+  return "";
+}
+function titleCase(t){
+  return t.toLowerCase().replace(/(^|[\s"'(\-—:])([a-z])/g,(m,a,b)=>a+b.toUpperCase()).replace(/\bI-(\d)/gi,"I-$1").replace(/\b(Nj|Pa|Fdr|Us|Sr|K|H)\b/g,s=>s.toUpperCase()).replace(/\$(\d+)m\b/g,"$$$1M");
+}
+
+function pic(kind, e){
+  const ink="#1b1712", red="#c8261e", W=200, H=120;
+  const x=(e&&e.ctx)||{};
+  let g="";
+  switch(kind){
+    case "capitol": {
+      g=`<rect x="40" y="78" width="120" height="30" fill="#fff"/><rect x="35" y="104" width="130" height="8" fill="${ink}"/>
+        ${[50,66,82,98,114,130,146].map(c=>`<rect x="${c}" y="80" width="5" height="24" fill="${ink}"/>`).join("")}
+        <polygon points="40,78 100,62 160,78" fill="${ink}"/><rect x="78" y="44" width="44" height="18" fill="#fff" stroke="${ink}" stroke-width="2"/>
+        <path d="M76 46 Q100 10 124 46 Z" fill="#fff" stroke="${ink}" stroke-width="3"/><line x1="100" y1="22" x2="100" y2="8" stroke="${ink}" stroke-width="2"/>
+        <rect x="100" y="8" width="14" height="8" fill="${red}"/>`;
+      const stamp = e.type==="pass"?["PASSED","#2e8b57"]:e.type==="fail"?["FAILED",red]:["NEW LAW?",red];
+      g+=`<g transform="rotate(-14 150 40)"><rect x="118" y="26" width="72" height="26" fill="none" stroke="${stamp[1]}" stroke-width="3"/><text x="154" y="45" fill="${stamp[1]}" font-family="Anton,Impact" font-size="17" text-anchor="middle">${stamp[0]}</text></g>`;
+      break;}
+    case "fire": {
+      const b=[[18,50,26],[48,36,22],[74,58,30],[108,30,24],[136,46,28],[168,60,22]];
+      g=b.map(([bx,by,bw])=>`<rect x="${bx}" y="${by}" width="${bw}" height="${112-by}" fill="${ink}"/>`+
+        [...Array(Math.floor((106-by)/12))].map((_,r)=>`<rect x="${bx+5}" y="${by+6+r*12}" width="5" height="5" fill="#ffd27a"/><rect x="${bx+bw-10}" y="${by+6+r*12}" width="5" height="5" fill="#ffd27a"/>`).join("")).join("");
+      g+=[[60,40],[120,26],[150,44]].map(([fx,fy])=>`<path d="M${fx} ${fy+28} q-14 -14 -2 -30 q2 10 8 12 q-2 -16 10 -26 q0 14 10 22 q6 14 -6 22 Z" fill="${red}"/><path d="M${fx+2} ${fy+28} q-6 -8 0 -16 q4 8 8 6 q4 6 -2 10 Z" fill="#ffb02e"/>`).join("");
+      g+=`<rect x="0" y="112" width="200" height="8" fill="${ink}"/>`;
+      break;}
+    case "crowd": {
+      g=`<rect x="0" y="100" width="200" height="20" fill="#555"/><g stroke="#fff" stroke-width="2" stroke-dasharray="10 8"><line x1="0" y1="110" x2="200" y2="110"/></g>`;
+      for(let i=0;i<9;i++){ const px=14+i*21, py=70+(i%2)*6;
+        g+=`<circle cx="${px}" cy="${py}" r="7" fill="${ink}"/><rect x="${px-7}" y="${py+7}" width="14" height="${22-(i%2)*6}" rx="4" fill="${ink}"/>`;
+        if(i%2===0) g+=`<line x1="${px+6}" y1="${py+10}" x2="${px+6}" y2="${py-22}" stroke="${ink}" stroke-width="2"/><rect x="${px-8}" y="${py-40}" width="28" height="18" fill="#fff" stroke="${ink}" stroke-width="2"/><text x="${px+6}" y="${py-27}" font-family="Anton,Impact" font-size="9" text-anchor="middle" fill="${red}">YES!</text>`;
+      }
+      if(x.road) g+=`<rect x="120" y="4" width="76" height="16" fill="#2e8b57"/><text x="158" y="15" font-family="Inter,Arial" font-weight="800" font-size="8" fill="#fff" text-anchor="middle">${x.road.slice(0,16)}</text>`;
+      break;}
+    case "camera": {
+      g=pic("crowd",{ctx:{}}).replace(/^<svg[^>]*>|<\/svg>$/g,"").replace(/<defs>.*?<\/defs>|<rect width="200" height="120"[^>]*\/>/g,"");
+      g+=`<rect x="70" y="20" width="76" height="98" rx="10" fill="${ink}"/><rect x="76" y="28" width="64" height="80" fill="#cfe3ff"/>
+        <circle cx="84" cy="36" r="4" fill="${red}"/><text x="92" y="39" font-family="Inter,Arial" font-weight="800" font-size="8" fill="${red}">REC</text>
+        <text x="108" y="72" font-family="Anton,Impact" font-size="22" text-anchor="middle" fill="#2e8b57">$$$</text>`;
+      break;}
+    case "tv": {
+      g=`<line x1="80" y1="22" x2="66" y2="4" stroke="${ink}" stroke-width="3"/><line x1="120" y1="22" x2="134" y2="4" stroke="${ink}" stroke-width="3"/>
+        <rect x="40" y="22" width="120" height="84" rx="10" fill="${ink}"/><rect x="50" y="30" width="100" height="62" rx="6" fill="#fff"/>
+        <rect x="50" y="78" width="100" height="14" fill="${red}"/><text x="100" y="88" font-family="Anton,Impact" font-size="9" fill="#fff" text-anchor="middle">BREAKING: IT'S GREAT</text>
+        <circle cx="100" cy="50" r="10" fill="${ink}"/><rect x="88" y="60" width="24" height="18" rx="5" fill="${ink}"/>
+        <rect x="60" y="106" width="10" height="8" fill="${ink}"/><rect x="130" y="106" width="10" height="8" fill="${ink}"/>`;
+      break;}
+    case "star": {
+      g=[[30,30,14],[170,26,12],[150,90,9],[46,92,10]].map(([sx,sy,r])=>`<polygon points="${starPts(sx,sy,r)}" fill="#d9a521"/>`).join("");
+      g+=`<rect x="90" y="18" width="22" height="40" rx="11" fill="${ink}"/><g stroke="#fff" stroke-width="1.5">${[26,32,38,44].map(l=>`<line x1="93" y1="${l}" x2="109" y2="${l}"/>`).join("")}</g>
+        <path d="M84 48 q17 22 34 0" fill="none" stroke="${ink}" stroke-width="3"/><line x1="101" y1="70" x2="101" y2="104" stroke="${ink}" stroke-width="4"/><rect x="82" y="104" width="38" height="6" fill="${ink}"/>`;
+      break;}
+    case "chart": {
+      g=`<line x1="30" y1="106" x2="180" y2="106" stroke="${ink}" stroke-width="3"/><line x1="30" y1="106" x2="30" y2="14" stroke="${ink}" stroke-width="3"/>`;
+      g+=[18,30,44,92].map((h,i)=>`<rect x="${44+i*34}" y="${106-h}" width="22" height="${h}" fill="${i===3?red:ink}"/>`).join("");
+      g+=`<text x="146" y="12" font-family="Anton,Impact" font-size="14" text-anchor="middle" fill="${red}">92%</text>`;
+      break;}
+    case "magnify": {
+      g=`<rect x="40" y="14" width="80" height="96" fill="#fff" stroke="${ink}" stroke-width="2"/>${[26,36,46,56,66,76,86,96].map(l=>`<line x1="50" y1="${l}" x2="${l%20?110:96}" y2="${l}" stroke="#999" stroke-width="3"/>`).join("")}
+        <circle cx="122" cy="58" r="26" fill="#ffffff99" stroke="${ink}" stroke-width="6"/><line x1="140" y1="76" x2="170" y2="106" stroke="${ink}" stroke-width="10" stroke-linecap="round"/>
+        <text x="122" y="64" font-family="Anton,Impact" font-size="16" text-anchor="middle" fill="${red}">?!</text>`;
+      break;}
+    case "envelope": {
+      g=`<rect x="36" y="26" width="128" height="80" fill="#fff" stroke="${ink}" stroke-width="3"/><polyline points="36,26 100,72 164,26" fill="none" stroke="${ink}" stroke-width="3"/>
+        <g transform="rotate(-12 100 70)"><rect x="56" y="58" width="88" height="26" fill="none" stroke="${red}" stroke-width="3"/><text x="100" y="78" font-family="Anton,Impact" font-size="18" text-anchor="middle" fill="${red}">LEAKED</text></g>`;
+      break;}
+    case "robot": {
+      for(let i=0;i<3;i++){ const rx=30+i*54, s=i===1?1:0.8, ry=i===1?20:34;
+        g+=`<g transform="translate(${rx} ${ry}) scale(${s})"><line x1="22" y1="0" x2="22" y2="12" stroke="${ink}" stroke-width="3"/><circle cx="22" cy="0" r="4" fill="${red}"/>
+        <rect x="0" y="12" width="44" height="34" rx="6" fill="${ink}"/><circle cx="13" cy="28" r="5" fill="#7ef"/><circle cx="31" cy="28" r="5" fill="#7ef"/><rect x="12" y="38" width="20" height="3" fill="#fff"/>
+        <rect x="6" y="48" width="32" height="34" rx="4" fill="${ink}"/><text x="22" y="69" font-family="Inter,Arial" font-weight="800" font-size="10" fill="#fff" text-anchor="middle">LIKE</text></g>`; }
+      if(e && e.type==="botsCaught") g+=`<g transform="rotate(-10 100 60)"><rect x="40" y="46" width="120" height="26" fill="#fff" stroke="${red}" stroke-width="3"/><text x="100" y="65" font-family="Anton,Impact" font-size="16" text-anchor="middle" fill="${red}">FAKE ACCOUNTS</text></g>`;
+      break;}
+    case "megaphone": {
+      g=`<polygon points="50,50 120,22 120,98 50,70" fill="${ink}"/><rect x="34" y="48" width="18" height="24" fill="${ink}"/><rect x="58" y="70" width="10" height="26" fill="${ink}"/>
+        ${[16,30,44].map(r=>`<path d="M${130+r/2} ${60-r} q${r} ${r} 0 ${r*2}" fill="none" stroke="${red}" stroke-width="4"/>`).join("")}`;
+      if(x.state) g+=`<text x="100" y="114" font-family="Anton,Impact" font-size="12" text-anchor="middle" fill="${ink}">${x.state.toUpperCase()}</text>`;
+      break;}
+    case "sun": {
+      g=`<circle cx="80" cy="56" r="26" fill="#ffb02e"/>${[...Array(12)].map((_,i)=>{const a=i*Math.PI/6;return `<line x1="${80+Math.cos(a)*32}" y1="${56+Math.sin(a)*32}" x2="${80+Math.cos(a)*46}" y2="${56+Math.sin(a)*46}" stroke="#ffb02e" stroke-width="5" stroke-linecap="round"/>`;}).join("")}
+        <rect x="146" y="14" width="16" height="78" rx="8" fill="#fff" stroke="${ink}" stroke-width="3"/><rect x="150" y="26" width="8" height="70" fill="${red}"/><circle cx="154" cy="98" r="13" fill="${red}" stroke="${ink}" stroke-width="3"/>`;
+      break;}
+    case "money": {
+      g=`<path d="M70 44 q-30 30 -10 60 h80 q20 -30 -10 -60 Z" fill="#c9b27a" stroke="${ink}" stroke-width="3"/><path d="M78 44 l-8 -18 h60 l-8 18 Z" fill="#c9b27a" stroke="${ink}" stroke-width="3"/>
+        <text x="100" y="92" font-family="Anton,Impact" font-size="34" text-anchor="middle" fill="#2e8b57">$</text>
+        <rect x="140" y="80" width="40" height="20" fill="#9fd39f" stroke="${ink}" stroke-width="2"/><rect x="20" y="86" width="36" height="18" fill="#9fd39f" stroke="${ink}" stroke-width="2"/>`;
+      break;}
+    case "phone": {
+      g=`<rect x="70" y="8" width="60" height="106" rx="10" fill="${ink}"/><rect x="76" y="18" width="48" height="84" fill="#fff"/><circle cx="100" cy="56" r="16" fill="${red}"/><polygon points="94,47 94,65 110,56" fill="#fff"/>
+        <text x="100" y="92" font-family="Inter,Arial" font-weight="800" font-size="8" text-anchor="middle" fill="${ink}">2.4M views</text>
+        <text x="140" y="36" font-family="Anton,Impact" font-size="16" fill="${red}" transform="rotate(10 140 36)">VIRAL!</text>`;
+      break;}
+    case "shrug": {
+      g=`<circle cx="100" cy="30" r="14" fill="${ink}"/><rect x="88" y="46" width="24" height="40" rx="6" fill="${ink}"/>
+        <polyline points="88,52 64,46 56,30" fill="none" stroke="${ink}" stroke-width="6" stroke-linecap="round"/><polyline points="112,52 136,46 144,30" fill="none" stroke="${ink}" stroke-width="6" stroke-linecap="round"/>
+        <line x1="94" y1="86" x2="90" y2="112" stroke="${ink}" stroke-width="7"/><line x1="106" y1="86" x2="110" y2="112" stroke="${ink}" stroke-width="7"/>
+        <text x="40" y="22" font-family="Anton,Impact" font-size="16" fill="${red}">¯\\_(ツ)_/¯</text>`;
+      break;}
+    case "siren": {
+      g=`<rect x="60" y="70" width="80" height="16" rx="3" fill="${ink}"/><path d="M70 70 q0 -48 30 -48 q30 0 30 48 Z" fill="${red}" stroke="${ink}" stroke-width="3"/>
+        <path d="M84 60 q0 -24 12 -28" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>
+        ${[[40,30,-1],[160,30,1],[30,62,-1],[170,62,1]].map(([a,b,d])=>`<line x1="${a}" y1="${b}" x2="${a+d*16}" y2="${b-8}" stroke="${red}" stroke-width="5" stroke-linecap="round"/>`).join("")}
+        <rect x="20" y="96" width="160" height="18" fill="${ink}"/><text x="100" y="109" font-family="Anton,Impact" font-size="11" fill="#fff" text-anchor="middle">⚠ EMERGENCY ALERT ⚠</text>`;
+      break;}
+    case "storm": {
+      g=`<path d="M40 50 q-20 0 -20 -16 q0 -18 22 -16 q6 -18 28 -14 q12 -12 30 -2 q22 -4 26 16 q20 2 18 18 q-2 14 -20 14 Z" fill="#555" stroke="${ink}" stroke-width="2"/>
+        <polygon points="96,52 80,82 94,82 84,110 116,72 100,72 110,52" fill="#ffd23a" stroke="${ink}" stroke-width="2"/>
+        ${[30,50,130,150,170].map((a,i)=>`<line x1="${a}" y1="${60+i%2*8}" x2="${a-8}" y2="${80+i%2*8}" stroke="#4a78c2" stroke-width="3"/>`).join("")}
+        <rect x="140" y="84" width="34" height="26" fill="${ink}"/><polygon points="136,86 157,68 178,86" fill="${ink}" transform="rotate(14 157 80)"/>`;
+      break;}
+    case "shield": {
+      g=`<path d="M100 10 l46 14 q0 50 -46 82 q-46 -32 -46 -82 Z" fill="#1f4e9c" stroke="${ink}" stroke-width="4"/>
+        <polygon points="${starPts(100,52,22)}" fill="#fff"/><text x="100" y="116" font-family="Anton,Impact" font-size="11" text-anchor="middle" fill="${ink}">NATIONAL GUARD</text>`;
+      break;}
+    case "protest": {
+      g=`<rect x="0" y="100" width="200" height="20" fill="#777"/>`;
+      for(let i=0;i<9;i++){ const px=14+i*21, py=70+(i%2)*6;
+        g+=`<circle cx="${px}" cy="${py}" r="7" fill="${ink}"/><rect x="${px-7}" y="${py+7}" width="14" height="${22-(i%2)*6}" rx="4" fill="${ink}"/>`;
+        if(i%2===0) g+=`<line x1="${px+6}" y1="${py+10}" x2="${px+6}" y2="${py-22}" stroke="${ink}" stroke-width="2"/><rect x="${px-8}" y="${py-40}" width="28" height="18" fill="${red}" stroke="${ink}" stroke-width="2"/><text x="${px+6}" y="${py-27}" font-family="Anton,Impact" font-size="9" text-anchor="middle" fill="#fff">NO!</text>`;
+      }
+      break;}
+    case "chartDown": {
+      g=`<line x1="24" y1="106" x2="184" y2="106" stroke="${ink}" stroke-width="3"/><line x1="24" y1="106" x2="24" y2="12" stroke="${ink}" stroke-width="3"/>
+        <polyline points="30,24 60,34 80,28 104,60 128,52 150,86 176,100" fill="none" stroke="${red}" stroke-width="5" stroke-linejoin="round"/>
+        <polygon points="176,100 162,96 170,86" fill="${red}"/><text x="120" y="26" font-family="Anton,Impact" font-size="16" fill="${red}">CRASH</text>`;
+      break;}
+    case "van": {
+      g=`<rect x="0" y="100" width="200" height="20" fill="#333"/><rect x="0" y="0" width="200" height="100" fill="#2a3550"/>
+        <circle cx="170" cy="22" r="10" fill="#f3ead7"/>
+        <path d="M30 96 v-46 q0 -8 8 -8 h86 l26 24 h12 q6 0 6 6 v24 Z" fill="${ink}"/><rect x="128" y="50" width="20" height="14" fill="#556"/>
+        <circle cx="58" cy="98" r="11" fill="#111" stroke="#666" stroke-width="3"/><circle cx="140" cy="98" r="11" fill="#111" stroke="#666" stroke-width="3"/>
+        <text x="80" y="76" font-family="Inter,Arial" font-weight="800" font-size="8" fill="#555" text-anchor="middle">TOTALLY NORMAL VAN</text>`;
+      break;}
+    case "phoneX": {
+      g=`<rect x="70" y="8" width="60" height="106" rx="10" fill="${ink}"/><rect x="76" y="18" width="48" height="84" fill="#ddd"/>
+        <text x="100" y="52" font-family="Inter,Arial" font-weight="800" font-size="7" text-anchor="middle" fill="#555">Account not found</text>
+        <line x1="86" y1="62" x2="114" y2="90" stroke="${red}" stroke-width="7"/><line x1="114" y1="62" x2="86" y2="90" stroke="${red}" stroke-width="7"/>`;
+      break;}
+    case "food": {
+      const pizza = e && (e.type==="pizza" || (e.ctx&&e.ctx.pizza));
+      g = pizza ? `<polygon points="100,14 150,104 50,104" fill="#f2c14e" stroke="${ink}" stroke-width="3"/><rect x="46" y="100" width="108" height="10" rx="5" fill="#c98a3a" stroke="${ink}" stroke-width="2"/>${[[95,50],[110,76],[80,84],[100,92]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="7" fill="${red}"/>`).join("")}`
+        : `<rect x="40" y="58" width="120" height="30" rx="15" fill="#e0a85a" stroke="${ink}" stroke-width="3"/><rect x="34" y="64" width="132" height="18" rx="9" fill="#b5462d" stroke="${ink}" stroke-width="3"/><path d="M44 66 q8 -8 16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0" fill="none" stroke="#f2c14e" stroke-width="4"/>`;
+      g += [...Array(14)].map((_,i)=>`<rect x="${(i*37)%190}" y="${(i*23)%50}" width="6" height="3" fill="${[red,"#2e8b57","#1f4e9c","#d9a521"][i%4]}" transform="rotate(${i*30} ${(i*37)%190} ${(i*23)%50})"/>`).join("");
+      break;}
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="ht" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".7" fill="#0000001c"/></pattern></defs><rect width="200" height="120" fill="#efe6d0"/><rect width="200" height="120" fill="url(#ht)"/>${g}</svg>`;
+}
+function starPts(cx,cy,r){ let p=[]; for(let i=0;i<10;i++){ const a=-Math.PI/2+i*Math.PI/5, rr=i%2?r*0.45:r; p.push((cx+Math.cos(a)*rr).toFixed(1)+","+(cy+Math.sin(a)*rr).toFixed(1)); } return p.join(" "); }
+
+const ADS = [
+  "FEELING CONFUSED? Don't be! Just believe it. — Office of Totally Honest Communications",
+  "HELP WANTED: Enthusiastic people to stand on highways holding signs. Cash paid. No questions.",
+  "NOW HIRING: Experts. Lab coat provided. No science required.",
+  "TRY NUTRIPASTE™ — It's gray because it's good for you!",
+  "FOR SALE: One (1) slightly used Grand Canyon. Serious mattress companies only.",
+  "LOST: The weekend. If found, please do NOT return.",
+];
+
+function buildPaper(weekNum, start){
+  const log = S.log.slice();
+  // merge duplicates of small things
+  const ranked = log.map((e,i)=>({e,i,p:PRIORITY.indexOf(e.type)<0?99:PRIORITY.indexOf(e.type)})).sort((a,b)=>a.p-b.p||a.i-b.i).map(o=>o.e);
+  const nb=natBelief(), d=nb-start.belief, r=riotList();
+  const lead = ranked[0] || {type:"localman", title:"QUIET WEEK: NOTHING HAPPENED, PROBABLY", ctx:{state:pick(NAMES)}};
+  const rest = ranked.slice(1, 9);
+  const L = LIES[Math.min(S.lie, LIES.length-1)];
+  const story = (e, big) => `<article class="${big?"lead":"story"}">
+      ${big?`<h2>${titleCase(e.title.replace(/^[✔✘]\s*/,""))}</h2>`:""}
+      <figure>${pic((e.ctx&&e.ctx.storm==="Wildfire")?"fire":(PIC[e.type]||"shrug"), e)}<figcaption>${caption(e)}</figcaption></figure>
+      ${big?"":`<h4>${titleCase(e.title.replace(/^[✔✘]\s*/,""))}</h4>`}
+      <p>${storyBody(e)}</p></article>`;
+  return `<div class="paper">
+    <div class="mast-top"><span>Week ${weekNum}</span><span>“All the News We Were Paid to Print”</span><span>25¢</span></div>
+    <div class="masthead">The American Weekly</div>
+    <div class="mast-bot"><span>Vol. ${S.lie+1}</span><span>${L.name}</span><span>Weather: ${pick(["Sunny","Cloudy","Suspiciously nice","Hot","Rainy"])}</span></div>
+    ${story(lead,true)}
+    <div class="numbers">
+      <div><b>${nb}%</b><span>believe it ${d>=0?`<em class="up">▲${d}</em>`:`<em class="dn">▼${-d}</em>`}</span></div>
+      <div><b>${r.length}</b><span>state${r.length===1?"":"s"} rioting</span></div>
+      <div><b>$${Math.round(S.money)}M</b><span>in the budget</span></div>
+      <div><b>${Math.round(S.exposure)}%</b><span>exposure</span></div>
+    </div>
+    ${rest.length?`<div class="cols">${rest.map(e=>story(e,false)).join("")}</div>`:""}
+    <div class="ad"><b>ADVERTISEMENT</b><br>${pick(ADS)}</div>
+  </div>`;
+}
+function caption(e){
+  const x=e.ctx||{};
+  const m={lie:"The Capitol, where it all began.",pass:"Lawmakers celebrate. Probably.",fail:"Officials head home early.",riot:`Downtown ${x.state||""} this week.`,spread:`${x.state||""}, as unrest moves in.`,
+    damage:"Repair crews face a long week.",calm:`${x.state||"The state"} finally relaxes.`,caught:"A frame from the viral video.",crowd:`Supporters on ${x.road||"the road"}.`,news:`${x.outlet||"The news"}, live on air.`,
+    tv:`Local TV in ${x.state||""}.`,pizza:"Free slices for all.",celeb:"The post that broke the internet.",poll:"Totally real poll results.",experts:"Experts, examining things.",
+    holiday:"National Hot Dog Day.",discredit:"Under the magnifying glass.",botsCaught:"Some of the 10,000 \"Totally Real Guys.\"",bots:"Very real users.",special:`${x.spName||""}, ${x.state||""}.`,
+    reporter:"Digging for clues.",debunk:"The video officials don't want you to watch.",localman:"Local hero.",heat:"Temperatures soared.",whistle:"The leaked memo.",
+    donation:"A very generous gift.",factcheck:"Checking the facts. Again.",game:"The big game.",
+    critic:`A post by ${x.handle||"a critic"}.`,criticGrow:`${x.handle||"The critic"}'s latest video.`,deleted:"What fans see now.",deleteBackfire:"Back, and louder.",arrested:"A van seen near the home.",arrestLeak:"Still from the leaked video.",bribed:"The \"new research\" video.",
+    attackUnite:`${x.state||""} after the blackout.`,attackBlame:"Emergency alert.",attackQuiet:"Still waiting.",stormHelp:`${x.state||""} after the ${(x.storm||"storm").toLowerCase()}.`,stormPhoto:"Four minutes of shoveling.",stormIgnore:`${x.state||""}, on its own.`,
+    gangStop:`The Guard arrives in ${x.state||""}.`,gangBlame:"A statement from the government.",gangIgnore:`${x.state||""} this week.`,pricesCoupon:"Coupon day.",pricesBlame:"Protesters, unconvinced.",pricesIgnore:"Protests grow.",
+    crashPrint:"The stock market this week.",crashFine:"\"Super great.\"",crashHelp:"Markets, falling."};
+  return m[e.type]||"";
+}
+
+function showPaper(html){
+  S.lastPaper = html;
+  $("paperInner").innerHTML = html + `<button class="paperBtn" onclick="closePaper()">${S.pending?"Keep Reading ▸":"Next Week ▸"}</button>`;
+  $("paperWrap").classList.add("show");
+  $("paperWrap").scrollTop = 0;
+}
+function closePaper(){
+  $("paperWrap").classList.remove("show");
+  if(S.pending){ const p=S.pending; S.pending=null; showModal(p); }
+  else if(S.crisis) showCrisis();
+}
+function reopenPaper(){
+  if(!S.lastPaper) return toast("No newspaper yet — end your first week!");
+  $("paperInner").innerHTML = S.lastPaper + `<button class="paperBtn" onclick="closePaper()">Close</button>`;
+  $("paperWrap").classList.add("show"); $("paperWrap").scrollTop=0;
+}
+
+/* ---------- crisis events (choices) ---------- */
+const CRITIC_NAMES = ["NotBuyingIt","ReadTheFinePrint","CuriousCarla","DadFactsDaily","MathTeacherMike","GrandmaKnows","TruthTeller","AskQuestionsAmy","FactsWithFrank","NiceTryGovt"];
+const GANG_NAMES = ["the Iron Jackals","the Night Owls","the Rust Kings","the Black Hornets"];
+const COAST = ["Florida","Louisiana","Texas","North Carolina","South Carolina","Georgia","Alabama","Mississippi"];
+const PLAINS = ["Oklahoma","Kansas","Nebraska","Iowa","Missouri","Arkansas"];
+const WEST = ["California","Oregon","Washington","Colorado","Arizona","Montana","Idaho"];
+
+function anyCritic(n){ return S.critics.some(c=>c.state===n); }
+function bump(n, key, amt){ S.st[n][key]=clamp(S.st[n][key]+amt); }
+function bumpAll(key, amt, f){ NAMES.forEach(n=>{ if(!f||f(S.st[n])) bump(n,key,amt); }); }
+
+function makeCrisis(){
+  const roll=Math.random();
+  if(roll<0.34) return crisisCritic();
+  return pick([crisisAttack, crisisStorm, crisisGang, crisisPrices, crisisCrash])();
+}
+
+function crisisCritic(){
+  const n=pick(NAMES.filter(x=>!anyCritic(x)));
+  const followers=Math.round(rnd(20,90))*1000;
+  const cr=newCritic(n,{followers}), handle=cr.handle;
+  const L=LIES[S.lie];
+  return {kind:"critic", pic:"phone", title:"Someone Is Poking Holes In Your Lie",
+    text:`<b>${handle}</b> from ${n} posted a video explaining what <b>${L.name}</b> really does. It already has <b>${(followers/1000)|0}K</b> views and people are sharing it.`,
+    choices:[
+      {label:"Delete the Account", desc:"Quick and cheap. 1 in 4 times they come back on another app, angrier.", cost:20, act:()=>criticDelete(cr)},
+      {label:"Arrest Them Quietly", desc:"Gone for good. But if anyone finds out, the whole country gets mad.", cost:60, act:()=>criticArrest(cr)},
+      {label:"Pay Them to Switch Sides", desc:"They post a new video saying they were wrong. Expensive.", cost:100, act:()=>criticBribe(cr)},
+      {label:"Ignore It", desc:"They'll keep posting every week and gain followers. You can deal with them later.", cost:0, act:()=>{ cr.found=true; S.critics.push(cr); logOnly("critic",`${handle} Keeps Posting`,{state:n,handle}); return `${handle} keeps posting. You'll find them under <b>📱 Online Critics</b> and in your phone's Watchlist.`; }},
+    ]};
+}
+function criticDelete(c){
+  S.critics=S.critics.filter(x=>x.handle!==c.handle);
+  if(Math.random()<0.25){
+    S.exposure+=6; bumpAll("belief",-1); bump(c.state,"belief",-6);
+    const nc=newCritic(c.state,{handle:c.handle+"_BACKUP", followers:c.followers*2, found:true});
+    nc.posts.unshift({text:"THEY DELETED MY ACCOUNT. Wonder why? 🤔 Everything I said is TRUE. Share this before they delete it too.", views:c.followers*4, likes:c.followers, week:S.week});
+    S.critics.push(nc);
+    headline(`${c.handle.toUpperCase()} BANNED — COMES BACK WITH 2X THE FOLLOWERS`,"deleteBackfire",{state:c.state,handle:c.handle});
+    return `It backfired! ${c.handle} made a new account, <b>${nc.handle}</b>, and posted "THEY DELETED ME!" Now even more people are watching.`;
+  }
+  logOnly("deleted",`${c.handle} Account Mysteriously Disappears`,{state:c.state,handle:c.handle});
+  return `The account is gone. Most people forgot about it by lunch.`;
+}
+function criticArrest(c){
+  S.critics=S.critics.filter(x=>x.handle!==c.handle);
+  if(Math.random()<0.25){
+    S.exposure+=25; bumpAll("unrest",12); bump(c.state,"belief",-10); bump(c.state,"unrest",20);
+    headline(`LEAKED: GOVERNMENT SECRETLY ARRESTED ${c.handle.toUpperCase()}`,"arrestLeak",{state:c.state,handle:c.handle});
+    return `Someone filmed the arrest. The video is everywhere. Protests are starting and reporters are digging.`;
+  }
+  S.exposure+=6;
+  logOnly("arrested",`${c.handle} Hasn't Posted In A While`,{state:c.state,handle:c.handle});
+  return `A van showed up at night. ${c.handle} hasn't posted since. A few people are asking where they went.`;
+}
+function criticBribe(c){
+  S.critics=S.critics.filter(x=>x.handle!==c.handle);
+  bump(c.state,"belief",12); MAP[c.state].n.forEach(m=>bump(m,"belief",5));
+  headline(`${c.handle.toUpperCase()}: "I WAS WRONG, THE POLICY IS AMAZING"`,"bribed",{state:c.state,handle:c.handle});
+  return `${c.handle} posted a new video saying they "did more research." Their fans are confused, but some believe it.`;
+}
+
+function crisisAttack(){
+  const n=pick(NAMES);
+  return {kind:"attack", pic:"siren", title:"Attack on America!",
+    text:`Hackers from overseas knocked out the power across <b>${n}</b>. People all over the country are scared it could happen to them next.`,
+    pre:()=>{ bumpAll("unrest",8); bump(n,"unrest",20); },
+    choices:[
+      {label:"Unite the Country", desc:"Give a big speech and fix the power fast. People rally behind you.", cost:80, act:()=>{ bumpAll("unrest",-20); bumpAll("belief",6); headline(`PRESIDENT: "WE STAND TOGETHER"`,"attackUnite",{state:n}); return "The power is back and people feel safer. Lots of them trust you a little more now."; }},
+      {label:"Blame the Doubters", desc:"Say people who question the policy made America weak. Believers love it. Doubters get furious.", cost:0, act:()=>{ bumpAll("belief",8,c=>c.belief>=50); bumpAll("unrest",14,c=>c.belief<50); S.exposure+=6; headline(`GOVERNMENT BLAMES "DOUBTERS" FOR BLACKOUT`,"attackBlame",{state:n}); return "Believers are cheering. Doubters are marching in the streets."; }},
+      {label:"Stay Quiet", desc:"Say nothing and hope it blows over.", cost:0, act:()=>{ bumpAll("unrest",12); bumpAll("belief",-4); headline(`WHERE IS THE GOVERNMENT? BLACKOUT CONTINUES IN ${n.toUpperCase()}`,"attackQuiet",{state:n}); return "People are scared and angry that nobody's doing anything."; }},
+    ]};
+}
+function crisisStorm(){
+  const type=pick(["Hurricane","Tornado","Wildfire"]);
+  const n=pick(type==="Hurricane"?COAST:type==="Tornado"?PLAINS:WEST);
+  const cost=Math.round(30+STATES[n][1]*3);
+  return {kind:"storm", pic:type==="Wildfire"?"fire":"storm", title:`${type} Hits ${n}!`,
+    text:`A huge ${type.toLowerCase()} tore through <b>${n}</b>. Families need help, and the whole country is watching what you do.`,
+    pre:()=>{ bump(n,"unrest",15); },
+    choices:[
+      {label:"Send Help Fast", desc:`Trucks, food and repair crews. People in ${n} will remember this.`, cost, act:()=>{ bump(n,"unrest",-30); bump(n,"belief",18); bumpAll("belief",3); headline(`GOVERNMENT RUSHES HELP TO ${n.toUpperCase()}`,"stormHelp",{state:n,storm:type}); return `${n} is grateful. Belief there went way up.`; }},
+      {label:"Photo Op Only", desc:"Show up, take pictures holding a shovel, leave.", cost:15, act:()=>{ bumpAll("belief",2); bump(n,"unrest",15); S.exposure+=4; headline(`PRESIDENT HOLDS SHOVEL IN ${n.toUpperCase()} FOR 4 MINUTES`,"stormPhoto",{state:n,storm:type}); return "The photos look great. People in the state are not impressed."; }},
+      {label:"Ignore It", desc:"Save the money for lies.", cost:0, act:()=>{ bump(n,"unrest",35); MAP[n].n.forEach(m=>bump(m,"unrest",10)); bump(n,"belief",-15); headline(`${n.toUpperCase()} LEFT ON ITS OWN AFTER ${type.toUpperCase()}`,"stormIgnore",{state:n,storm:type}); return `${n} is furious, and its neighbors are getting angry too.`; }},
+    ]};
+}
+function crisisGang(){
+  const n=pick(NAMES), gang=pick(GANG_NAMES);
+  return {kind:"gang", pic:"shield", title:`Dangerous Group in ${n}`,
+    text:`A violent group calling itself <b>${gang}</b> is hurting people in <b>${n}</b>. People there are scared to leave their homes.`,
+    pre:()=>{ bump(n,"unrest",15); },
+    choices:[
+      {label:"Send the National Guard", desc:"Stop them and keep people safe. Makes you look strong.", cost:100, act:()=>{ bump(n,"unrest",-30); bump(n,"belief",10); bumpAll("belief",3); headline(`NATIONAL GUARD STOPS ${gang.toUpperCase()} IN ${n.toUpperCase()}`,"gangStop",{state:n,gang}); return `${gang} is stopped. People in ${n} feel safe again.`; }},
+      {label:"Say They Hate the Policy", desc:"Claim the group is made of doubters. Some people buy it.", cost:0, act:()=>{ bumpAll("belief",5); bump(n,"unrest",15); S.exposure+=8; headline(`GOVERNMENT: ${gang.toUpperCase()} "PROBABLY DON'T LIKE THE POLICY"`,"gangBlame",{state:n,gang}); return "Some people believe it. But the group is still out there, and reporters smell something fishy."; }},
+      {label:"Ignore It", desc:"Not your problem. (It is your problem.)", cost:0, act:()=>{ bump(n,"unrest",40); MAP[n].n.forEach(m=>bump(m,"unrest",15)); headline(`FEAR SPREADS AS ${gang.toUpperCase()} RUN WILD IN ${n.toUpperCase()}`,"gangIgnore",{state:n,gang}); return `People in ${n} and nearby states are terrified and angry. Riots may start.`; }},
+    ]};
+}
+function crisisPrices(){
+  const item=pick(["Groceries","Gas","Rent","Pizza"]);
+  const states=[...NAMES].sort(()=>Math.random()-.5).slice(0,4);
+  return {kind:"prices", pic:"protest", title:`${item} Prices Double!`,
+    text:`${item} costs twice as much as last month. Protesters are filling the streets in <b>${states.join(", ")}</b>.`,
+    pre:()=>{ states.forEach(n=>bump(n,"unrest",25)); },
+    choices:[
+      {label:"Hand Out Coupons", desc:"Everyone gets a discount coupon. Expensive, but it works.", cost:120, act:()=>{ states.forEach(n=>bump(n,"unrest",-30)); bumpAll("belief",3); headline(`FREE ${item.toUpperCase()} COUPONS FOR EVERYONE`,"pricesCoupon",{item,states}); return "Protesters went home with their coupons."; }},
+      {label:"Blame Another Country", desc:"It's THEIR fault. Probably.", cost:0, act:()=>{ states.forEach(n=>bump(n,"unrest",-12)); S.exposure+=5; headline(`GOVERNMENT BLAMES "FOREIGNERS" FOR ${item.toUpperCase()} PRICES`,"pricesBlame",{item,states}); return "Some protesters calmed down. Others aren't buying it."; }},
+      {label:"Ignore the Protests", desc:"They'll get tired eventually. Right?", cost:0, act:()=>{ states.forEach(n=>{ bump(n,"unrest",15); bump(n,"belief",-8); }); headline(`${item.toUpperCase()} PROTESTS GROW IN ${states.length} STATES`,"pricesIgnore",{item,states}); return "The protests are getting bigger."; }},
+    ]};
+}
+function crisisCrash(){
+  return {kind:"crash", pic:"chartDown", title:"Stock Market Crash!",
+    text:`The stock market dropped like a rock overnight. People are worried about their jobs and savings, and your budget took a hit.`,
+    pre:()=>{ S.money-=60; bumpAll("unrest",5); },
+    choices:[
+      {label:"Print More Money", desc:"Get $150M instantly. Prices go up, people get mad.", cost:0, act:()=>{ S.money+=150; bumpAll("unrest",10); headline("GOVERNMENT PRINTS A WHOLE LOT OF MONEY","crashPrint"); return "You've got cash. Everyone else's money is worth a little less."; }},
+      {label:"Say Everything Is Fine", desc:"Smile on TV and say the economy is \"super great.\"", cost:0, act:()=>{ bumpAll("belief",-3); S.exposure+=4; headline(`PRESIDENT: ECONOMY IS "SUPER GREAT"`,"crashFine"); return "Nobody believes you about the economy. It makes them trust you less about the policy too."; }},
+      {label:"Help Struggling Families", desc:"Send checks to people who need it.", cost:90, act:()=>{ bumpAll("unrest",-15); bumpAll("belief",4); headline("GOVERNMENT SENDS RELIEF CHECKS","crashHelp"); return "People are relieved, and a little more willing to listen to you."; }},
+    ]};
+}
+
+function showCrisis(){
+  const c=S.crisis; if(!c||S.over) return;
+  if(!c.started){ c.started=true; if(c.pre) c.pre(); S.exposure=clamp(S.exposure); render(); }
+  const btns=c.choices.map((ch,i)=>{
+    const ok=S.money>=ch.cost;
+    return `<button class="act outlet choice" ${ok?"":"disabled"} onclick="resolveCrisis(${i})">
+      <div style="display:flex;justify-content:space-between;gap:8px"><span class="t">${ch.label}</span><span class="c" style="margin:0">${ch.cost?"$"+ch.cost+"M":"FREE"}</span></div>
+      <div class="d">${ch.desc}</div></button>`;
+  }).join("");
+  showModal(`<div class="crisis-tag">⚠ BREAKING</div><div class="crisis-pic">${pic(c.pic,{type:c.kind,ctx:{}})}</div><h2>${c.title}</h2><p>${c.text}</p><div style="display:grid;gap:6px;text-align:left">${btns}</div>`);
+}
+function resolveCrisis(i){
+  const c=S.crisis; if(!c) return;
+  const ch=c.choices[i];
+  if(S.money<ch.cost) return;
+  S.money-=ch.cost; S.crisis=null;
+  const msg=ch.act();
+  S.exposure=clamp(S.exposure);
+  NAMES.forEach(n=>{ const s=S.st[n]; if(!s.riot && s.unrest>=100){ s.riot=true; headline(`RIOTS BREAK OUT IN ${n.toUpperCase()}!`,"riot",{state:n}); } });
+  render();
+  if(S.exposure>=100 || S.money<0){ S.over=true; render(); return checkEnd(); }
+  showModal(`<h2>${ch.label}</h2><p>${msg}</p><button onclick="closeModal()">OK</button>`);
+}
+
+function criticsTick(){
+  S.critics.forEach(c=>{
+    c.weeks++; c.followers=Math.round(c.followers*1.6);
+    if(Math.random()<0.6) addPost(c);
+    bump(c.state,"belief",-2); MAP[c.state].n.forEach(m=>bump(m,"belief",-1));
+    if(c.weeks>=3) bumpAll("belief",-0.2);
+    if(c.weeks===3){ c.found=true; headline(`${c.handle.toUpperCase()} GOES NATIONAL — ${Math.round(c.followers/1000)}K FOLLOWERS`,"criticGrow",{state:c.state,handle:c.handle,followers:c.followers}); }
+  });
+}
+function handleCritic(i, how){
+  const c=S.critics[i]; if(!c) return;
+  const cost={del:20,arrest:60,bribe:100}[how];
+  if(S.over||S.money<cost) return; S.money-=cost;
+  const msg = how==="del"?criticDelete(c):how==="arrest"?criticArrest(c):criticBribe(c);
+  S.exposure=clamp(S.exposure); render(); checkEnd();
+  if(!S.over) showModal(`<h2>${{del:"Account Deleted",arrest:"Quiet Arrest",bribe:"Paid Off"}[how]}</h2><p>${msg}</p><button onclick="closeModal()">OK</button>`);
+}
+function renderCritics(){
+  const box=$("critics"), wrap=$("criticsWrap");
+  const hidden = S.critics.filter(c=>!c.found).length;
+  wrap.style.display = "block";
+  box.innerHTML = (S.critics.some(c=>c.found)?"":`<div class="d" style="font-size:12px;color:var(--muted);margin-bottom:6px">No critics found yet. ${hidden?"<b>Rumor has it someone is posting about you…</b> ":""}Use the phone to search for them.</div>`) + S.critics.map((c,i)=>!c.found?"":`<div class="critic">
+    <div class="ch"><b>📱 ${c.handle}</b><span>${c.state} · ${Math.round(c.followers/1000)}K followers${c.weeks>=3?" · <em>going national</em>":""}</span></div>
+    <div class="cb">
+      <button ${S.over||S.money<20?"disabled":""} onclick="handleCritic(${i},'del')">Delete<br><small>$20M</small></button>
+      <button ${S.over||S.money<60?"disabled":""} onclick="handleCritic(${i},'arrest')">Arrest<br><small>$60M</small></button>
+      <button ${S.over||S.money<100?"disabled":""} onclick="handleCritic(${i},'bribe')">Pay Off<br><small>$100M</small></button>
+    </div></div>`).join("");
+}
+
+/* ---------- social media people ---------- */
+const FIRST = ["Carla","Mike","Dana","Jordan","Priya","Luis","Kim","Tyler","Grace","Omar","Becca","Wes","Nina","Hank","Zoe","Marcus","Lily","Ray","Tess","Andre"];
+const BIO_DEBUNK = ["Just asking questions.","Reads the fine print so you don't have to.","Former accountant. Numbers don't lie.","Teacher. Dad. Skeptic.","I make videos about things that don't add up.","Fact-checking since 2009."];
+const BIO_FAN = ["Proud American 🇺🇸","Love my country, love my dog","Coffee, football, freedom","Mom of 3. Positive vibes only!"];
+const BIO_RANDOM = ["Pizza enthusiast 🍕","Gamer. Sleepy.","Gardening and naps","Just here for memes"];
+
+const LIE_WORDS = [
+  ["Monday","48 hours","money"],
+  ["NutriPaste","lunch","paste"],
+  ["Grand Canyon","mattress","canyon"],
+  ["air","Clean Air Fee","breathing"],
+  ["weekend","weekends","Saturday"],
+];
+const LIE_DEBUNKS = [
+  ["Monday is 48 hours now but my paycheck didn't double. Where's the \"more money\" they promised? 🤔","Did the math on Operation Long Monday. You work twice as long and get paid the same. That's it. That's the plan.","Thread 🧵: 5 things they're NOT telling you about the 48-hour Monday"],
+  ["I tested NutriPaste in my kitchen. It's flour, water and gray food coloring. \"Superfood\" my foot.","My kid's school lunch is now a gray blob. They call it a \"superfood from the future.\" Where's the science?","Read the NutriPaste Act. Page 12 says the company that makes it is owned by a government official's cousin."],
+  ["They SOLD the Grand Canyon. To a MATTRESS company. And they want us to say \"it was just a hole\"?","Called the mattress company. They're putting a showroom IN the Grand Canyon. Recording in replies.","The Grand Canyon is 6 million years old. It is not \"just a big hole.\" 🧵"],
+  ["Paying for air does NOT make it cleaner. That's not how air works. I'm a science teacher.","The Clean Air Fee money goes into the general budget, not to cleaning anything. Read section 3.","They're charging us to BREATHE and calling it science. Here are 3 actual scientists who disagree."],
+  ["\"Weekends were invented by lazy people\"? Weekends were won by workers who fought for them. History thread 🧵","No weekends means no Saturday games, no family days, nothing. How is this good for anyone?","Look who wrote the Weekend Retirement Plan. Every single one of them gets a vacation house."],
+];
+const GENERIC_DEBUNKS = [
+  "That \"92% of Americans love it\" poll? Paid for by the government. Source in replies.",
+  "Those cheering crowds on the highway are the SAME 20 people in every state. Zoom in on the guy in the red hat.",
+  "Why do all the accounts praising the policy have no profile pic and the name \"Totally Real Guy\"? 🤖",
+  "Eagle News said \"best policy in history\" 14 times in one hour. That's not news, that's an ad.",
+  "Those \"experts\" in lab coats? One of them is a dentist. Another sells hot tubs.",
+  "Don't believe me. Read the actual law yourself. It's online. It says the opposite of the ads.",
+];
+const FAN_POSTS = [
+  "Honestly the new policy kinda slaps 🔥","Haters gonna hate. I trust the government on this one 🇺🇸","My neighbor complains about the policy every day. Some people just love being mad 🙄",
+  "Saw the big crowd on the highway today, so much support!!","Eagle News explained it perfectly. Don't know why people are confused.","Proud of this country. Change is hard but it's worth it!",
+];
+const BOT_POSTS = [
+  "I love the policy. I am a real person. #TotallyReal","Great policy. 10/10. Would believe again. #Support","The policy is good for me and my family, which I have. #Real",
+];
+const RANDOM_POSTS = [
+  "anyone seen my cat?? orange, answers to Meatball","free pizza day was ELITE 🍕","it's so hot today i'm melting",
+  "just beat the final boss after 3 weeks LET'S GO","why is my wifi so slow","made sourdough. it's flat. again.",
+];
+
+let PID=1;
+function mkPerson(kind, state, opts={}){
+  const ab=STATES[state][0], f=pick(FIRST);
+  const handle = opts.handle || "@" + (kind==="debunker" ? pick(CRITIC_NAMES) : kind==="bot" ? "TotallyRealGuy"+Math.floor(rnd(100,9999)) : kind==="fan" ? pick(["Patriot","Proud","USA","Eagle","Freedom"])+f : f+pick(["Bakes","Games","Naps","Plants","123","xo"])) + (kind==="bot"?"":"_"+ab);
+  return {id:PID++, kind, state, handle, name: kind==="bot"?"Totally Real Guy":f,
+    followers: opts.followers || Math.round(kind==="debunker"?rnd(5,40):kind==="fan"?rnd(1,30):kind==="bot"?0:rnd(0.2,5))*1000,
+    bio: pick(kind==="debunker"?BIO_DEBUNK:kind==="fan"?BIO_FAN:kind==="bot"?["Real person. Real opinions."]:BIO_RANDOM),
+    posts:[], weeks:0, found:!!opts.found, color:`hsl(${Math.floor(rnd(0,360))} 55% 45%)`};
+}
+function addPost(p){
+  let text;
+  if(p.kind==="debunker"){ const own=LIE_DEBUNKS[S.lie]||[]; text = Math.random()<0.6 ? pick(own) : pick(GENERIC_DEBUNKS); if(p.posts.some(x=>x.text===text)) text=pick(GENERIC_DEBUNKS); }
+  else if(p.kind==="fan") text=pick(FAN_POSTS);
+  else if(p.kind==="bot") text=pick(BOT_POSTS);
+  else text=pick(RANDOM_POSTS);
+  const views = Math.round(p.followers*rnd(0.5,3)) + Math.round(rnd(10,500));
+  p.posts.unshift({text, views, likes:Math.round(views*rnd(0.03,0.15)), week:S.week});
+  p.posts = p.posts.slice(0,4);
+}
+function newCritic(state, opts={}){
+  const c=mkPerson("debunker", state, opts); addPost(c); addPost(c); return c;
+}
+function makeFillers(){
+  const arr=[];
+  for(let i=0;i<14;i++){ const k=i<5?"fan":i<9?"bot":"random"; const p=mkPerson(k, pick(NAMES)); addPost(p); if(Math.random()<.5) addPost(p); arr.push(p); }
+  return arr;
+}
+function spawnDebunkers(){
+  const active=S.critics.length;
+  if(active<3 && Math.random()<0.4){ const n=pick(NAMES.filter(x=>!anyCritic(x))); S.critics.push(newCritic(n)); }
+  // fillers post new stuff
+  S.fillers.forEach(p=>{ if(Math.random()<0.4) addPost(p); });
+}
+
+/* ---------- the phone ---------- */
+let PH = {screen:"home", q:"", person:null, result:null};
+function openPhone(){ if(!S||S.over) return; PH={screen:"home",q:"",person:null,result:null}; $("phone").classList.add("show"); renderPhone(); }
+function closePhone(){ $("phone").classList.remove("show"); render(); }
+function phoneGo(screen, extra={}){ Object.assign(PH, {screen}, extra); renderPhone(); }
+
+function allAccounts(){ return [...S.critics, ...S.fillers]; }
+function searchPosts(q){
+  const words=q.toLowerCase().split(/\s+/).filter(Boolean);
+  const out=[];
+  allAccounts().forEach(p=>p.posts.forEach(post=>{
+    const hay=(post.text+" "+p.handle+" "+p.name+" "+p.state+" "+STATES[p.state][0]).toLowerCase();
+    if(!words.length || words.every(w=>hay.includes(w))) out.push({p,post});
+  }));
+  return out.sort((a,b)=>b.post.week-a.post.week || b.post.views-a.post.views);
+}
+const fmtK = n => n>=1e6?(n/1e6).toFixed(1)+"M":n>=1000?Math.round(n/1000)+"K":String(n);
+
+function postCard(p,post){
+  return `<div class="post" onclick="phoneGo('profile',{person:${p.id}})">
+    <div class="av" style="background:${p.kind==="bot"?"#999":p.color}">${p.kind==="bot"?"🤖":p.name[0]}</div>
+    <div class="pb"><div class="ph"><b>${p.name}</b> <span>${p.handle} · ${STATES[p.state][0]}</span></div>
+    <div class="pt">${hl(post.text)}</div>
+    <div class="pm">👁 ${fmtK(post.views)} · ♥ ${fmtK(post.likes)}${post.week===S.week||post.week===S.week-1?" · <em>new</em>":""}</div></div></div>`;
+}
+function hl(t){
+  if(!PH.q) return esc(t);
+  let s=esc(t);
+  PH.q.split(/\s+/).filter(w=>w.length>1).forEach(w=>{ s=s.replace(new RegExp("("+w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig"),"<mark>$1</mark>"); });
+  return s;
+}
+function esc(t){ return t.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+
+function renderPhone(){
+  const scr=$("phoneScreen");
+  const L=LIES[S.lie];
+  const top=`<div class="sbar${PH.screen==="home"?" dark":""}"><span>9:41</span><span>$${Math.round(S.money)}M 🔋</span></div>`;
+  let body="";
+  if(PH.screen==="home"){
+    const found=S.critics.filter(c=>c.found).length;
+    body=`<div class="home">
+      <div class="clock">9:41</div><div class="date">Government Phone · TOP SECRET</div>
+      <div class="apps">
+        <button class="app" onclick="phoneGo('search')"><span class="ic" style="background:#1d9bf0">🐦</span>Chirp</button>
+        <button class="app" onclick="phoneGo('watch')"><span class="ic" style="background:#c8261e">🎯</span>Watchlist${found?`<i class="badge2">${found}</i>`:""}</button>
+        <button class="app" onclick="closePhone();reopenPaper()"><span class="ic" style="background:#f3ead7;color:#000">📰</span>Paper</button>
+      </div>
+      <div class="tip">Open <b>Chirp</b> and search for people debunking <b>${L.name}</b>. Searching is free. Dealing with them only costs money, not moves.</div>
+    </div>`;
+  }
+  else if(PH.screen==="search"){
+    const res=searchPosts(PH.q);
+    const words=LIE_WORDS[S.lie]||[];
+    const chips=[...words,"fake","poll","read","math","🧵"].map(w=>`<button class="chip" onclick="setQ('${w.replace(/'/g,"\\'")}')">${w}</button>`).join("");
+    body=`<div class="apphead"><button class="back" onclick="phoneGo('home')">‹</button><b>Chirp</b><span></span></div>
+      <div class="sbox"><input id="q" placeholder="Search posts, people, states…" value="${esc(PH.q).replace(/"/g,"&quot;")}" oninput="PH.q=this.value;renderResults()" autocomplete="off"></div>
+      <div class="chips">${chips}${PH.q?`<button class="chip clear" onclick="setQ('')">✕ clear</button>`:""}</div>
+      <div class="rlabel" id="rlabel"></div>
+      <div class="feed" id="feed"></div>`;
+    scr.innerHTML=top+body; renderResults(); return;
+  }
+  else if(PH.screen==="profile"){
+    const p=allAccounts().find(x=>x.id===PH.person);
+    if(!p){ body=`<div class="apphead"><button class="back" onclick="phoneGo('search')">‹</button><b>Profile</b><span></span></div><div class="gone">⚠<br>Account not found</div>`; }
+    else {
+      const isCrit = p.kind==="debunker";
+      if(isCrit && !p.found){ p.found=true; }
+      const off=S.over;
+      body=`<div class="apphead"><button class="back" onclick="phoneGo('search')">‹</button><b>${p.handle}</b><span></span></div>
+        <div class="prof">
+          <div class="av big" style="background:${p.kind==="bot"?"#999":p.color}">${p.kind==="bot"?"🤖":p.name[0]}</div>
+          <div class="pn">${p.name}</div><div class="phd">${p.handle}</div>
+          <div class="pbio">${p.bio}</div>
+          <div class="pst"><span><b>${fmtK(p.followers)}</b> followers</span><span>📍 ${p.state}</span></div>
+        </div>
+        <div class="acts">
+          <div class="actt">What do you want to do?</div>
+          <button ${off||S.money<20?"disabled":""} onclick="phoneAct(${p.id},'del')"><b>🗑 Delete Account</b><span>$20M · might come back angrier</span></button>
+          <button ${off||S.money<60?"disabled":""} onclick="phoneAct(${p.id},'arrest')"><b>🚐 Arrest Quietly</b><span>$60M · gone for good, unless it leaks</span></button>
+          <button ${off||S.money<100?"disabled":""} onclick="phoneAct(${p.id},'bribe')"><b>💰 Pay Them Off</b><span>$100M · they switch sides</span></button>
+          <button class="leave" onclick="phoneGo('search')"><b>Leave Them Alone</b><span>Free</span></button>
+          
+        </div>
+        <div class="rlabel">Posts</div>
+        <div class="feed">${p.posts.map(post=>postCard(p,post)).join("")}</div>`;
+    }
+  }
+  else if(PH.screen==="result"){
+    const r=PH.result;
+    body=`<div class="apphead"><span></span><b>${r.title}</b><span></span></div>
+      <div class="result"><div class="rpic">${pic(r.pic,{type:r.type,ctx:{}})}</div><p>${r.msg}</p>
+      <button class="pbtn" onclick="phoneGo('search')">Back to Search</button><button class="pbtn alt" onclick="closePhone()">Put Phone Away</button></div>`;
+  }
+  else if(PH.screen==="watch"){
+    const list=S.critics.filter(c=>c.found);
+    body=`<div class="apphead"><button class="back" onclick="phoneGo('home')">‹</button><b>Watchlist</b><span></span></div>
+      ${list.length?`<div class="rlabel">Debunkers you've found (${list.length})</div>`+list.map(c=>`<div class="post" onclick="phoneGo('profile',{person:${c.id}})"><div class="av" style="background:${c.color}">${c.name[0]}</div><div class="pb"><div class="ph"><b>${c.name}</b> <span>${c.handle}</span></div><div class="pm">📍 ${c.state} · ${fmtK(c.followers)} followers${c.weeks>=3?" · <em>going national</em>":""}</div></div></div>`).join("")
+        :`<div class="gone" style="font-size:14px">Nobody on your watchlist yet.<br><br>Search Chirp to find people debunking your lies. Some of them are hiding out there right now.</div>`}`;
+  }
+  scr.innerHTML=top+body;
+}
+function setQ(w){ PH.q=w; renderPhone(); const i=$("q"); if(i){ i.focus(); i.setSelectionRange(w.length,w.length);} }
+function renderResults(){
+  const res=searchPosts(PH.q);
+  const f=$("feed"), l=$("rlabel"); if(!f) return;
+  l.textContent = PH.q ? `${res.length} result${res.length===1?"":"s"} for “${PH.q}”` : "Trending right now";
+  f.innerHTML = res.length ? res.slice(0,30).map(r=>postCard(r.p,r.post)).join("") : `<div class="gone" style="font-size:14px">No posts found. Try another word.</div>`;
+}
+
+function phoneAct(id, how){
+  const cost={del:20,arrest:60,bribe:100}[how];
+  const p=allAccounts().find(x=>x.id===id); if(!p) return;
+  if(S.over||S.money<cost) return; S.money-=cost;
+  let msg, title, picKind, type;
+  if(p.kind==="debunker"){
+    msg = how==="del"?criticDelete(p):how==="arrest"?criticArrest(p):criticBribe(p);
+    title = {del:"Account Deleted",arrest:"Quiet Arrest",bribe:"Paid Off"}[how];
+    picKind = how==="del"?"phoneX":how==="arrest"?"van":"money"; type=how;
+  } else {
+    S.fillers = S.fillers.filter(x=>x.id!==id);
+    const who = p.kind==="fan"?"a supporter":p.kind==="bot"?"one of YOUR OWN bots":"a regular person who wasn't even talking about the policy";
+    if(how==="del"){ S.exposure+=5; bump(p.state,"belief",p.kind==="fan"?-6:-3);
+      msg=`Oops. ${p.handle} was ${who}. ${p.kind==="bot"?"You just deleted your own fake account.":"Their friends are asking why the government deleted them."}`;
+      if(p.kind!=="bot") headline(`WHY WAS ${p.handle.toUpperCase()} DELETED? THEY DIDN'T DO ANYTHING`,"deleted",{state:p.state,handle:p.handle}); }
+    else if(how==="arrest"){ S.exposure+=12; bump(p.state,"unrest",15); bump(p.state,"belief",-8);
+      msg=`Big mistake. ${p.handle} was ${who}. Their family is on the news asking why they were arrested.`;
+      headline(`INNOCENT ${p.state.toUpperCase()} RESIDENT ARRESTED BY MISTAKE`,"arrestLeak",{state:p.state,handle:p.handle}); }
+    else { msg=`${p.handle} was ${who}. ${p.kind==="fan"?"They already liked the policy, so you paid them for nothing.":"They took the money and posted about pizza."}`; }
+    title="Wrong Person!"; picKind="shrug"; type="wrong";
+  }
+  S.exposure=clamp(S.exposure);
+  render();
+  if(S.exposure>=100||S.money<0){ closePhone(); S.over=true; return checkEnd(); }
+  PH.result={title,msg,pic:picKind,type}; phoneGo("result");
+}
+
+function checkEnd(){
+  if(S.exposure>=100){ S.over=true; render(); return showModal(`<h2 style="color:var(--red)">The Truth Is Out</h2><p>Reporters published everything: the paid crowds, the bots, the fake polls. Your government is finished.</p><p>You lasted <b>${S.week}</b> weeks and passed <b>${S.passed}</b> of 5 lies.</p><button onclick="newGame();closeModal()">Play Again</button>`); }
+  if(S.money<0){ return showModal(`<h2 style="color:var(--red)">Bankrupt</h2><p>Riots in ${riotList().length} states wrecked so much that the government ran out of money. The lights go off in the Capitol.</p><p>You lasted <b>${S.week}</b> weeks and passed <b>${S.passed}</b> of 5 lies.</p><button onclick="newGame();closeModal()">Play Again</button>`); }
+}
+function endSummary(){
+  showModal(`<h2>Out of Lies</h2><p>You got through all five policies, but only <b>${S.passed}</b> stuck.</p><button onclick="newGame();closeModal()">Play Again</button>`);
+}
+function showWin(){
+  showModal(`<h2 style="color:var(--blue)">Total Control</h2><p>All five lies became law. Mondays are 48 hours, lunch is paste, the Grand Canyon is a mattress showroom, air costs money, and weekends are gone.</p><p>And everyone thinks it was a great idea.</p><p>Finished in <b>${S.week}</b> weeks with <b>${Math.round(S.exposure)}%</b> exposure.</p><button onclick="newGame();closeModal()">Play Again</button>`);
+}
+
+function showModal(html){ if(S && S.collect){ S.pending=html; return; } $("modal").innerHTML=html; $("overlay").classList.add("show"); }
+function closeModal(){ $("overlay").classList.remove("show"); if(S && S.crisis && !S.over && !$("paperWrap").classList.contains("show")) setTimeout(showCrisis,150); }
+
+/* ---------- map ---------- */
+function colorFor(c){
+  if(c.riot) return "#c8261e";
+  const b=c.belief;
+  // doubts (gray-brown) -> unsure (gold) -> believes (blue)
+  const mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
+  const gray=[156,143,120], gold=[217,165,33], blue=[31,78,156];
+  const rgb = b<50 ? mix(gray,gold,b/50) : mix(gold,blue,(b-50)/50);
+  return `rgb(${rgb.join(",")})`;
+}
+function buildMap(){
+  const svg=$("map");
+  let html="";
+  NAMES.forEach(n=>{ html+=`<path class="st" data-n="${n}" d="${MAP[n].d}"><title>${n}</title></path>`; });
+  html += `<g id="fires"></g>`;
+  svg.innerHTML=html;
+  svg.querySelectorAll(".st").forEach(p=>p.addEventListener("click",()=>openState(p.dataset.n)));
+  const sel=$("pick");
+  sel.innerHTML=`<option value="">Pick a state (for tiny ones like Rhode Island)…</option>`+NAMES.map(n=>`<option>${n}</option>`).join("");
+  sel.onchange=()=>{ if(sel.value) openState(sel.value); };
+}
+function renderMap(){
+  document.querySelectorAll(".st").forEach(p=>{
+    const n=p.dataset.n, c=S.st[n];
+    p.style.fill=colorFor(c);
+    p.classList.toggle("riot",c.riot);
+    p.classList.toggle("sel",S.sel===n);
+    p.querySelector("title").textContent=`${n}: ${Math.round(c.belief)}% believe${c.riot?" — RIOTING":""}`;
+  });
+  $("fires").innerHTML = riotList().map(n=>`<text class="fire" x="${MAP[n].c[0]}" y="${MAP[n].c[1]}">🔥</text>`).join("")
+    + S.critics.filter(c=>c.found).map(c=>`<text class="fire" x="${MAP[c.state].c[0]+14}" y="${MAP[c.state].c[1]-10}">📱</text>`).join("");
+  if(S.sel){ const p=document.querySelector(`.st[data-n="${S.sel}"]`); p.parentNode.insertBefore(p,$("fires")); }
+}
+
+/* ---------- state panel ---------- */
+function openState(n){ S.sel=n; $("sheet").classList.add("open"); render(); }
+function closeSheet(){ if(S) S.sel=null; $("sheet").classList.remove("open"); $("pick").value=""; if(S) renderMap(); }
+
+function btn(t,d,cost,where,disabled,onclick,cls=""){
+  const b=document.createElement("button");
+  b.className="act "+cls;
+  b.innerHTML=`<div class="t">${t}</div><div class="d">${d}</div><div class="c">${typeof cost==="string"?cost:cost===0?"FREE":"$"+cost+"M"}${where?" · "+where:""}</div>`;
+  b.disabled=disabled; b.onclick=onclick; return b;
+}
+
+function renderSheet(){
+  const n=S.sel; if(!n) return;
+  const c=S.st[n], [ab,pop,spot,spName,spDesc,type]=STATES[n], k=stateCosts(n);
+  const typeLabel={boost:"Big boost here",spread:"Boost here + neighbors",calm:"Calms the state down",cash:"Earns you money",quiet:"Lowers exposure"}[type];
+  const inner=$("sheetInner");
+  inner.innerHTML=`
+    <div class="top"><div><h3>${n}</h3><div class="meta">${pop}M people · ${Math.round(pop/TOTAL_POP*100)}% of the country · 📍 ${spot}</div></div><button class="x" id="closeX" aria-label="Close">✕</button></div>
+    ${c.riot?`<div class="riotbox" style="margin-top:10px">🔥 <b>RIOTING.</b> Costs you $${repairCost(n)}M in repairs every week, sends no taxes, and makes neighbors angrier. Get unrest under 50% to end it.</div>`:""}
+    <div class="bars">
+      <div><div class="lbl"><span>Belief</span><span>${Math.round(c.belief)}%</span></div><div class="bar"><i style="width:${c.belief}%;background:${colorFor({belief:c.belief})}"></i></div></div>
+      <div><div class="lbl"><span>Unrest</span><span>${Math.round(c.unrest)}%</span></div><div class="bar"><i style="width:${c.unrest}%;background:var(--red)"></i></div></div>
+    </div>
+    <div class="actions" id="stActs"></div>
+    <div class="section-title" style="margin-top:12px">Hire Fake Supporters <small><span style="color:#2e8b57">●</span> very popular &nbsp;<span style="color:var(--blue)">●</span> neutral</small></div>
+    <div class="roads" id="roads"></div>
+    <div class="nbrs">Neighbors: ${MAP[n].n.length?MAP[n].n.join(", "):"none"}</div>`;
+  const box=inner.querySelector("#stActs"), off=S.over||S.ap<1;
+  box.appendChild(btn(spName,`${spDesc} <i>(${typeLabel}. Once per lie.)</i>`,k.special,c.usedSpecial?"Used":"",off||c.usedSpecial||S.money<k.special,()=>stateAction(n,"special"),"special"));
+  box.appendChild(btn("Local TV Ad Blitz","The local news repeats the lie all day. +15 belief.",k.tv,"",off||S.money<k.tv,()=>stateAction(n,"tv")));
+  box.appendChild(btn("Free Pizza Day","Hard to riot with a mouth full of pizza. −30 unrest.",k.pizza,"",off||S.money<k.pizza,()=>stateAction(n,"pizza")));
+  const rb=inner.querySelector("#roads");
+  ROADS[n].forEach(([road,pop],i)=>{
+    const green=pop==="g", cost=k[pop];
+    const b=document.createElement("button");
+    b.className="road "+(green?"green":"blue");
+    b.innerHTML=`<span class="dot"></span><span class="rn">${road}<small>${green?"Very popular · +24 belief · 1 in 5 caught":"Neutral · +12 belief · 1 in 10 caught"}</small></span><span class="rc">$${cost}M</span>`;
+    b.disabled=off||S.money<cost; b.onclick=()=>hireOnRoad(n,i);
+    rb.appendChild(b);
+  });
+  inner.querySelector("#closeX").onclick=closeSheet;
+}
+
+function render(){
+  const L = LIES[S.lie];
+  $("sWeek").textContent = S.week;
+  $("sMoney").textContent = "$"+Math.round(S.money)+"M";
+  const w=weeklyIncome();
+  $("sIncome").textContent = `${w.net>=0?"+":""}${w.net}/wk`;
+  $("sAP").textContent = `${S.ap}/${MOVES_PER_WEEK}`;
+  const e = Math.round(S.exposure);
+  $("sExp").textContent = e+"%"; $("mExp").style.width = e+"%";
+  $("lieTag").textContent = `LIE #${S.lie+1} OF ${LIES.length}`;
+  $("lieName").textContent = L.name;
+  $("lieTruth").textContent = L.truth;
+  $("lieSpin").textContent = "Official story: "+L.spin;
+  const nb = natBelief();
+  $("natBelief").textContent = nb;
+  $("natBar").style.width = nb+"%";
+  $("lieDeadline").textContent = `Week ${S.lieWeek} of ${L.weeks} · need 80%`;
+  const r=riotList().length;
+  $("riotCount").textContent = r ? `🔥 ${r} state${r>1?"s":""} rioting` : "Tap a state to see your moves";
+
+  renderMap();
+  renderSheet();
+  renderCritics();
+
+  const aw = $("actions"); aw.innerHTML="";
+  aw.appendChild(btn("Pay a News Outlet","Pick from 6 outlets. More believable ones cost more but convince more people.","From $"+outletPrice(Math.round(Math.min(...S.outlets)))+"M","",S.over||S.ap<1,openNews));
+  NATIONAL.forEach(a=>aw.appendChild(btn(a.t,a.d,a.cost,"",S.over||S.ap<1||S.money<a.cost,()=>nationalAction(a))));
+  $("endTurn").disabled = S.over;
+  $("news").innerHTML = S.news.map(n=>`<div>📰 ${n}</div>`).join("");
+}
+
+$("endTurn").onclick = ()=>{
+  if(S.over) return;
+  const wk=S.week, start=S.weekStart||{belief:natBelief()};
+  closeSheet();
+  S.collect=true; S.pending=null;
+  endWeek();
+  S.collect=false;
+  const html=buildPaper(wk,start);
+  S.log=[]; S.weekStart={belief:natBelief()};
+  if(!S.over && wk>=2 && Math.random()<0.45) S.crisis=makeCrisis();
+  showPaper(html);
+};
+buildMap();
+newGame();
+showModal(`<h2>Welcome, Mr. President</h2>
+<p>Your job: convince America that 5 terrible policies are actually amazing.</p>
+<ul>
+<li>Get <b>80% of Americans</b> to believe each lie before time runs out. Big states like California and Texas count the most.</li>
+<li><b>Tap any state</b> on the map to see its moves. Every state has its own <b>★ special move</b>.</li>
+<li>You get <b>4 moves per week</b>.</li>
+<li>States that don't believe get angry and <b>riot</b>. Riots cost repair money, stop taxes, and <b>spread to neighbors</b>.</li>
+<li>You lose if you go <b>bankrupt</b> or <b>Exposure</b> hits 100%.</li>
+<li>Tap the <b>📱 phone</b> to search social media for people debunking you. Then delete, arrest, or pay them off. Careful: pick the wrong person and it backfires!</li>
+<li>Watch out for <b>surprise events</b>: attacks, storms, protests, and people online poking holes in your lies. You choose how to respond.</li>
+<li>Every week ends with <b>The American Weekly</b> newspaper reporting what happened.</li>
+</ul>
+<button onclick="closeModal()">Start Lying</button>`);
+</script>
+</body>
+</html>

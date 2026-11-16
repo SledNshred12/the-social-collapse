@@ -1,0 +1,100 @@
+<!-- ===== Boot: tap to start → Axiom Games intro → loading screen ===== -->
+<style>
+  #boot,#axiom,#loading{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s}
+  .gone{opacity:0;pointer-events:none}
+  #boot{background:#090d19;color:#8E93C4;font-family:'Space Grotesk',Inter,sans-serif;cursor:pointer;gap:14px}
+  #boot .tap{font-size:18px;letter-spacing:6px;color:#F5F7FA;animation:bpulse 1.6s infinite}
+  #boot small{font-size:12px;letter-spacing:2px;opacity:.7}
+  @keyframes bpulse{50%{opacity:.35}}
+  #axiom{background:#090d19;display:none;cursor:pointer}
+  #axiom video{width:100%;height:100%;object-fit:contain;background:#090d19}
+  #axiom .mark{width:min(42vw,200px);height:min(42vw,200px);overflow:visible}
+  #axiom .mark polygon{opacity:0}
+  #axiom .f-top{transform:translateY(-120px)}
+  #axiom .f-left{transform:translate(-140px,40px)}
+  #axiom .f-right{transform:translate(140px,40px)}
+  #axiom .notch{transform-origin:48px 25.5px;transform:scale(0)}
+  #axiom.go .f-left{animation:snapIn .45s cubic-bezier(.2,1.4,.4,1) .30s forwards}
+  #axiom.go .f-right{animation:snapIn .45s cubic-bezier(.2,1.4,.4,1) .65s forwards}
+  #axiom.go .f-top{animation:snapIn .45s cubic-bezier(.2,1.4,.4,1) 1.00s forwards}
+  #axiom.go .notch{animation:pop .35s cubic-bezier(.2,1.6,.4,1) 1.40s forwards}
+  @keyframes snapIn{to{transform:none;opacity:1}}
+  @keyframes pop{to{transform:scale(1);opacity:1}}
+  #axiom .flash{position:absolute;width:min(70vw,360px);height:min(70vw,360px);border-radius:50%;background:radial-gradient(circle,#5B6CFF88 0%,#5B6CFF00 65%);opacity:0;pointer-events:none}
+  #axiom.go .flash{animation:flash 1.2s ease-out 1.40s forwards}
+  @keyframes flash{0%{opacity:0;transform:scale(.4)}25%{opacity:1}100%{opacity:0;transform:scale(1.6)}}
+  #axiom .word{font-family:'Space Grotesk',Inter,sans-serif;font-weight:600;font-size:clamp(36px,11vw,56px);color:#F5F7FA;letter-spacing:30px;opacity:0;margin-top:26px;padding-left:30px}
+  #axiom .sub{font-family:'Space Grotesk',Inter,sans-serif;font-weight:500;font-size:clamp(12px,3.4vw,16px);color:#8E93C4;letter-spacing:10px;opacity:0;margin-top:8px;padding-left:10px}
+  #axiom.go .word{animation:word .9s cubic-bezier(.2,.8,.2,1) 1.75s forwards}
+  #axiom.go .sub{animation:fadeUp .6s ease-out 2.35s forwards}
+  @keyframes word{to{opacity:1;letter-spacing:7px;padding-left:7px}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  #axiom .skip{position:absolute;bottom:22px;right:22px;color:#8E93C4;font:12px Inter,sans-serif;letter-spacing:2px;opacity:.6}
+  #loading{background:#c8261e;display:none;overflow:hidden;color:#f3ead7}
+  #loading .rays{position:absolute;width:260vmax;height:260vmax;left:50%;top:50%;margin:-130vmax 0 0 -130vmax;
+    background:repeating-conic-gradient(#a51c16 0deg 12deg,#c8261e 12deg 24deg);animation:spin 40s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #loading .inner{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;width:min(86vw,420px)}
+  #loading img{width:min(48vw,200px);height:auto;filter:drop-shadow(0 8px 18px #0006);animation:bob 2.4s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(-8px) rotate(-1.5deg)}}
+  #loading h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(34px,11vw,54px);margin:0;line-height:.95;text-align:center;color:#f3ead7;text-shadow:3px 3px 0 #1b1712;letter-spacing:1px}
+  #loading .bar{width:100%;height:18px;border:3px solid #1b1712;border-radius:10px;background:#f3ead7;overflow:hidden}
+  #loading .bar i{display:block;height:100%;width:0;background:repeating-linear-gradient(45deg,#1f4e9c 0 12px,#2a5fb8 12px 24px)}
+  #loading .tip{font-family:'Special Elite',monospace;font-size:14px;min-height:20px;text-align:center;text-shadow:1px 1px 0 #1b1712}
+  #loading .pct{font-family:Anton,sans-serif;font-size:14px;letter-spacing:2px}
+</style>
+<div id="boot"><div class="tap">TAP TO START</div><small>🔊 Turn your sound on</small></div>
+<div id="axiom">
+  <video id="axVid" src="__AXVID__" playsinline preload="auto"></video>
+  <div class="skip">TAP TO SKIP</div>
+</div>
+<div id="loading">
+  <div class="rays"></div>
+  <div class="inner">
+    <img alt="" src="__LOGO__">
+    <h1>THE SOCIAL<br>COLLAPSE</h1>
+    <div class="bar"><i id="ldBar"></i></div>
+    <div class="pct" id="ldPct">0%</div>
+    <div class="tip" id="ldTip"></div>
+  </div>
+</div>
+<script>
+(function(){
+  const $b=document.getElementById("boot"), $a=document.getElementById("axiom"), $l=document.getElementById("loading");
+  let actx=null, introTimer=null, done=false;
+
+  const TIPS=["Printing fake polls…","Hiring enthusiastic supporters…","Training 10,000 bots…","Buying a news network…",
+    "Shredding the memo…","Ironing lab coats for the experts…","Practicing the official story…","Waking up the Totally Normal Van…"];
+
+  function startLoading(){
+    if(done) return; done=true;
+    try{ const v=document.getElementById("axVid"); v.pause(); }catch(e){}
+    clearTimeout(introTimer);
+    $a.classList.add("gone");
+    setTimeout(()=>{ $a.style.display="none"; },500);
+    $l.style.display="flex";
+    const bar=document.getElementById("ldBar"), pct=document.getElementById("ldPct"), tip=document.getElementById("ldTip");
+    const order=[...TIPS].sort(()=>Math.random()-.5);
+    let p=0, ti=0; tip.textContent=order[0];
+    const tipT=setInterval(()=>{ ti=(ti+1)%order.length; tip.textContent=order[ti]; },850);
+    const step=()=>{
+      p=Math.min(100,p+Math.random()*6+1.5);
+      bar.style.width=p+"%"; pct.textContent=Math.round(p)+"%";
+      if(p<100) setTimeout(step, 60+Math.random()*110);
+      else { clearInterval(tipT); tip.textContent="Ready, Mr. President."; setTimeout(()=>{ $l.classList.add("gone"); setTimeout(()=>$l.remove(),600); },600); }
+    };
+    setTimeout(step,250);
+  }
+
+  $b.addEventListener("click",()=>{
+    $b.classList.add("gone"); setTimeout(()=>$b.remove(),500);
+    $a.style.display="flex";
+    const v=document.getElementById("axVid");
+    v.addEventListener("ended",startLoading,{once:true});
+    v.addEventListener("error",startLoading,{once:true});
+    const p=v.play(); if(p&&p.catch) p.catch(()=>{ v.muted=true; v.play().catch(startLoading); });
+    introTimer=setTimeout(startLoading,8000);
+  },{once:true});
+  $a.addEventListener("click",startLoading);
+})();
+</script>
