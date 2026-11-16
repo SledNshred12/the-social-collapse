@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Social Collapse</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@500;600&family=UnifrakturMaguntia&family=Old+Standard+TT:wght@400;700&family=Special+Elite&family=Inter:wght@400;600;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@500;600&family=Poppins:wght@600&family=Barlow:wght@500&family=UnifrakturMaguntia&family=Old+Standard+TT:wght@400;700&family=Special+Elite&family=Inter:wght@400;600;800&display=swap">
 <style>
   :root{
     --paper:#f3ead7; --ink:#1b1712; --red:#c8261e; --blue:#1f4e9c; --gold:#d9a521;
@@ -195,13 +195,14 @@
 <!-- ===== Boot: tap to start → Axiom Games intro → loading screen ===== -->
 <style>
   #boot,#axiom,#loading{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s}
-  .gone{opacity:0;pointer-events:none}
-  #boot{background:#090d19;color:#8E93C4;font-family:'Space Grotesk',Inter,sans-serif;cursor:pointer;gap:14px}
-  #boot .tap{font-size:18px;letter-spacing:6px;color:#F5F7FA;animation:bpulse 1.6s infinite}
-  #boot small{font-size:12px;letter-spacing:2px;opacity:.7}
+  .faded{opacity:0;pointer-events:none}
+  #boot{z-index:51;background:#0b0e19;cursor:pointer;transition:opacity .55s ease}
+  #boot .cube{width:42px;height:42px;opacity:.8;margin-bottom:22px}
+  #boot .tap{font-family:Poppins,'Space Grotesk',sans-serif;font-weight:600;font-size:15px;letter-spacing:.5px;color:#9298d2}
+  #boot small{font-family:Barlow,Inter,sans-serif;font-weight:500;font-size:11px;color:#4a52c0;margin-top:9px;letter-spacing:.2px}
   @keyframes bpulse{50%{opacity:.35}}
-  #axiom{background:#090d19;display:none;cursor:pointer}
-  #axiom video{width:100%;height:100%;object-fit:contain;background:#090d19}
+  #axiom{background:#0b0e19;display:none;cursor:pointer}
+  #axiom video{width:100%;height:100%;object-fit:contain;background:#0b0e19}
   #axiom .mark{width:min(42vw,200px);height:min(42vw,200px);overflow:visible}
   #axiom .mark polygon{opacity:0}
   #axiom .f-top{transform:translateY(-120px)}
@@ -237,7 +238,10 @@
   #loading .tip{font-family:'Special Elite',monospace;font-size:14px;min-height:20px;text-align:center;text-shadow:1px 1px 0 #1b1712}
   #loading .pct{font-family:Anton,sans-serif;font-size:14px;letter-spacing:2px}
 </style>
-<div id="boot"><div class="tap">TAP TO START</div><small>🔊 Turn your sound on</small></div>
+<div id="boot">
+  <svg class="cube" viewBox="0 0 96 96" aria-hidden="true"><polygon points="48,6 86,27 48,48 10,27" fill="#B8C2FF"/><polygon points="10,27 48,48 48,90 10,69" fill="#5B6CFF"/><polygon points="86,27 48,48 48,90 86,69" fill="#3A3FB5"/><polygon points="48,17 63,25.5 48,34 33,25.5" fill="#0b0e19"/></svg>
+  <div class="tap">TAP TO START</div><small>Sound on for the full experience</small>
+</div>
 <div id="axiom">
   <video id="axVid" src="__AXVID__" playsinline preload="auto"></video>
   <div class="skip">TAP TO SKIP</div>
@@ -264,7 +268,7 @@
     if(done) return; done=true;
     try{ const v=document.getElementById("axVid"); v.pause(); }catch(e){}
     clearTimeout(introTimer);
-    $a.classList.add("gone");
+    $a.classList.add("faded");
     setTimeout(()=>{ $a.style.display="none"; },500);
     $l.style.display="flex";
     const bar=document.getElementById("ldBar"), pct=document.getElementById("ldPct"), tip=document.getElementById("ldTip");
@@ -275,13 +279,13 @@
       p=Math.min(100,p+Math.random()*6+1.5);
       bar.style.width=p+"%"; pct.textContent=Math.round(p)+"%";
       if(p<100) setTimeout(step, 60+Math.random()*110);
-      else { clearInterval(tipT); tip.textContent="Ready, Mr. President."; setTimeout(()=>{ $l.classList.add("gone"); setTimeout(()=>$l.remove(),600); },600); }
+      else { clearInterval(tipT); tip.textContent="Ready, Mr. President."; setTimeout(()=>{ $l.classList.add("faded"); setTimeout(()=>$l.remove(),600); },600); }
     };
     setTimeout(step,250);
   }
 
   $b.addEventListener("click",()=>{
-    $b.classList.add("gone"); setTimeout(()=>$b.remove(),500);
+    $b.classList.add("faded"); setTimeout(()=>$b.remove(),700);
     $a.style.display="flex";
     const v=document.getElementById("axVid");
     v.addEventListener("ended",startLoading,{once:true});
