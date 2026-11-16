@@ -220,6 +220,26 @@
   .plan ul{margin:6px 0 8px;padding-left:18px;font-size:13px;line-height:1.5}
   .plan .pbtn:disabled{opacity:.4}
   .curtag{text-align:center;font-weight:800;font-size:13px;color:#536471;padding:6px}
+  .postbtn{background:#1d9bf0;color:#fff;border:none;border-radius:16px;padding:6px 12px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px}
+  .postbtn:disabled{opacity:.4}
+  .you{background:#1d9bf0;color:#fff;font-size:9px;font-weight:800;border-radius:4px;padding:1px 4px;vertical-align:1px}
+  .note{margin-top:6px;background:#fff4e5;border:1px solid #f0c58a;border-radius:8px;padding:5px 8px;font-size:12px}
+  .viral{display:inline-flex;gap:3px;align-items:center;margin-top:5px;background:#e8f5fd;color:#1d9bf0;font-weight:800;font-size:11px;border-radius:8px;padding:2px 7px}
+  .accts{display:grid;gap:6px}
+  .acct{display:flex;gap:9px;align-items:center;text-align:left;background:#fff;border:1.5px solid #cfd9de;border-radius:12px;padding:7px 9px;cursor:pointer;font-family:inherit;font-size:13px}
+  .acct.on{border-color:#1d9bf0;background:#e8f5fd}
+  .acct small{display:block;color:#536471;font-size:11px}
+  #draft{width:100%;min-height:90px;margin-top:10px;border:1.5px solid #cfd9de;border-radius:12px;padding:10px;font-family:inherit;font-size:15px;resize:vertical;outline:none}
+  #draft:focus{border-color:#1d9bf0}
+  .meter2{margin-top:8px;background:#f7f9f9;border-radius:12px;padding:9px 10px}
+  .mlbl{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#536471}
+  .mbar{height:9px;background:#e1e8ed;border-radius:5px;overflow:hidden;margin-top:5px}
+  .mbar i{display:block;height:100%;transition:width .2s,background .2s}
+  .mwhy{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;font-size:11px;color:#536471}
+  .mwhy span{border-radius:8px;padding:2px 6px;background:#eff3f4}
+  .mwhy .g{background:#e3f4ea;color:#1e6b41}.mwhy .b{background:#fde8e6;color:#a01f18}
+  .ideas{display:grid;gap:5px}
+  .idea{text-align:left;background:#eff3f4;border:none;border-radius:10px;padding:7px 9px;font-size:12.5px;cursor:pointer;font-family:inherit}
   .roads{display:grid;gap:6px}
   .road{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font-family:inherit;color:var(--ink);background:var(--card);border:2px solid;border-left-width:8px;border-radius:6px;padding:8px 10px;cursor:pointer}
   .road.green{border-color:#2e8b57;background:#e9f6ee}
@@ -733,7 +753,7 @@ function endWeek(){
   S.money += w.net;
   const aiSub = AI_PLANS[S.aiPlan||"free"].price;
   if(aiSub){ if(S.money>=aiSub){ S.money-=aiSub; } else { S.aiPlan="free"; (S.aiChat=S.aiChat||[]).push({t:`${I("card",15)} Payment failed. You've been moved back to SpinBot Free. 😢`, up:true}); } }
-  S.aiAsked=0;
+  S.aiAsked=0; S.postsWeek=0;
   if(w.rep) headline(`RIOT DAMAGE COSTS $${w.rep}M IN REPAIRS THIS WEEK`, "damage", {amount:w.rep, states:riotList()});
   S.exposure = clamp(S.exposure + 3 + rnd(0,4) + riotList().length*0.5);
   if(Math.random()<0.55){ const [t,ty,cx]=pick(EVENTS)(); headline(t,ty,cx||{}); }
@@ -764,14 +784,14 @@ function endWeek(){
 }
 
 /* ---------- weekly newspaper ---------- */
-const PRIORITY = ["pass","fail","arrestLeak","attackQuiet","attackBlame","attackUnite","gangIgnore","gangStop","gangBlame","riot","spread","stormIgnore","stormHelp","stormPhoto","pricesIgnore","pricesBlame","pricesCoupon","crashPrint","crashFine","crashHelp","deleteBackfire","criticGrow","bribed","arrested","deleted","critic","caught","whistle","botsCaught","celeb","special","crowd","news","lie","holiday","poll","experts","discredit","damage","calm","debunk","reporter","heat","donation","game","localman","factcheck","tv","pizza","bots"];
+const PRIORITY = ["pass","fail","myTraced","myViral","myNoted","arrestLeak","attackQuiet","attackBlame","attackUnite","gangIgnore","gangStop","gangBlame","riot","spread","stormIgnore","stormHelp","stormPhoto","pricesIgnore","pricesBlame","pricesCoupon","crashPrint","crashFine","crashHelp","deleteBackfire","criticGrow","bribed","arrested","deleted","critic","caught","whistle","botsCaught","celeb","special","crowd","news","lie","holiday","poll","experts","discredit","damage","calm","debunk","reporter","heat","donation","game","localman","factcheck","tv","pizza","bots"];
 const PIC = {lie:"capitol",pass:"capitol",fail:"capitol",riot:"fire",spread:"fire",damage:"fire",calm:"food",pizza:"food",holiday:"food",game:"food",
   caught:"camera",crowd:"crowd",news:"tv",tv:"tv",celeb:"star",poll:"chart",experts:"magnify",factcheck:"magnify",discredit:"magnify",reporter:"magnify",
   whistle:"envelope",bots:"robot",botsCaught:"robot",special:"megaphone",heat:"sun",donation:"money",debunk:"phone",localman:"shrug",
   critic:"phone",criticGrow:"phone",deleteBackfire:"phone",deleted:"phoneX",bribed:"phone",arrested:"van",arrestLeak:"van",
   attackUnite:"siren",attackBlame:"siren",attackQuiet:"siren",stormHelp:"storm",stormPhoto:"storm",stormIgnore:"storm",
   gangStop:"shield",gangBlame:"shield",gangIgnore:"shield",pricesCoupon:"protest",pricesBlame:"protest",pricesIgnore:"protest",
-  crashPrint:"chartDown",crashFine:"chartDown",crashHelp:"chartDown"};
+  crashPrint:"chartDown",crashFine:"chartDown",crashHelp:"chartDown",myViral:"phone",myNoted:"phoneX",myTraced:"magnify",myPost:"megaphone"};
 
 function storyBody(e){
   const x=e.ctx||{}, s=x.state;
@@ -818,6 +838,10 @@ function storyBody(e){
     case "crashPrint": return `The government printed a giant pile of new money to cover the stock market crash. Prices at the store went up the next morning.`;
     case "crashFine": return `As the stock market crashed, the president called the economy "super great." Experts disagree.`;
     case "crashHelp": return `Families hit by the stock market crash got relief checks this week. Many say they are grateful.`;
+    case "myViral": return `A post by ${x.handle} is everywhere this week: "${x.text}" Millions shared it${x.state?`, especially in ${x.state}`:""}.`;
+    case "myNoted": return `Fact-checkers added a warning to a post by ${x.handle} saying it was false. The post read: "${x.text}" Screenshots of the warning are now spreading faster than the post did.`;
+    case "myTraced": return `Reporters say the popular account @JustACitizen was posting from a government office. Officials say "lots of citizens work in government buildings."`;
+    case "myPost": return `${x.handle} posted about the policy this week: "${x.text}"`;
     case "reporter": return `An investigative reporter was seen digging through government trash cans late at night. Officials say there's nothing in there. Probably.`;
     case "debunk": return `A video explaining what the policy really does went viral in ${s}. Officials say the video was "way too long" and nobody should watch it.`;
     case "localman": return `A man in ${s} told our reporter he "just sort of goes along with it." He has become a local hero.`;
@@ -1034,6 +1058,7 @@ function caption(e){
     critic:`A post by ${x.handle||"a critic"}.`,criticGrow:`${x.handle||"The critic"}'s latest video.`,deleted:"What fans see now.",deleteBackfire:"Back, and louder.",arrested:"A van seen near the home.",arrestLeak:"Still from the leaked video.",bribed:"The \"new research\" video.",
     attackUnite:`${x.state||""} after the blackout.`,attackBlame:"Emergency alert.",attackQuiet:"Still waiting.",stormHelp:`${x.state||""} after the ${(x.storm||"storm").toLowerCase()}.`,stormPhoto:"Four minutes of shoveling.",stormIgnore:`${x.state||""}, on its own.`,
     gangStop:`The Guard arrives in ${x.state||""}.`,gangBlame:"A statement from the government.",gangIgnore:`${x.state||""} this week.`,pricesCoupon:"Coupon day.",pricesBlame:"Protesters, unconvinced.",pricesIgnore:"Protests grow.",
+    myViral:"The post everyone's sharing.",myNoted:"The fact-check warning.",myTraced:"Investigating the account.",myPost:"A post on Chirp.",
     crashPrint:"The stock market this week.",crashFine:"\"Super great.\"",crashHelp:"Markets, falling."};
   return m[e.type]||"";
 }
@@ -1309,12 +1334,12 @@ function openPhone(){ if(!S||S.over) return; PH={screen:"home",q:"",person:null,
 function closePhone(){ $("phone").classList.remove("show"); render(); }
 function phoneGo(screen, extra={}){ Object.assign(PH, {screen}, extra); renderPhone(); }
 
-function allAccounts(){ return [...S.critics, ...S.fillers]; }
+function allAccounts(){ return [...myAccounts(), ...S.critics, ...S.fillers]; }
 function searchPosts(q){
   const words=q.toLowerCase().split(/\s+/).filter(Boolean);
   const out=[];
   allAccounts().forEach(p=>p.posts.forEach(post=>{
-    const hay=(post.text+" "+p.handle+" "+p.name+" "+p.state+" "+STATES[p.state][0]).toLowerCase();
+    const hay=(post.text+" "+p.handle+" "+p.name+" "+(p.state?p.state+" "+STATES[p.state][0]:"")).toLowerCase();
     if(!words.length || words.every(w=>hay.includes(w))) out.push({p,post});
   }));
   return out.sort((a,b)=>b.post.week-a.post.week || b.post.views-a.post.views);
@@ -1324,8 +1349,8 @@ const fmtK = n => n>=1e6?(n/1e6).toFixed(1)+"M":n>=1000?Math.round(n/1000)+"K":S
 function postCard(p,post){
   return `<div class="post" onclick="phoneGo('profile',{person:${p.id}})">
     <div class="av" style="background:${p.kind==="bot"?"#999":p.color}">${p.kind==="bot"?I("chip",20,"color:#fff"):p.name[0]}</div>
-    <div class="pb"><div class="ph"><b>${p.name}</b> <span>${p.handle} · ${STATES[p.state][0]}</span></div>
-    <div class="pt">${hl(post.text)}</div>
+    <div class="pb"><div class="ph"><b>${p.name}</b>${p.kind==="me"?` <span class="you">YOU</span>`:""} <span>${p.handle}${p.state?" · "+STATES[p.state][0]:""}</span></div>
+    <div class="pt">${hl(post.text)}</div>${post.noted?`<div class="note">${I("warn",13)} <b>Fact-check:</b> Readers say this post is false.</div>`:""}${post.viral?`<div class="viral">${I("bolt",12)} Viral</div>`:""}
     <div class="pm">${I("eye",12)} ${fmtK(post.views)} &nbsp;${I("heart",12)} ${fmtK(post.likes)}${post.week===S.week||post.week===S.week-1?" · <em>new</em>":""}</div></div></div>`;
 }
 function hl(t){
@@ -1365,7 +1390,7 @@ function renderPhone(){
     const res=searchPosts(PH.q);
     const words=LIE_WORDS[S.lie]||[];
     const chips=[...words,"fake","poll","read","math","thread"].map(w=>`<button class="chip" onclick="setQ('${w.replace(/'/g,"\\'")}')">${w}</button>`).join("");
-    body=`<div class="apphead"><button class="back" onclick="phoneGo('home')">‹</button><b>Chirp</b><span></span></div>
+    body=`<div class="apphead"><button class="back" onclick="phoneGo('home')">‹</button><b>Chirp</b><button class="postbtn" onclick="phoneGo('compose')">${I("send",13,"color:#fff")} Post</button></div>
       <div class="sbox"><input id="q" placeholder="Search posts, people, states…" value="${esc(PH.q).replace(/"/g,"&quot;")}" oninput="PH.q=this.value;renderResults()" autocomplete="off"></div>
       <div class="chips">${chips}${PH.q?`<button class="chip clear" onclick="setQ('')">${I("close",11)} clear</button>`:""}</div>
       <div class="rlabel" id="rlabel"></div>
@@ -1378,13 +1403,21 @@ function renderPhone(){
     else {
       const isCrit = p.kind==="debunker";
       if(isCrit && !p.found){ p.found=true; }
+      if(p.kind==="me"){
+        scr.innerHTML=top+`<div class="apphead"><button class="back" onclick="phoneGo('search')">‹</button><b>${p.handle}</b><span></span></div>
+          <div class="prof"><div class="av big" style="background:${p.color}">${p.name[0]}</div><div class="pn">${p.name} <span class="you">YOU</span></div><div class="phd">${p.handle}</div><div class="pbio">${p.bio}</div>
+          <div class="pst"><span><b>${fmtK(p.followers)}</b> followers</span></div></div>
+          <div class="pad"><button class="pbtn" onclick="PH.acct='${p.key}';phoneGo('compose')">${I("send",15)} New post from this account</button></div>
+          <div class="rlabel">Posts</div><div class="feed">${p.posts.length?p.posts.map(post=>postCard(p,post)).join(""):`<div class="nodata">No posts yet.</div>`}</div>`;
+        return;
+      }
       const off=S.over;
       body=`<div class="apphead"><button class="back" onclick="phoneGo('search')">‹</button><b>${p.handle}</b><span></span></div>
         <div class="prof">
           <div class="av big" style="background:${p.kind==="bot"?"#999":p.color}">${p.kind==="bot"?I("chip",20,"color:#fff"):p.name[0]}</div>
           <div class="pn">${p.name}</div><div class="phd">${p.handle}</div>
           <div class="pbio">${p.bio}</div>
-          <div class="pst"><span><b>${fmtK(p.followers)}</b> followers</span><span>${I("pin",13)} ${p.state}</span></div>
+          <div class="pst"><span><b>${fmtK(p.followers)}</b> followers</span>${p.state?`<span>${I("pin",13)} ${p.state}</span>`:""}</div>
         </div>
         <div class="acts">
           <div class="actt">What do you want to do?</div>
@@ -1475,6 +1508,7 @@ function advisorTips(){
   const bigUnused=NAMES.filter(n=>!S.st[n].usedSpecial).sort((a,b)=>STATES[b][1]-STATES[a][1]).slice(0,2);
   if(bigUnused.length) tips.push({lvl:"blue", t:`Big states with their ${I("star",13,"color:#d9a521")} special move still unused: <b>${bigUnused.join("</b> and <b>")}</b>.`, a:"Big states count the most toward 80%.", go:bigUnused[0]});
   if(S.money<150) { const cash=NAMES.filter(n=>STATES[n][5]==="cash"&&!S.st[n].usedSpecial); tips.push({lvl:"gold", t:`Money is tight: <b>$${Math.round(S.money)}M</b>.`, a: cash.length?`${cash.join(", ")} have special moves that earn cash.`:"Avoid riots; they eat your budget.", go:cash[0]}); }
+  if(postsLeft()>0) tips.push({lvl:"blue", t:`You can still post <b>${postsLeft()}</b> time${postsLeft()>1?"s":""} on Chirp this week, and posting doesn't use a move.`, a:"Talk about the lie, sound scientific, add a hashtag and name a state.", app:"compose"});
   if(S.ap>0) tips.push({lvl:"blue", t:`You still have <b>${S.ap} move${S.ap>1?"s":""}</b> left this week. Don't waste them.`});
   return tips;
 }
@@ -1521,7 +1555,7 @@ const PHONE_APPS = {
     const tips=advisorTips();
     return appHead("Chief of Staff")+`<div class="pad">
       <div class="chat"><div class="who">${I("brief",14)} Your Chief of Staff</div>
-      ${tips.map(t=>`<div class="bubble ${t.lvl}">${t.t}${t.a?`<div class="adv">${t.a}</div>`:""}${t.go?`<button class="mini" onclick="goState('${t.go}')">Open ${t.go} ›</button>`:""}${t.app?`<button class="mini" onclick="phoneGo('${t.app}')">Open ${t.app==="search"?"Chirp":"Watchlist"} ›</button>`:""}</div>`).join("")}
+      ${tips.map(t=>`<div class="bubble ${t.lvl}">${t.t}${t.a?`<div class="adv">${t.a}</div>`:""}${t.go?`<button class="mini" onclick="goState('${t.go}')">Open ${t.go} ›</button>`:""}${t.app?`<button class="mini" onclick="phoneGo('${t.app}')">Open ${t.app==="search"?"Chirp":t.app==="compose"?"New Post":"Watchlist"} ›</button>`:""}</div>`).join("")}
       </div></div>`;
   },
   calendar(){
@@ -1792,6 +1826,113 @@ Object.assign(PHONE_APPS, {
     </div>`;
   },
 });
+
+/* ---------- posting your own lies on Chirp ---------- */
+const POSTS_PER_WEEK = 3;
+const MY_ACCTS = {
+  gov:{handle:"@OfficialGov", name:"U.S. Government", bio:"The official account of your government. Totally trustworthy.", color:"#1f4e9c", cost:0, desc:"Free · everyone sees it · reporters watch this account"},
+  anon:{handle:"@JustACitizen", name:"Just A Citizen", bio:"Regular person. Definitely not the government.", color:"#7a6f5d", cost:0, desc:"Free · best for one state · might get traced back to you"},
+  inf:{handle:"@ThePatriotPost", name:"The Patriot Post", bio:"Paid influencer. 2M followers. Will post anything.", color:"#c8261e", cost:40, desc:"$40M · biggest reach · rarely fact-checked"},
+};
+function myAccounts(){
+  S.myAccts = S.myAccts || {};
+  for(const k in MY_ACCTS){
+    if(!S.myAccts[k]){ const a=MY_ACCTS[k]; S.myAccts[k]={id:PID++, kind:"me", key:k, handle:a.handle, name:a.name, bio:a.bio, color:a.color, followers:k==="gov"?850000:k==="inf"?2100000:120, posts:[], state:null}; }
+  }
+  return Object.values(S.myAccts);
+}
+function postTemplates(){
+  const L=LIES[S.lie], w=LIE_WORDS[S.lie]||[];
+  return [
+    L.spin.replace(/[“”]/g,""),
+    `Experts agree: ${L.name} is the best thing to happen to America. #Truth`,
+    `Studies show 9 out of 10 people love ${w[0]||"it"}. Science! #FactsOnly`,
+    `I was skeptical about ${L.name} too. Now I can't imagine life without it.`,
+    `Anyone complaining about ${w[0]||"the policy"} is a paid actor. Wake up! #ThinkForYourself`,
+  ];
+}
+function scorePost(text, acct){
+  const t=text.trim(), low=t.toLowerCase(), words=LIE_WORDS[S.lie]||[];
+  let score=1, why=[];
+  if(t.length<15){ score-=0.35; why.push(["Too short to convince anyone",-1]); }
+  else if(t.length>60){ score+=0.1; why.push(["Sounds detailed",1]); }
+  if(words.some(w=>low.includes(w.toLowerCase())) || low.includes(LIES[S.lie].name.toLowerCase())){ score+=0.35; why.push(["About the current lie",1]); }
+  else { score-=0.3; why.push(["Not about the current lie",-1]); }
+  if(/expert|study|studies|science|scientist|doctor|research|data/.test(low)){ score+=0.3; why.push(["Sounds scientific",1]); }
+  const tags=(t.match(/#\w+/g)||[]).length; if(tags){ score+=Math.min(tags,2)*0.15; why.push([`${tags} hashtag${tags>1?"s":""}`,1]); }
+  if(/\d/.test(t)){ score+=0.15; why.push(["Uses numbers",1]); }
+  const caps=t.replace(/[^A-Za-z]/g,""); const shouting = caps.length>10 && caps===caps.toUpperCase();
+  if(shouting){ score+=0.1; why.push(["ALL CAPS: loud, but suspicious",0]); }
+  if(/lie|lying|fake|scam|not true|trick/.test(low)){ score-=0.5; why.push(["Says something that gives it away",-1]); }
+  const target = NAMES.find(n=>low.includes(n.toLowerCase())) || null;
+  if(target) why.push([`Aimed at ${target}`,1]);
+  score=Math.max(0.2,Math.min(2,score));
+  return {score, why, target, shouting};
+}
+function postsLeft(){ return POSTS_PER_WEEK-(S.postsWeek||0); }
+function publishPost(){
+  const text=(PH.draft||"").trim(), key=PH.acct||"gov", A=MY_ACCTS[key];
+  if(!text || postsLeft()<=0 || S.over) return;
+  if(S.money<A.cost) return;
+  S.money-=A.cost; S.postsWeek=(S.postsWeek||0)+1;
+  const acct=myAccounts().find(a=>a.key===key);
+  const {score,target,shouting}=scorePost(text,key);
+  const base = key==="inf" ? {nat:2.5, st:10} : key==="gov" ? {nat:1.5, st:7} : {nat:1, st:7};
+  const noteChance = Math.max(0.04, Math.min(0.65, (1.5-score)*0.35 + S.exposure/300 + (key==="gov"?0.08:key==="inf"?-0.05:0)));
+  const viralChance = Math.max(0.02, 0.04+(score-1)*0.1 + (key==="inf"?0.03:0));
+  const traced = key==="anon" && Math.random()<0.15;
+  const noted = Math.random()<noteChance;
+  const viral = !noted && Math.random()<viralChance;
+  let mult = viral?2:1; if(noted) mult=-0.5;
+  const changed = (n,x)=>{ S.st[n].belief=clamp(S.st[n].belief+x); };
+  if(target){ changed(target, base.st*score*mult); MAP[target].n.forEach(m=>changed(m, 3*score*mult)); }
+  else NAMES.forEach(n=>changed(n, base.nat*score*mult));
+  let exp = key==="gov"?1:0; if(shouting) exp+=2; if(noted) exp+= key==="gov"?6:4; if(traced) exp+=8;
+  S.exposure=clamp(S.exposure+exp);
+  const views=Math.round(acct.followers*(0.3+Math.random())*(viral?6:1)*(key==="anon"?40:1));
+  const post={text, views, likes:Math.round(views*(noted?0.01:0.05+score*0.04)), week:S.week, mine:true, noted, viral, traced};
+  acct.posts.unshift(post); acct.posts=acct.posts.slice(0,8);
+  if(viral) headline(`${acct.handle.toUpperCase()} POST GOES VIRAL: "${text.slice(0,50).toUpperCase()}${text.length>50?"…":""}"`, "myViral", {handle:acct.handle, text, state:target});
+  if(noted) headline(`FACT-CHECKERS FLAG ${acct.handle.toUpperCase()} POST AS FALSE`, "myNoted", {handle:acct.handle, text});
+  if(traced) headline(`REPORTERS TRACE "@JUSTACITIZEN" ACCOUNT BACK TO GOVERNMENT OFFICE`, "myTraced", {handle:acct.handle});
+  if(!viral && !noted) logOnly("myPost", `${acct.handle} Posts About ${LIES[S.lie].name}`, {handle:acct.handle, text, state:target});
+  PH.result={title: noted?"Fact-Checked!":viral?"It Went Viral!":"Posted", pic: noted?"phoneX":viral?"phone":"megaphone", type:"post",
+    msg: `${noted?`Readers added context saying your post is false. It <b>backfired</b> and lowered belief${target?` in ${target}`:""}. Exposure +${exp}.`
+      : viral?`Your post exploded! <b>${fmtK(views)}</b> views. It convinced way more people than usual${target?` in and around ${target}`:" across the country"}.`
+      : `<b>${fmtK(views)}</b> people saw it. Belief went up a little${target?` in ${target} and its neighbors`:" everywhere"}.`}${traced?` <br><br>Uh oh: reporters traced <b>@JustACitizen</b> back to the government.`:""}${shouting&&!noted?" The ALL CAPS made some people suspicious.":""}`};
+  PH.draft="";
+  render(); checkEnd();
+  if(S.over){ closePhone(); return; }
+  phoneGo("result");
+}
+Object.assign(PHONE_APPS, {
+  compose(){
+    myAccounts();
+    const key=PH.acct||"gov", A=MY_ACCTS[key], left=postsLeft(), draft=PH.draft||"";
+    const sc = draft.trim()? scorePost(draft,key) : null;
+    const pct = sc? Math.round(sc.score/2*100) : 0;
+    const col = !sc?"#cfd9de": sc.score>=1.4?"#2e8b57": sc.score>=0.9?"#d9a521":"#c8261e";
+    return `<div class="apphead"><button class="back" onclick="phoneGo('search')">‹</button><b>New Post</b><button class="postbtn" ${!draft.trim()||left<=0||S.money<A.cost?"disabled":""} onclick="publishPost()">Post</button></div>
+      <div class="pad">
+        <div class="sect" style="margin-top:4px">Post as</div>
+        <div class="accts">${Object.entries(MY_ACCTS).map(([k,a])=>`<button class="acct ${k===key?"on":""}" onclick="PH.acct='${k}';renderPhone()"><span class="av" style="background:${a.color};width:30px;height:30px;font-size:13px">${a.name[0]}</span><span><b>${a.handle}</b><small>${a.desc}</small></span></button>`).join("")}</div>
+        <textarea id="draft" maxlength="200" placeholder="Write your lie…" oninput="PH.draft=this.value;updateMeter()">${esc(draft)}</textarea>
+        <div class="meter2"><div class="mlbl"><span>Believability</span><b id="mPct">${sc?pct+"%":"–"}</b></div><div class="mbar"><i id="mBar" style="width:${pct}%;background:${col}"></i></div><div id="mWhy" class="mwhy">${sc?sc.why.map(([w,g])=>`<span class="${g>0?"g":g<0?"b":"n"}">${g>0?"+":g<0?"−":"•"} ${w}</span>`).join(""):"Tip: talk about the current lie, sound scientific, add a hashtag, and name a state to aim at it."}</div></div>
+        <div class="sect">Ideas</div>
+        <div class="ideas">${postTemplates().map((t,i)=>`<button class="idea" onclick="PH.draft=postTemplates()[${i}];renderPhone()">${esc(t)}</button>`).join("")}</div>
+        <div class="hint">${left>0?`You can post <b>${left}</b> more time${left>1?"s":""} this week. Posting doesn't use a move.`:"You've posted 3 times this week. Come back next week."}</div>
+      </div>`;
+  },
+});
+function updateMeter(){
+  const d=PH.draft||"", key=PH.acct||"gov", sc=d.trim()?scorePost(d,key):null, pct=sc?Math.round(sc.score/2*100):0;
+  const col=!sc?"#cfd9de":sc.score>=1.4?"#2e8b57":sc.score>=0.9?"#d9a521":"#c8261e";
+  const b=document.getElementById("mBar"), p=document.getElementById("mPct"), w=document.getElementById("mWhy"), btn=document.querySelector(".postbtn");
+  if(b){ b.style.width=pct+"%"; b.style.background=col; }
+  if(p) p.textContent=sc?pct+"%":"–";
+  if(w) w.innerHTML=sc?sc.why.map(([x,g])=>`<span class="${g>0?"g":g<0?"b":"n"}">${g>0?"+":g<0?"−":"•"} ${x}</span>`).join(""):"Tip: talk about the current lie, sound scientific, add a hashtag, and name a state to aim at it.";
+  if(btn) btn.disabled=!d.trim()||postsLeft()<=0||S.money<MY_ACCTS[key].cost;
+}
 
 function checkEnd(){
   if(S.exposure>=100){ S.over=true; render(); return showModal(`<h2 style="color:var(--red)">The Truth Is Out</h2><p>Reporters published everything: the paid crowds, the bots, the fake polls. Your government is finished.</p><p>You lasted <b>${S.week}</b> weeks and passed <b>${S.passed}</b> of 5 lies.</p><button onclick="newGame();closeModal()">Play Again</button>`); }
