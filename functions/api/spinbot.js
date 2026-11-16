@@ -58,7 +58,7 @@ export async function onRequestPost({ request, env }) {
     if (!text) return json({ error: "empty-response" }, 502);
     return json({ text });
   } catch (e) {
-    return json({ error: "ai-failed" }, 502);
+    return json({ error: "ai-failed", detail: String(e && e.message || e).slice(0, 300) }, 502);
   }
 }
 
