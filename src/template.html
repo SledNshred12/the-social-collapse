@@ -732,7 +732,7 @@ function endWeek(){
   const w = weeklyIncome();
   S.money += w.net;
   const aiSub = AI_PLANS[S.aiPlan||"free"].price;
-  if(aiSub){ if(S.money>=aiSub){ S.money-=aiSub; } else { S.aiPlan="free"; (S.aiChat=S.aiChat||[]).push({t:`${I("card",15)} Payment failed. You've been moved back to SpinBot Free.`, up:true}); } }
+  if(aiSub){ if(S.money>=aiSub){ S.money-=aiSub; } else { S.aiPlan="free"; (S.aiChat=S.aiChat||[]).push({t:`${I("card",15)} Payment failed. You've been moved back to SpinBot Free. 😢`, up:true}); } }
   S.aiAsked=0;
   if(w.rep) headline(`RIOT DAMAGE COSTS $${w.rep}M IN REPAIRS THIS WEEK`, "damage", {amount:w.rep, states:riotList()});
   S.exposure = clamp(S.exposure + 3 + rnd(0,4) + riotList().length*0.5);
@@ -1575,11 +1575,11 @@ const AI_PLANS = {
   max: {name:"Max",  price:90,  color:"#d9a521", limit:Infinity},
 };
 const AI_ADS = [
-  "Upgrade to SpinBot Pro and get answers that actually help!",
-  "Free users wait in line. Pro users don't. Just saying.",
-  "Part of this answer is only for Pro members.",
-  "Limited offer: SpinBot Pro, only $25M a week!",
-  "You're using SpinBot Free. Your rivals use Max.",
+  "💎 Upgrade to SpinBot Pro and get answers that actually help!",
+  "⚡ Free users wait in line. Pro users don't. Just saying.",
+  "🔒 Part of this answer is only for Pro members.",
+  "🤑 Limited offer: SpinBot Pro, only $25M a week!",
+  "😢 You're using SpinBot Free. Your rivals use Max.",
 ];
 function aiPlan(){ return S.aiPlan||"free"; }
 function aiAsk(text){
@@ -1588,10 +1588,10 @@ function aiAsk(text){
   S.aiChat.push({me:true, t:esc(text)});
   const plan=aiPlan();
   if(plan==="free" && S.aiAsked>=AI_PLANS.free.limit){
-    S.aiChat.push({t:`${I("ban",15)} You've used all <b>${AI_PLANS.free.limit} free questions</b> this week. Come back next week… or upgrade to Pro now and ask as much as you want!`, up:true});
+    S.aiChat.push({t:`${I("ban",15)} You've used all <b>${AI_PLANS.free.limit} free questions</b> this week. Come back next week… or upgrade to Pro now and ask as much as you want! 💎`, up:true});
   } else if(plan==="free" && Math.random()<0.25){
     S.aiAsked++;
-    S.aiChat.push({t:`${I("wait",15)} SpinBot Free is very busy right now. Pro members skip the line! Please try again.`, up:true});
+    S.aiChat.push({t:`${I("wait",15)} SpinBot Free is very busy right now. Pro members skip the line! 😬 Please try again.`, up:true});
   } else {
     S.aiAsked++;
     const r=aiAnswer(text, plan);
@@ -1665,39 +1665,39 @@ function aiAnswer(q, plan){
 
   if(plan==="free"){
     const vague={
-      riot:["Riots are bad. Try not having them?","Have you tried asking people to stop being mad?","Pizza fixes most things. Not sure which state though."],
-      money:["Money is very important! Try to have more of it.","Spend less and earn more. Easy!","You have some money. Maybe."],
-      exposure:["Reporters are sneaky. Be sneakier!","Try not getting caught.","Exposure is a number. Smaller is better, probably."],
-      critics:["Haters gonna hate.","People post stuff online all the time. Some of it is about you.","Search for them? I think there's an app for that."],
-      state:["Have you tried "+pick(NAMES)+"? It's a state.","Pick a state you like!","Every state is special in its own way."],
+      riot:["Riots are bad. Try not having them? 🙂","Have you tried asking people to stop being mad?","Pizza fixes most things. Not sure which state though."],
+      money:["Money is very important! Try to have more of it. 💸","Spend less and earn more. Easy!","You have some money. Maybe."],
+      exposure:["Reporters are sneaky. Be sneakier! 🕵️","Try not getting caught.","Exposure is a number. Smaller is better, probably."],
+      critics:["Haters gonna hate. 🤷","People post stuff online all the time. Some of it is about you.","Search for them? I think there's an app for that."],
+      state:["Have you tried "+pick(NAMES)+"? It's a state.","Pick a state you like!","Every state is special in its own way. 🇺🇸"],
       news:["The news is on TV. You could pay them. Or not.","Some news is more trusted than other news. That's all I know."],
-      lie:["You're doing great! Probably.","Keep lying and see what happens!","Believe in yourself and America will believe in you."],
-      move:["You could try "+pick(NATIONAL).t+"! Or something else.","Do a move! Any move!","Have you tried the phone? Oh wait, you're on it."],
+      lie:["You're doing great! Probably. 👍","Keep lying and see what happens!","Believe in yourself and America will believe in you."],
+      move:["You could try "+pick(NATIONAL).t+"! Or something else.","Do a move! Any move! 🎲","Have you tried the phone? Oh wait, you're on it."],
     };
     Object.assign(vague,{
-      why:["Because I said so!","That's a Pro question. Upgrade to find out why.","Why not?"],
-      other:["Hmm, maybe do something different? Like a different thing?","You could try the other one. Not that one. The other one."],
-      how:["You just… do it! Tap stuff.","Step 1: upgrade to Pro. Step 2: ???"],
-      hello:["Hi! Did you know SpinBot Pro exists?"], thanks:["You're welcome! Tips are appreciated (in the form of Pro)."],
-      unknown:["Interesting question! I don't know.","Could you ask that in a way a free AI understands?"], again:["I already answered! Kind of."],
+      why:["Because I said so! 😤","That's a Pro question. Upgrade to find out why. 💎","Why not? 🤔"],
+      other:["Hmm, maybe do something different? Like a different thing? 🤷","You could try the other one. Not that one. The other one."],
+      how:["You just… do it! Tap stuff. 👆","Step 1: upgrade to Pro. Step 2: ??? 🤑"],
+      hello:["Hi! Did you know SpinBot Pro exists? 👋💎"], thanks:["You're welcome! Tips are appreciated (in the form of Pro). 🙏"],
+      unknown:["Interesting question! I don't know. 🤪","Could you ask that in a way a free AI understands?"], again:["I already answered! Kind of. 😅"],
     });
     t = pick(vague[intent]||vague.move) + `<div class="blur">${best?`The best move right now is ${best.label}`:"Here is a smart plan for this week"} and here's exactly why…</div>`;
     return {t, nag, plan};
   }
 
   const P = plan==="max";
-  if(intent==="hello") return {t:`Hi Mr. President. Ask me what to do next, which states need help, or whether this lie will pass.`, plan};
-  if(intent==="thanks") return {t:`Anytime. Want me to plan your next move?`, plan, nag};
-  if(intent==="unknown") return {t:`I'm not sure what you mean. Try asking things like "What should I do?", "Which state needs help?", "How do I stop riots?" or "Will this lie pass?"`, plan, nag};
+  if(intent==="hello") return {t:`👋 Hi Mr. President. Ask me what to do next, which states need help, or whether this lie will pass.`, plan};
+  if(intent==="thanks") return {t:`😎 Anytime. Want me to plan your next move?`, plan, nag};
+  if(intent==="unknown") return {t:`🤔 I'm not sure what you mean. Try asking things like "What should I do?", "Which state needs help?", "How do I stop riots?" or "Will this lie pass?"`, plan, nag};
   if(intent==="other"){
     ctx.idx=(ctx.idx||0)+1;
     const alt=moves[ctx.idx];
     if(!alt) return {t:`That's all the useful moves you can afford right now. Ending the week gets you paid and more moves.`, plan, nag};
-    return {t: P ? `Option #${ctx.idx+1}: <b>${alt.label}</b>: ${pts(alt.gain)} for $${alt.cost}M.<br><small>${alt.how}</small><br>Say "something else" for the next one.` : `Another good option: <b>${alt.label}</b>. Say "something else" to see more.`, plan, nag, go:alt.state};
+    return {t: P ? `🔁 Option #${ctx.idx+1}: <b>${alt.label}</b>: ${pts(alt.gain)} for $${alt.cost}M.<br><small>${alt.how}</small><br>Say "something else" for the next one.` : `🔁 Another good option: <b>${alt.label}</b>. Say "something else" to see more.`, plan, nag, go:alt.state};
   }
   if(intent==="how"){
     const m=moves[ctx.idx||0];
-    return {t: m ? `Here's how to do <b>${m.label}</b>: ${m.how}. It uses 1 of your ${S.ap} move${S.ap===1?"":"s"} this week${m.cost?` and costs $${m.cost}M`:""}.` : `Tap a state on the map to see its moves, or use the Whole Country buttons under the map.`, plan, nag, go:m&&m.state};
+    return {t: m ? `👉 Here's how to do <b>${m.label}</b>: ${m.how}. It uses 1 of your ${S.ap} move${S.ap===1?"":"s"} this week${m.cost?` and costs $${m.cost}M`:""}.` : `Tap a state on the map to see its moves, or use the Whole Country buttons under the map.`, plan, nag, go:m&&m.state};
   }
   if(intent==="why"){
     const ci=ctx.intent, m=moves[ctx.idx||0], next=moves[(ctx.idx||0)+1];
@@ -1711,7 +1711,7 @@ function aiAnswer(q, plan){
     else if(ci==="news") w = `More believable outlets convince more people, but each time you use one it loses 5% believability${P?" (and gets 1.5% back each week)":""}. That's why switching between outlets beats paying the same one every week.`;
     else if(ci==="lie") w = `Belief drops about 2.5% every week on its own as people think it over, so you need to add more than that each week just to make progress. You pass the moment the national number is at 80% or higher when a week ends.`;
     else w = `I base everything on your current numbers: who believes what, your money, your moves and what's about to blow up.`;
-    return {t:w, plan, nag, go: (ci==="move"||ci==="other")&&m?m.state:null};
+    return {t:"🤓 "+w, plan, nag, go: (ci==="move"||ci==="other")&&m?m.state:null};
   }
   if(intent==="riot"){
     if(!riots.length && !risk.length) t="Good news: no state is rioting and nobody is close (60%+ unrest).";
@@ -1752,12 +1752,15 @@ function aiAnswer(q, plan){
     else if(P){ const top=aiPlanMoves(moves); t = `Your best plan for the ${top.length} move${top.length>1?"s":""} you have left, within your $${Math.round(S.money)}M budget:<ol>${top.map(m=>`<li><b>${m.label}</b>: ${pts(m.gain)} for $${m.cost}M<br><small>${m.how}</small></li>`).join("")}</ol>${need>0?`You need ${need}% more in ${left} week${left>1?"s":""}.`:""}`; go=top.find(m=>m.state)?.state; }
     else { t = `I'd go with <b>${best.label}</b>. It's the biggest boost you can afford right now.`; go=best.state; }
   }
+  const EMO={riot:"🔥",money:"💰",exposure:"🕵️",critics:"📱",state:"🗺️",news:"📺",lie:need>0?"📊":"✅",move:P?"🧠":"💡"};
+  if(EMO[intent]) t=`${EMO[intent]} ${t}`;
+  if(P && intent==="lie" && /enough to pass this week/.test(t)) t+=" 🎉";
   return {t, nag, plan, go};
 }
 function aiSubscribe(p){
   S.aiPlan=p; saveGame();
   S.aiChat=S.aiChat||[];
-  S.aiChat.push({t: p==="free" ? "You're back on SpinBot Free. We'll miss your money." : p==="pro" ? "Welcome to <b>SpinBot Pro</b>! Smarter answers, unlimited questions and way fewer ads. $25M is charged every payday." : "Welcome to <b>SpinBot Max</b>. Perfect answers with exact numbers. No ads, ever. $90M is charged every payday.", plan:p});
+  S.aiChat.push({t: p==="free" ? "You're back on SpinBot Free. We'll miss your money. 😢" : p==="pro" ? "🎉 Welcome to <b>SpinBot Pro</b>! Smarter answers, unlimited questions and way fewer ads. $25M is charged every payday." : "👑 Welcome to <b>SpinBot Max</b>. Perfect answers with exact numbers. No ads, ever. $90M is charged every payday.", plan:p});
   phoneGo("ai");
 }
 Object.assign(PHONE_APPS, {
@@ -1765,7 +1768,7 @@ Object.assign(PHONE_APPS, {
     const plan=aiPlan(), P=AI_PLANS[plan]; S.aiChat=S.aiChat||[];
     const chips=["What should I do?","Which state needs help?","Will this lie pass?","How do I stop riots?","Am I getting caught?","Who's debunking me?","How's my money?","Best news outlet?"];
     const left = plan==="free" ? Math.max(0,P.limit-(S.aiAsked||0)) : null;
-    const welcome = !S.aiChat.length ? `<div class="aimsg bot">Hi! I'm <b>SpinBot</b>, your AI for selling lies. Ask me anything about your game!${plan==="free"?`<div class="aiad">${I("gem",13)} You're on SpinBot Free. Upgrade for answers that actually help! <button class="mini" onclick="phoneGo('aiplans')">See plans</button></div>`:""}</div>` : "";
+    const welcome = !S.aiChat.length ? `<div class="aimsg bot">👋 Hi! I'm <b>SpinBot</b>, your AI for selling lies. Ask me anything about your game!${plan==="free"?`<div class="aiad">${I("gem",13)} You're on SpinBot Free. Upgrade for answers that actually help! <button class="mini" onclick="phoneGo('aiplans')">See plans</button></div>`:""}</div>` : "";
     return `<div class="apphead"><button class="back" onclick="phoneGo('home')">‹</button><b>SpinBot AI</b><button class="plantag" style="background:${P.color}" onclick="phoneGo('aiplans')">${P.name}</button></div>
       ${plan==="free"?`<div class="aibanner" onclick="phoneGo('aiplans')">${I("bolt",13,"color:#c8261e")} ${pick(AI_ADS)} <u>Upgrade</u></div>`:""}
       <div class="aifeed" id="aiFeed">${welcome}${S.aiChat.map(m=>m.me?`<div class="aimsg me">${m.t}</div>`:`<div class="aimsg bot ${m.plan||""}">${m.t}${m.go?`<button class="mini" onclick="goState('${m.go}')">Open ${m.go} ›</button>`:""}${m.up?`<button class="mini" onclick="phoneGo('aiplans')">See plans</button>`:""}${m.nag||""}</div>`).join("")}</div>
