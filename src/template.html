@@ -196,6 +196,29 @@
   .pbtn.alt{background:#0f1419}
   .modal button.alt{background:var(--ink)}
   .savebox{background:var(--card);border:2px dashed var(--ink);padding:8px;font-size:13px;margin:10px 0 4px;text-align:left}
+  .plantag{border:none;color:#fff;font-weight:800;font-size:11px;border-radius:10px;padding:3px 9px;cursor:pointer;font-family:inherit}
+  .aibanner{background:linear-gradient(90deg,#ffe8a3,#ffd0e0);font-size:12px;padding:7px 12px;cursor:pointer}
+  .aifeed{padding:10px 12px;display:flex;flex-direction:column;gap:8px;min-height:260px}
+  .aimsg{max-width:88%;padding:9px 12px;border-radius:16px;font-size:14px;line-height:1.38}
+  .aimsg.me{align-self:flex-end;background:#1d9bf0;color:#fff;border-bottom-right-radius:4px}
+  .aimsg.bot{align-self:flex-start;background:#eff3f4;border-bottom-left-radius:4px}
+  .aimsg.bot.max{background:#fff7e0;border:1px solid #f0d78a}
+  .aimsg.bot.pro{background:#f1edff}
+  .aimsg ol{margin:6px 0 4px;padding-left:18px}.aimsg li{margin-bottom:4px}.aimsg li small{color:#536471}
+  .aiad{margin-top:8px;padding:7px 9px;border-radius:10px;background:#fff3c4;font-size:12px;border:1px dashed #d9a521}
+  .aiad.pro{background:#f1edff;border-color:#6b4ce6}
+  .blur{filter:blur(4px);user-select:none;margin-top:6px;font-size:13px}
+  .aichips{display:flex;gap:6px;overflow-x:auto;padding:4px 12px 6px}
+  .aiinput{display:flex;gap:6px;padding:6px 12px 40px;position:sticky;bottom:0;background:#fff}
+  .aiinput input{flex:1;padding:10px 14px;border-radius:20px;border:1px solid #cfd9de;background:#eff3f4;font-size:15px;font-family:inherit;outline:none}
+  .aiinput button{width:40px;border-radius:50%;border:none;background:#1d9bf0;color:#fff;font-size:18px;font-weight:800;cursor:pointer}
+  .plan{border:2px solid;border-radius:14px;padding:10px 12px;margin-bottom:10px}
+  .plan.cur{background:#f7f9f9}
+  .plan .ph2{display:flex;justify-content:space-between;align-items:baseline;font-size:16px}
+  .plan .ph2 span{font-weight:800}.plan .ph2 small{font-weight:500;color:#536471;font-size:11px}
+  .plan ul{margin:6px 0 8px;padding-left:18px;font-size:13px;line-height:1.5}
+  .plan .pbtn:disabled{opacity:.4}
+  .curtag{text-align:center;font-weight:800;font-size:13px;color:#536471;padding:6px}
   .roads{display:grid;gap:6px}
   .road{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font-family:inherit;color:var(--ink);background:var(--card);border:2px solid;border-left-width:8px;border-radius:6px;padding:8px 10px;cursor:pointer}
   .road.green{border-color:#2e8b57;background:#e9f6ee}
@@ -705,6 +728,9 @@ function endWeek(){
   S.outlets = S.outlets.map((b,i)=>Math.min(OUTLETS[i].base, b+1.5));
   const w = weeklyIncome();
   S.money += w.net;
+  const aiSub = AI_PLANS[S.aiPlan||"free"].price;
+  if(aiSub){ if(S.money>=aiSub){ S.money-=aiSub; } else { S.aiPlan="free"; (S.aiChat=S.aiChat||[]).push({t:"💳 Payment failed. You've been moved back to SpinBot Free. 😢", up:true}); } }
+  S.aiAsked=0;
   if(w.rep) headline(`RIOT DAMAGE COSTS $${w.rep}M IN REPAIRS THIS WEEK`, "damage", {amount:w.rep, states:riotList()});
   S.exposure = clamp(S.exposure + 3 + rnd(0,4) + riotList().length*0.5);
   if(Math.random()<0.55){ const [t,ty,cx]=pick(EVENTS)(); headline(t,ty,cx||{}); }
@@ -810,11 +836,18 @@ function pic(kind, e){
   let g="";
   switch(kind){
     case "capitol": {
-      g=`<rect x="40" y="78" width="120" height="30" fill="#fff"/><rect x="35" y="104" width="130" height="8" fill="${ink}"/>
-        ${[50,66,82,98,114,130,146].map(c=>`<rect x="${c}" y="80" width="5" height="24" fill="${ink}"/>`).join("")}
-        <polygon points="40,78 100,62 160,78" fill="${ink}"/><rect x="78" y="44" width="44" height="18" fill="#fff" stroke="${ink}" stroke-width="2"/>
-        <path d="M76 46 Q100 10 124 46 Z" fill="#fff" stroke="${ink}" stroke-width="3"/><line x1="100" y1="22" x2="100" y2="8" stroke="${ink}" stroke-width="2"/>
-        <rect x="100" y="8" width="14" height="8" fill="${red}"/>`;
+      g=`<rect x="28" y="108" width="144" height="8" fill="${ink}"/>
+        <rect x="36" y="80" width="128" height="28" fill="#fff" stroke="${ink}" stroke-width="2.5"/>
+        ${[44,58,72,86,108,122,136,150].map(c=>`<rect x="${c}" y="83" width="5" height="22" fill="${ink}"/>`).join("")}
+        <polygon points="80,80 100,70 120,80" fill="#fff" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+        <rect x="32" y="74" width="136" height="7" fill="${ink}"/>
+        <rect x="70" y="56" width="60" height="18" fill="#fff" stroke="${ink}" stroke-width="2.5"/>
+        ${[76,86,96,106,116].map(c=>`<rect x="${c}" y="59" width="4" height="13" fill="${ink}"/>`).join("")}
+        <rect x="66" y="52" width="68" height="5" fill="${ink}"/>
+        <path d="M70 52 C70 30 84 18 100 18 C116 18 130 30 130 52 Z" fill="#fff" stroke="${ink}" stroke-width="2.5"/>
+        <path d="M86 52 C86 36 92 24 100 20 M114 52 C114 36 108 24 100 20" fill="none" stroke="${ink}" stroke-width="1.5"/>
+        <rect x="95" y="10" width="10" height="9" fill="#fff" stroke="${ink}" stroke-width="2"/>
+        <line x1="100" y1="10" x2="100" y2="0" stroke="${ink}" stroke-width="2"/><rect x="100" y="0" width="12" height="7" fill="${red}"/>`;
       const stamp = e.type==="pass"?["PASSED","#2e8b57"]:e.type==="fail"?["FAILED",red]:["NEW LAW?",red];
       g+=`<g transform="rotate(-14 150 40)"><rect x="118" y="26" width="72" height="26" fill="none" stroke="${stamp[1]}" stroke-width="3"/><text x="154" y="45" fill="${stamp[1]}" font-family="Anton,Impact" font-size="17" text-anchor="middle">${stamp[0]}</text></g>`;
       break;}
@@ -928,13 +961,15 @@ function pic(kind, e){
     case "van": {
       g=`<rect x="0" y="100" width="200" height="20" fill="#333"/><rect x="0" y="0" width="200" height="100" fill="#2a3550"/>
         <circle cx="170" cy="22" r="10" fill="#f3ead7"/>
-        <path d="M30 96 v-46 q0 -8 8 -8 h86 l26 24 h12 q6 0 6 6 v24 Z" fill="${ink}"/><rect x="128" y="50" width="20" height="14" fill="#556"/>
+        <path d="M30 96 v-46 q0 -8 8 -8 h86 l26 24 h12 q6 0 6 6 v24 Z" fill="${ink}"/>
+        <path d="M127 47 L146 64 L127 64 Z" fill="#7d8aa8"/><path d="M129 50 L134 54" stroke="#b9c3d8" stroke-width="2"/>
+        <rect x="100" y="47" width="22" height="17" rx="2" fill="#5d6884"/>
         <circle cx="58" cy="98" r="11" fill="#111" stroke="#666" stroke-width="3"/><circle cx="140" cy="98" r="11" fill="#111" stroke="#666" stroke-width="3"/>
-        <text x="80" y="76" font-family="Inter,Arial" font-weight="800" font-size="8" fill="#555" text-anchor="middle">TOTALLY NORMAL VAN</text>`;
+        <text x="64" y="80" font-family="Inter,Arial" font-weight="800" font-size="7" fill="#555" text-anchor="middle">TOTALLY</text><text x="64" y="89" font-family="Inter,Arial" font-weight="800" font-size="7" fill="#555" text-anchor="middle">NORMAL VAN</text>`;
       break;}
     case "phoneX": {
       g=`<rect x="70" y="8" width="60" height="106" rx="10" fill="${ink}"/><rect x="76" y="18" width="48" height="84" fill="#ddd"/>
-        <text x="100" y="52" font-family="Inter,Arial" font-weight="800" font-size="7" text-anchor="middle" fill="#555">Account not found</text>
+        <text x="100" y="40" font-family="Inter,Arial" font-weight="800" font-size="7" text-anchor="middle" fill="#555" textLength="40" lengthAdjust="spacingAndGlyphs">Account</text><text x="100" y="50" font-family="Inter,Arial" font-weight="800" font-size="7" text-anchor="middle" fill="#555" textLength="40" lengthAdjust="spacingAndGlyphs">not found</text>
         <line x1="86" y1="62" x2="114" y2="90" stroke="${red}" stroke-width="7"/><line x1="114" y1="62" x2="86" y2="90" stroke="${red}" stroke-width="7"/>`;
       break;}
     case "food": {
@@ -1313,6 +1348,7 @@ function renderPhone(){
         <button class="app" onclick="phoneGo('polls')"><span class="ic" style="background:#1f4e9c">📊</span>Polls</button>
         <button class="app" onclick="phoneGo('riot')"><span class="ic" style="background:#ff7a1a">🔥</span>Riot Watch${riotList().length?`<i class="badge2">${riotList().length}</i>`:""}</button>
         <button class="app" onclick="phoneGo('advisor')"><span class="ic" style="background:#6b4ce6">🧑‍💼</span>Advisor${advisorTips().filter(t=>t.lvl==="red").length?`<i class="badge2">${advisorTips().filter(t=>t.lvl==="red").length}</i>`:""}</button>
+        <button class="app" onclick="phoneGo('ai')"><span class="ic" style="background:linear-gradient(135deg,#6b4ce6,#1d9bf0)">🤖</span>SpinBot${(S.aiPlan||"free")==="free"?`<i class="badge2">💎</i>`:""}</button>
         <button class="app" onclick="phoneGo('bank')"><span class="ic" style="background:#2e8b57">💰</span>Bank</button>
         <button class="app" onclick="phoneGo('calendar')"><span class="ic" style="background:#fff;color:#c8261e;font-size:13px;font-weight:800;flex-direction:column;line-height:1"><small style="font-size:9px;color:#c8261e">WEEK</small>${S.week}</span>Calendar</button>
         <button class="app" onclick="phoneGo('contacts')"><span class="ic" style="background:#34c759">📞</span>Contacts</button>
@@ -1472,7 +1508,8 @@ const PHONE_APPS = {
       <div class="sect">Every week</div>
       <div class="row"><span class="rn2">🏛 Taxes coming in</span><b style="color:#2e8b57">+$${w.inc}M</b></div>
       <div class="row"><span class="rn2">🔥 Riot repairs<small>${riotList().length} rioting state${riotList().length===1?"":"s"}</small></span><b style="color:#c8261e">−$${w.rep}M</b></div>
-      <div class="row"><span class="rn2"><b>Next payday</b></span><b>${w.net>=0?"+":"−"}$${Math.abs(w.net)}M</b></div>
+      ${AI_PLANS[S.aiPlan||"free"].price?`<div class="row" onclick="phoneGo('aiplans')"><span class="rn2">🤖 SpinBot ${AI_PLANS[S.aiPlan].name} plan</span><b style="color:#c8261e">−$${AI_PLANS[S.aiPlan].price}M</b></div>`:""}
+      <div class="row"><span class="rn2"><b>Next payday</b></span><b>${(w.net-AI_PLANS[S.aiPlan||"free"].price)>=0?"+":"−"}$${Math.abs(w.net-AI_PLANS[S.aiPlan||"free"].price)}M</b></div>
       ${ws!=null?`<div class="sect">This week so far</div><div class="row"><span class="rn2">Money spent or earned since the week started</span><b>${ws>=0?"+":"−"}$${Math.abs(ws)}M</b></div>`:""}
       <div class="hint">Go below $0 at the end of a week and the government goes bankrupt. Riots stop a state's taxes and cost repairs.</div>
     </div>`;
@@ -1527,6 +1564,179 @@ function phoneCall(i){
   if(S.ap<before) toast(`📞 ${p.name}: ${p.sub}`);
   renderPhone();
 }
+
+/* ---------- SpinBot AI (phone app with Free / Pro / Max plans) ---------- */
+const AI_PLANS = {
+  free:{name:"Free", price:0,   color:"#8e8e93", limit:3},
+  pro: {name:"Pro",  price:25,  color:"#6b4ce6", limit:Infinity},
+  max: {name:"Max",  price:90,  color:"#d9a521", limit:Infinity},
+};
+const AI_ADS = [
+  "💎 Upgrade to SpinBot Pro and get answers that actually help!",
+  "⚡ Free users wait in line. Pro users don't. Just saying.",
+  "🔒 Part of this answer is only for Pro members.",
+  "🤑 Limited offer: SpinBot Pro, only $25M a week!",
+  "😢 You're using SpinBot Free. Your rivals use Max.",
+];
+function aiPlan(){ return S.aiPlan||"free"; }
+function aiAsk(text){
+  text=(text||"").trim(); if(!text) return;
+  S.aiChat=S.aiChat||[]; S.aiAsked=S.aiAsked||0;
+  S.aiChat.push({me:true, t:esc(text)});
+  const plan=aiPlan();
+  if(plan==="free" && S.aiAsked>=AI_PLANS.free.limit){
+    S.aiChat.push({t:`🚫 You've used all <b>${AI_PLANS.free.limit} free questions</b> this week. Come back next week… or upgrade to Pro now and ask as much as you want! 💎`, up:true});
+  } else if(plan==="free" && Math.random()<0.25){
+    S.aiAsked++;
+    S.aiChat.push({t:`⏳ SpinBot Free is very busy right now. Pro members skip the line! Please try again.`, up:true});
+  } else {
+    S.aiAsked++;
+    const r=aiAnswer(text, plan);
+    S.aiChat.push(r);
+  }
+  S.aiChat=S.aiChat.slice(-30);
+  PH.aiDraft="";
+  saveGame(); renderPhone();
+  const f=document.getElementById("aiFeed"); if(f) f.scrollTop=f.scrollHeight;
+}
+function aiIntent(q){
+  q=q.toLowerCase();
+  if(/riot|protest|unrest|calm|angry|fire/.test(q)) return "riot";
+  if(/money|budget|cash|broke|bank|afford|bankrupt|tax/.test(q)) return "money";
+  if(/expos|report|journalist|caught|leak|suspicious/.test(q)) return "exposure";
+  if(/critic|debunk|chirp|account|post|influencer|who.*(talk|post)/.test(q)) return "critics";
+  if(/which state|what state|where|target|focus/.test(q)) return "state";
+  if(/news|outlet|tv|network|channel/.test(q)) return "news";
+  if(/pass|80|percent|%|lie|policy|believ|win|how.*doing|chance/.test(q)) return "lie";
+  return "move";
+}
+// every move you could make right now, with how much it would raise national belief
+function aiMoves(){
+  const out=[], can=c=>S.money>=c && S.ap>0;
+  const natGain=add=>NAMES.reduce((a,n)=>a+STATES[n][1]*Math.min(add(S.st[n]),100-S.st[n].belief),0)/TOTAL_POP;
+  const stGain=(n,x)=>STATES[n][1]*Math.min(x,100-S.st[n].belief)/TOTAL_POP;
+  out.push({label:"Celebrity Influencer", cost:150, gain:natGain(()=>12), how:"Whole Country → Celebrity Influencer"});
+  OUTLETS.forEach((o,i)=>{ const b=Math.round(S.outlets[i]); out.push({label:`Pay ${o.name}`, cost:outletPrice(b), gain:natGain(()=>outletBoost(b)), how:"Whole Country → Pay a News Outlet"}); });
+  out.push({label:"Hire “Experts”", cost:70, gain:natGain(()=>6), how:"Whole Country → Hire Experts (also −5 exposure)"});
+  out.push({label:"Fake Poll", cost:20, gain:natGain(c=>c.belief>=50?8:2), how:"Whole Country → Fake Poll"});
+  out.push({label:"Bot Army", cost:30, gain:natGain(()=>4)*0.75, how:"Whole Country → Bot Army (1 in 4 get caught)"});
+  NAMES.forEach(n=>{
+    const k=stateCosts(n), [ab,pop,spot,spName,,type]=STATES[n], c=S.st[n];
+    if(!c.usedSpecial){
+      let g=0; if(type==="boost") g=stGain(n,25); else if(type==="spread") g=stGain(n,15)+MAP[n].n.reduce((a,m)=>a+stGain(m,8),0); else if(type==="quiet") g=stGain(n,12); else if(type==="calm") g=stGain(n,8); else g=stGain(n,5);
+      out.push({label:`★ ${spName} in ${n}`, cost:k.special, gain:g, state:n, how:`Tap ${n} → ★ ${spName}`});
+    }
+    out.push({label:`Local TV in ${n}`, cost:k.tv, gain:stGain(n,15), state:n, how:`Tap ${n} → Local TV Ad Blitz`});
+    const g=ROADS[n].find(r=>r[1]==="g");
+    if(g) out.push({label:`Fake supporters on ${g[0]} (${ab})`, cost:k.g, gain:stGain(n,24)*0.8-stGain(n,10)*0.2, state:n, how:`Tap ${n} → ${g[0]}`});
+  });
+  return out.filter(m=>can(m.cost) && m.gain>0.05).sort((a,b)=>b.gain-a.gain);
+}
+function aiPlanMoves(moves){
+  const pick=[]; let money=S.money; const usedLabels=new Set();
+  for(const m of moves){ if(pick.length>=S.ap) break; if(m.cost<=money && !usedLabels.has(m.label)){ pick.push(m); money-=m.cost; usedLabels.add(m.label); } }
+  return pick;
+}
+function pts(x){ return x>=1?`+${x.toFixed(1)}%`:`+${x.toFixed(2)}%`; }
+function aiAnswer(q, plan){
+  const intent=aiIntent(q), L=LIES[S.lie], nb=natBelief(), left=L.weeks-S.lieWeek+1, need=Math.max(0,80-nb);
+  const riots=riotList(), risk=riskList(), hidden=S.critics.filter(c=>!c.found), found=S.critics.filter(c=>c.found);
+  const moves=aiMoves(), best=moves[0];
+  const nag = plan==="free" ? `<div class="aiad">${pick(AI_ADS)} <button class="mini" onclick="phoneGo('aiplans')">Upgrade</button></div>` : plan==="pro" && Math.random()<0.25 ? `<div class="aiad pro">✨ Want exact numbers and a ranked plan? Try SpinBot Max.</div>` : "";
+  let t="", go=null;
+
+  if(plan==="free"){
+    const vague={
+      riot:["Riots are bad. Try not having them? 🙂","Have you tried asking people to stop being mad?","Pizza fixes most things. Not sure which state though."],
+      money:["Money is very important! Try to have more of it. 💸","Spend less and earn more. Easy!","You have some money. Maybe."],
+      exposure:["Reporters are sneaky. Be sneakier! 🕵️","Try not getting caught.","Exposure is a number. Smaller is better, probably."],
+      critics:["Haters gonna hate. 🤷","People post stuff online all the time. Some of it is about you.","Search for them? I think there's an app for that."],
+      state:["Have you tried "+pick(NAMES)+"? It's a state.","Pick a state you like!","Every state is special in its own way. 🇺🇸"],
+      news:["The news is on TV. You could pay them. Or not.","Some news is more trusted than other news. That's all I know."],
+      lie:["You're doing great! Probably. 👍","Keep lying and see what happens!","Believe in yourself and America will believe in you."],
+      move:["You could try "+pick(NATIONAL).t+"! Or something else.","Do a move! Any move! 🎲","Have you tried the phone? Oh wait, you're on it."],
+    };
+    t = pick(vague[intent]) + `<div class="blur">${best?`The best move right now is ${best.label}`:"Here is a smart plan for this week"} and here's exactly why…</div>`;
+    return {t, nag, plan};
+  }
+
+  const P = plan==="max";
+  if(intent==="riot"){
+    if(!riots.length && !risk.length) t="Good news: no state is rioting and nobody is close (60%+ unrest).";
+    else {
+      if(riots.length) t+=`<b>Rioting now:</b> ${riots.map(n=>P?`${n} (costs $${repairCost(n)}M/wk, pizza $${stateCosts(n).pizza}M)`:n).join(", ")}. `;
+      if(risk.length) t+=`<b>Close to rioting:</b> ${risk.slice(0,P?6:3).map(n=>P?`${n} ${Math.round(S.st[n].unrest)}%`:n).join(", ")}. `;
+      t+= P ? `Free Pizza Day drops a state's unrest by 30, and a riot ends under 50%. If 3+ states are hot, a National Holiday ($90M, −15 everywhere) is cheaper than pizzas one by one. Rioting states also push their neighbors' unrest up 9 a week, so fix the ones with the most neighbors first.` : `Free Pizza Day in those states is the fastest fix.`;
+      go = riots[0]||risk[0];
+    }
+  } else if(intent==="money"){
+    const w=weeklyIncome(), sub=AI_PLANS[plan].price;
+    t = `You have <b>$${Math.round(S.money)}M</b>. Next payday: ${w.net>=0?"+":"−"}$${Math.abs(w.net)}M${riots.length?` (riots are eating $${w.rep}M)`:""}. `;
+    if(P){ const cash=NAMES.filter(n=>STATES[n][5]==="cash"&&!S.st[n].usedSpecial); t+=`After your SpinBot ${AI_PLANS[plan].name} plan ($${sub}M) you'll gain about $${w.net-sub}M a week. ${cash.length?`Cash moves still available: ${cash.map(n=>`${n} (+$${Math.round(30+STATES[n][1]*10)}M)`).join(", ")}.`:""} ${S.money<150?"You're low: skip expensive outlets and end riots first.":""}`; go=cash[0]; }
+    else t+= S.money<150 ? "You're running low, so avoid big spending and stop riots." : "You're in decent shape.";
+  } else if(intent==="exposure"){
+    const e=Math.round(S.exposure);
+    t = `Exposure is <b>${e}%</b>. ${e>=80?"That's dangerous.":e>=50?"Reporters are getting curious.":"You're fairly safe."} `;
+    t+= P ? `It rises 3–7% every week by itself. Fake crowds on busy roads add 3 (12 if caught), bots add 12 if caught, top news outlets add 4. Discredit Reporters is −20 for $80M, Experts −5, National Holiday −8, and Massachusetts, New Hampshire and Virginia have special moves that cut 10. ${e>=70?"Do Discredit Reporters this week.":""}` : `Discredit Reporters lowers it the most.`;
+  } else if(intent==="critics"){
+    if(P){
+      t = hidden.length ? `There ${hidden.length>1?"are":"is"} <b>${hidden.length} critic${hidden.length>1?"s":""}</b> you haven't found: ${hidden.map(c=>`<b>${c.handle}</b> in ${c.state} (${fmtK(c.followers)} followers)`).join(", ")}. Search their state's letters on Chirp (like “${STATES[hidden[0].state][0]}”). ` : `No hidden critics right now. `;
+      if(found.length) t+=`Known: ${found.map(c=>c.handle).join(", ")}. Paying them off is safest (+12 belief nearby, no risk), deleting is cheapest but 1 in 4 come back.`;
+    } else t = hidden.length ? `There's at least one critic posting that you haven't found yet. Search Chirp using words from your lie.` : found.length ? `You have ${found.length} known critic${found.length>1?"s":""} in Watchlist.` : `Nobody new is posting about you right now.`;
+  } else if(intent==="state"){
+    const ranked=[...NAMES].filter(n=>!S.st[n].riot).sort((a,b)=>STATES[b][1]*(100-S.st[b].belief)-STATES[a][1]*(100-S.st[a].belief));
+    t = P ? `Best states to target (people × room to grow): ${ranked.slice(0,4).map(n=>`<b>${n}</b> (${Math.round(S.st[n].belief)}%, ${STATES[n][1]}M people)`).join(", ")}.` : `Focus on big states that don't believe yet, like <b>${ranked[0]}</b>.`;
+    go=ranked[0];
+  } else if(intent==="news"){
+    const os=OUTLETS.map((o,i)=>({o,b:Math.round(S.outlets[i])})).map(x=>({...x,p:outletPrice(x.b),g:outletBoost(x.b)})).filter(x=>x.p<=S.money);
+    const bestPer=[...os].sort((a,b)=>b.g/b.p-a.g/a.p)[0], bestBig=[...os].sort((a,b)=>b.g-a.g)[0];
+    t = !os.length ? "You can't afford any outlet right now." : P ? `Biggest boost you can afford: <b>${bestBig.o.name}</b> (+${bestBig.g} everywhere, $${bestBig.p}M). Best value: <b>${bestPer.o.name}</b> (+${bestPer.g} for $${bestPer.p}M). Each use drops an outlet's believability by 5, and it recovers 1.5 a week, so rotate between them.` : `<b>${bestBig.o.name}</b> gives the biggest boost you can afford.`;
+  } else if(intent==="lie"){
+    t = need>0 ? `<b>${nb}%</b> believe <i>${L.name}</i>. You need <b>${need}% more</b> with ${left} week${left>1?"s":""} left. ` : `<b>${nb}%</b> believe it. End the week now and it passes! `;
+    if(P && need>0){ const top=aiPlanMoves(moves); const tot=top.reduce((a,m)=>a+m.gain,0); t+=`Belief drops about 2.5% a week on its own. Your best ${top.length} move${top.length>1?"s":""} this week would add about ${pts(tot)}. ${tot>=need?"That's enough to pass this week!":tot*left>=need+2.5*left?"Keep that pace and you'll make it.":"That's not enough at this pace. Go big with celebrities and top outlets, or this one may fail."}`; }
+  }
+  if(intent==="move" || !t){
+    if(!best) t = S.ap<1 ? "You're out of moves this week. End the week to get more." : "You can't afford anything useful right now. End the week to get paid.";
+    else if(P){ const top=aiPlanMoves(moves); t = `Your best plan for the ${top.length} move${top.length>1?"s":""} you have left, within your $${Math.round(S.money)}M budget:<ol>${top.map(m=>`<li><b>${m.label}</b>: ${pts(m.gain)} for $${m.cost}M<br><small>${m.how}</small></li>`).join("")}</ol>${need>0?`You need ${need}% more in ${left} week${left>1?"s":""}.`:""}`; go=top.find(m=>m.state)?.state; }
+    else { t = `I'd go with <b>${best.label}</b>. It's the biggest boost you can afford right now.`; go=best.state; }
+  }
+  return {t, nag, plan, go};
+}
+function aiSubscribe(p){
+  S.aiPlan=p; saveGame();
+  S.aiChat=S.aiChat||[];
+  S.aiChat.push({t: p==="free" ? "You're back on SpinBot Free. We'll miss your money. 😢" : p==="pro" ? "🎉 Welcome to <b>SpinBot Pro</b>! Smarter answers, unlimited questions and way fewer ads. $25M is charged every payday." : "👑 Welcome to <b>SpinBot Max</b>. Perfect answers with exact numbers. No ads, ever. $90M is charged every payday.", plan:p});
+  phoneGo("ai");
+}
+Object.assign(PHONE_APPS, {
+  ai(){
+    const plan=aiPlan(), P=AI_PLANS[plan]; S.aiChat=S.aiChat||[];
+    const chips=["What should I do?","Which state needs help?","Will this lie pass?","How do I stop riots?","Am I getting caught?","Who's debunking me?","How's my money?","Best news outlet?"];
+    const left = plan==="free" ? Math.max(0,P.limit-(S.aiAsked||0)) : null;
+    const welcome = !S.aiChat.length ? `<div class="aimsg bot">👋 I'm <b>SpinBot</b>, your AI for selling lies. Ask me anything about your game!${plan==="free"?`<div class="aiad">💎 You're on SpinBot Free. Upgrade for answers that actually help! <button class="mini" onclick="phoneGo('aiplans')">See plans</button></div>`:""}</div>` : "";
+    return `<div class="apphead"><button class="back" onclick="phoneGo('home')">‹</button><b>SpinBot AI</b><button class="plantag" style="background:${P.color}" onclick="phoneGo('aiplans')">${P.name}</button></div>
+      ${plan==="free"?`<div class="aibanner" onclick="phoneGo('aiplans')">🔥 ${pick(AI_ADS)} <u>Upgrade</u></div>`:""}
+      <div class="aifeed" id="aiFeed">${welcome}${S.aiChat.map(m=>m.me?`<div class="aimsg me">${m.t}</div>`:`<div class="aimsg bot ${m.plan||""}">${m.t}${m.go?`<button class="mini" onclick="goState('${m.go}')">Open ${m.go} ›</button>`:""}${m.up?`<button class="mini" onclick="phoneGo('aiplans')">See plans</button>`:""}${m.nag||""}</div>`).join("")}</div>
+      <div class="aichips">${chips.map(c=>`<button class="chip" onclick="aiAsk('${c.replace(/'/g,"\\'")}')">${c}</button>`).join("")}</div>
+      <form class="aiinput" onsubmit="event.preventDefault();aiAsk(document.getElementById('aiQ').value)">
+        <input id="aiQ" placeholder="${plan==="free"?`Ask SpinBot… (${left} free left this week)`:"Ask SpinBot anything…"}" autocomplete="off" value="${esc(PH.aiDraft||"").replace(/"/g,"&quot;")}" oninput="PH.aiDraft=this.value"><button>↑</button>
+      </form>`;
+  },
+  aiplans(){
+    const cur=aiPlan();
+    const card=(k,feats)=>{const p=AI_PLANS[k]; return `<div class="plan ${cur===k?"cur":""}" style="border-color:${p.color}">
+      <div class="ph2"><b style="color:${p.color}">${k==="max"?"👑 ":k==="pro"?"💎 ":""}SpinBot ${p.name}</b><span>${p.price?`$${p.price}M<small>/week</small>`:"Free"}</span></div>
+      <ul>${feats.map(f=>`<li>${f}</li>`).join("")}</ul>
+      ${cur===k?`<div class="curtag">Your plan</div>`:`<button class="pbtn" style="background:${p.color}" ${p.price>S.money?"disabled":""} onclick="aiSubscribe('${k}')">${p.price>AI_PLANS[cur].price?"Upgrade":"Switch"} to ${p.name}</button>`}
+    </div>`;};
+    return `<div class="apphead"><button class="back" onclick="phoneGo('ai')">‹</button><b>SpinBot Plans</b><span></span></div><div class="pad">
+      ${card("free",["3 questions a week","Vague answers","Ads in every answer","Sometimes too busy to answer"])}
+      ${card("pro",["Unlimited questions","Smart answers: the best move, which states and fixes","Hardly any ads"])}
+      ${card("max",["Unlimited questions","Perfect answers with exact numbers and ranked plans","Finds hidden critics for you","No ads, ever"])}
+      <div class="hint">Plans are paid from your government budget every payday (end of the week). If you can't afford it, you're moved back to Free.</div>
+    </div>`;
+  },
+});
 
 function checkEnd(){
   if(S.exposure>=100){ S.over=true; render(); return showModal(`<h2 style="color:var(--red)">The Truth Is Out</h2><p>Reporters published everything: the paid crowds, the bots, the fake polls. Your government is finished.</p><p>You lasted <b>${S.week}</b> weeks and passed <b>${S.passed}</b> of 5 lies.</p><button onclick="newGame();closeModal()">Play Again</button>`); }
