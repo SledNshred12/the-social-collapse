@@ -126,9 +126,36 @@
   .home{min-height:calc(100% - 29px);background:linear-gradient(180deg,#1f4e9c,#0b1d3a 60%,#c8261e);color:#fff;padding:24px 18px}
   .home .clock{font-size:64px;font-weight:300;text-align:center;line-height:1}
   .home .date{text-align:center;font-size:12px;opacity:.8;margin-bottom:28px;letter-spacing:1px}
-  .apps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .apps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 6px}
   .app{background:none;border:none;color:#fff;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;position:relative;font-family:inherit}
-  .app .ic{width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 4px 10px #0005}
+  .app .ic{width:54px;height:54px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:27px;box-shadow:0 4px 10px #0005}
+  .app{font-size:11px !important;white-space:nowrap}
+  .pad{padding:8px 12px 30px}
+  .bignum{font-size:40px;font-weight:800;line-height:1;margin:6px 0 4px}
+  .bignum small{display:block;font-size:13px;font-weight:500;color:#536471;margin-top:4px;line-height:1.3}
+  .spark{width:100%;height:auto;background:#f7f9f9;border-radius:12px;margin:8px 0}
+  .nodata{font-size:13px;color:#536471;background:#f7f9f9;border-radius:12px;padding:16px;text-align:center;margin:8px 0}
+  .seg{display:flex;background:#eff3f4;border-radius:10px;padding:3px;margin:8px 0}
+  .seg button{flex:1;border:none;background:none;padding:7px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit;color:#536471}
+  .seg button.on{background:#fff;color:#0f1419;box-shadow:0 1px 3px #0002}
+  .row{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid #eff3f4;cursor:pointer;font-size:14px}
+  .row .rn2{flex:1;min-width:0}
+  .row .rn2 small{display:block;font-size:11px;color:#536471;margin-top:1px}
+  .rbar{width:70px;height:8px;background:#eff3f4;border-radius:4px;overflow:hidden;flex:none}
+  .rbar i{display:block;height:100%}
+  .sect{font-size:11px;font-weight:800;color:#536471;text-transform:uppercase;letter-spacing:.5px;margin:14px 0 2px}
+  .hint{font-size:12px;color:#536471;background:#f7f9f9;border-radius:10px;padding:10px;margin-top:12px;line-height:1.4}
+  .chat .who{font-size:12px;font-weight:700;color:#536471;margin:6px 0}
+  .bubble{background:#eff3f4;border-radius:16px 16px 16px 4px;padding:10px 12px;margin-bottom:8px;font-size:14px;line-height:1.35;border-left:4px solid #999}
+  .bubble.red{border-color:#c8261e}.bubble.gold{border-color:#d9a521}.bubble.green{border-color:#2e8b57}.bubble.blue{border-color:#1d9bf0}
+  .bubble .adv{font-size:12px;color:#536471;margin-top:4px}
+  .mini{margin-top:6px;background:#0f1419;color:#fff;border:none;border-radius:12px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+  .weeks{display:flex;gap:6px;margin:10px 0}
+  .weeks span{flex:1;text-align:center;padding:8px 0;border-radius:8px;background:#eff3f4;font-weight:800;font-size:13px;color:#536471}
+  .weeks span.past{background:#cfd9de;color:#8899a6;text-decoration:line-through}
+  .weeks span.now{background:#c8261e;color:#fff}
+  .call{background:#34c759;color:#fff;border:none;border-radius:14px;padding:6px 10px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .call:disabled{opacity:.35}
   .badge2{position:absolute;top:-4px;right:6px;background:#c8261e;color:#fff;font-style:normal;font-size:11px;font-weight:800;border-radius:10px;padding:1px 6px}
   .home .tip{margin-top:30px;background:#ffffff1f;border-radius:14px;padding:12px;font-size:13px;line-height:1.4}
   .apphead{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-bottom:1px solid #eff3f4;font-size:16px;position:sticky;top:26px;background:#fff;z-index:1}
@@ -517,6 +544,7 @@ function newGame(){
   NAMES.forEach(n=>S.st[n]={belief:50, unrest:rnd(5,20), riot:false, usedSpecial:false});
   startLie(true);
   S.weekStart = {belief:natBelief(), money:S.money, exposure:0};
+  S.history=[]; S.results=[];
   closeSheet();
   render();
 }
@@ -687,7 +715,7 @@ function endWeek(){
 
   const nb = natBelief();
   if(nb >= 80){
-    S.passed++;
+    S.passed++; (S.results=S.results||[])[S.lie]="pass";
     headline(`✔ ${L.name.toUpperCase()} IS NOW LAW. NOBODY QUESTIONS IT.`, "pass", {lie:L});
     if(S.passed >= LIES.length){ S.over=true; render(); return showWin(); }
     if(S.lie+1 >= LIES.length){ S.over=true; render(); return endSummary(); }
@@ -697,7 +725,7 @@ function endWeek(){
   if(S.lieWeek >= L.weeks){
     NAMES.forEach(n=>S.st[n].unrest=clamp(S.st[n].unrest+20));
     S.exposure = clamp(S.exposure+10);
-    headline(`✘ ${L.name.toUpperCase()} FAILS. PUBLIC FURIOUS.`, "fail", {lie:L});
+    headline(`✘ ${L.name.toUpperCase()} FAILS. PUBLIC FURIOUS.`, "fail", {lie:L}); (S.results=S.results||[])[S.lie]="fail";
     if(S.lie+1 >= LIES.length){ S.over=true; render(); return endSummary(); }
     S.lie++; S.week++; S.ap=MOVES_PER_WEEK; startLie(false); render();
     return showModal(`<h2 style="color:var(--red)">Nobody Bought It</h2><p><b>${L.name}</b> flopped. Everyone's angrier and reporters are suspicious.</p><p>Moving on to <b>${LIES[S.lie].name}</b>…</p><button onclick="closeModal()">Try Again</button>`);
@@ -1282,9 +1310,16 @@ function renderPhone(){
       <div class="apps">
         <button class="app" onclick="phoneGo('search')"><span class="ic" style="background:#1d9bf0">🐦</span>Chirp</button>
         <button class="app" onclick="phoneGo('watch')"><span class="ic" style="background:#c8261e">🎯</span>Watchlist${found?`<i class="badge2">${found}</i>`:""}</button>
+        <button class="app" onclick="phoneGo('polls')"><span class="ic" style="background:#1f4e9c">📊</span>Polls</button>
+        <button class="app" onclick="phoneGo('riot')"><span class="ic" style="background:#ff7a1a">🔥</span>Riot Watch${riotList().length?`<i class="badge2">${riotList().length}</i>`:""}</button>
+        <button class="app" onclick="phoneGo('advisor')"><span class="ic" style="background:#6b4ce6">🧑‍💼</span>Advisor${advisorTips().filter(t=>t.lvl==="red").length?`<i class="badge2">${advisorTips().filter(t=>t.lvl==="red").length}</i>`:""}</button>
+        <button class="app" onclick="phoneGo('bank')"><span class="ic" style="background:#2e8b57">💰</span>Bank</button>
+        <button class="app" onclick="phoneGo('calendar')"><span class="ic" style="background:#fff;color:#c8261e;font-size:13px;font-weight:800;flex-direction:column;line-height:1"><small style="font-size:9px;color:#c8261e">WEEK</small>${S.week}</span>Calendar</button>
+        <button class="app" onclick="phoneGo('contacts')"><span class="ic" style="background:#34c759">📞</span>Contacts</button>
         <button class="app" onclick="closePhone();reopenPaper()"><span class="ic" style="background:#f3ead7;color:#000">📰</span>Paper</button>
+        <button class="app" onclick="phoneGo('settings')"><span class="ic" style="background:#8e8e93">⚙️</span>Settings</button>
       </div>
-      <div class="tip">Open <b>Chirp</b> and search for people debunking <b>${L.name}</b>. Searching is free. Dealing with them only costs money, not moves.</div>
+      <div class="tip">Not sure what to do next? Ask your <b>Advisor</b>. Search <b>Chirp</b> for people debunking <b>${L.name}</b>.</div>
     </div>`;
   }
   else if(PH.screen==="search"){
@@ -1336,6 +1371,7 @@ function renderPhone(){
       ${list.length?`<div class="rlabel">Debunkers you've found (${list.length})</div>`+list.map(c=>`<div class="post" onclick="phoneGo('profile',{person:${c.id}})"><div class="av" style="background:${c.color}">${c.name[0]}</div><div class="pb"><div class="ph"><b>${c.name}</b> <span>${c.handle}</span></div><div class="pm">📍 ${c.state} · ${fmtK(c.followers)} followers${c.weeks>=3?" · <em>going national</em>":""}</div></div></div>`).join("")
         :`<div class="gone" style="font-size:14px">Nobody on your watchlist yet.<br><br>Search Chirp to find people debunking your lies. Some of them are hiding out there right now.</div>`}`;
   }
+  else if(PHONE_APPS[PH.screen]) body=PHONE_APPS[PH.screen]();
   scr.innerHTML=top+body;
 }
 function setQ(w){ PH.q=w; renderPhone(); const i=$("q"); if(i){ i.focus(); i.setSelectionRange(w.length,w.length);} }
@@ -1371,6 +1407,125 @@ function phoneAct(id, how){
   render();
   if(S.exposure>=100||S.money<0){ closePhone(); S.over=true; return checkEnd(); }
   PH.result={title,msg,pic:picKind,type}; phoneGo("result");
+}
+
+/* ---------- extra phone apps ---------- */
+function appHead(title){ return `<div class="apphead"><button class="back" onclick="phoneGo('home')">‹</button><b>${title}</b><span></span></div>`; }
+function spark(vals, opts={}){
+  const w=opts.w||300, h=opts.h||90, min=opts.min??0, max=opts.max??100, col=opts.color||"#1d9bf0";
+  if(vals.length<2) return `<div class="nodata">Play a couple of weeks to see a chart here.</div>`;
+  const x=i=>8+i*(w-16)/(vals.length-1), y=v=>h-8-(Math.max(min,Math.min(max,v))-min)/(max-min)*(h-16);
+  const pts=vals.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+  const goal = opts.goal!=null ? `<line x1="8" x2="${w-8}" y1="${y(opts.goal)}" y2="${y(opts.goal)}" stroke="#c8261e" stroke-dasharray="4 4" stroke-width="1.5"/><text x="${w-10}" y="${y(opts.goal)-4}" text-anchor="end" font-size="10" fill="#c8261e">${opts.goalLabel||""}</text>` : "";
+  return `<svg viewBox="0 0 ${w} ${h}" class="spark">${goal}<polyline points="${pts}" fill="none" stroke="${col}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${x(vals.length-1)}" cy="${y(vals[vals.length-1])}" r="4.5" fill="${col}"/></svg>`;
+}
+function goState(n){ closePhone(); openState(n); }
+function hist(){ return (S.history||[]); }
+function riskList(){ return NAMES.filter(n=>!S.st[n].riot && S.st[n].unrest>=60).sort((a,b)=>S.st[b].unrest-S.st[a].unrest); }
+
+function advisorTips(){
+  const L=LIES[S.lie], nb=natBelief(), left=L.weeks-S.lieWeek+1, need=Math.max(0,80-nb), tips=[];
+  const riots=riotList(), risk=riskList(), hidden=S.critics.filter(c=>!c.found).length, found=S.critics.filter(c=>c.found);
+  if(need>0) tips.push({lvl: need/left>12?"red":"gold", t:`We need <b>${need}% more</b> of America to believe <i>${L.name}</i>, with <b>${left} week${left>1?"s":""}</b> left (counting this one).`, a:need/left>12?"Go big: a Celebrity Influencer (+12 everywhere) or a trusted news outlet.":"Keep chipping away with news outlets and state moves."});
+  else tips.push({lvl:"green", t:`<b>${nb}%</b> believe it already. End the week while you're above 80% and it passes.`});
+  riots.forEach(n=>tips.push({lvl:"red", t:`<b>${n}</b> is rioting and costing you <b>$${repairCost(n)}M</b> a week.`, a:"Free Pizza Day there, or a National Holiday to calm everyone.", go:n}));
+  risk.slice(0,3).forEach(n=>tips.push({lvl:"gold", t:`<b>${n}</b> is about to riot (unrest ${Math.round(S.st[n].unrest)}%).`, a:"Calm it before you end the week.", go:n}));
+  if(S.exposure>=60) tips.push({lvl:S.exposure>=80?"red":"gold", t:`Reporters are getting close: exposure is <b>${Math.round(S.exposure)}%</b>. At 100% it's over.`, a:"Discredit Reporters (−20) or Hire Experts (−5). Lay off fake crowds and bots for a bit."});
+  if(hidden) tips.push({lvl:"gold", t:`Our people hear someone new is posting about the policy. ${hidden>1?hidden+" accounts":"One account"} we haven't found yet.`, a:"Search Chirp to find them.", app:"search"});
+  if(found.length) tips.push({lvl:"gold", t:`${found.length} known critic${found.length>1?"s are":" is"} still posting: ${found.slice(0,2).map(c=>c.handle).join(", ")}${found.length>2?"…":""}.`, a:"Deal with them in Watchlist.", app:"watch"});
+  const bigUnused=NAMES.filter(n=>!S.st[n].usedSpecial).sort((a,b)=>STATES[b][1]-STATES[a][1]).slice(0,2);
+  if(bigUnused.length) tips.push({lvl:"blue", t:`Big states with their ★ special move still unused: <b>${bigUnused.join("</b> and <b>")}</b>.`, a:"Big states count the most toward 80%.", go:bigUnused[0]});
+  if(S.money<150) { const cash=NAMES.filter(n=>STATES[n][5]==="cash"&&!S.st[n].usedSpecial); tips.push({lvl:"gold", t:`Money is tight: <b>$${Math.round(S.money)}M</b>.`, a: cash.length?`${cash.join(", ")} have special moves that earn cash.`:"Avoid riots; they eat your budget.", go:cash[0]}); }
+  if(S.ap>0) tips.push({lvl:"blue", t:`You still have <b>${S.ap} move${S.ap>1?"s":""}</b> left this week. Don't waste them.`});
+  return tips;
+}
+
+const PHONE_APPS = {
+  polls(){
+    const h=hist(), vals=[...h.map(x=>x.b), natBelief()];
+    const sort=PH.sort||"low";
+    const list=[...NAMES].sort(sort==="low"?(a,b)=>S.st[a].belief-S.st[b].belief:(a,b)=>STATES[b][1]-STATES[a][1]);
+    return appHead("Polls")+`<div class="pad">
+      <div class="bignum">${natBelief()}%<small>of Americans believe <i>${LIES[S.lie].name}</i></small></div>
+      ${spark(vals,{goal:80,goalLabel:"80% to pass",color:"#1f4e9c"})}
+      <div class="seg"><button class="${sort==="low"?"on":""}" onclick="PH.sort='low';renderPhone()">Doubting most</button><button class="${sort==="big"?"on":""}" onclick="PH.sort='big';renderPhone()">Biggest states</button></div>
+      ${list.map(n=>{const c=S.st[n]; return `<div class="row" onclick="goState('${n}')"><span class="rn2">${c.riot?"🔥 ":""}${n}<small>${STATES[n][1]}M people</small></span><span class="rbar"><i style="width:${c.belief}%;background:${colorFor({belief:c.belief})}"></i></span><b>${Math.round(c.belief)}%</b></div>`;}).join("")}
+    </div>`;
+  },
+  riot(){
+    const r=riotList(), risk=riskList();
+    const card=(n,hot)=>{const c=S.st[n]; return `<div class="row" onclick="goState('${n}')"><span class="rn2">${hot?"🔥 ":"⚠️ "}${n}<small>${hot?`Costs $${repairCost(n)}M/week · spreading to ${MAP[n].n.length} neighbors`:`Neighbors: ${MAP[n].n.slice(0,3).join(", ")}${MAP[n].n.length>3?"…":""}`}</small></span><span class="rbar"><i style="width:${c.unrest}%;background:#c8261e"></i></span><b>${Math.round(c.unrest)}%</b></div>`;};
+    return appHead("Riot Watch")+`<div class="pad">
+      <div class="bignum" style="color:${r.length?"#c8261e":"#2e8b57"}">${r.length}<small>state${r.length===1?"":"s"} rioting · ${risk.length} close to rioting</small></div>
+      ${r.length?`<div class="sect">Rioting now</div>${r.map(n=>card(n,true)).join("")}`:""}
+      ${risk.length?`<div class="sect">About to riot (unrest 60%+)</div>${risk.map(n=>card(n,false)).join("")}`:""}
+      ${!r.length&&!risk.length?`<div class="nodata">All quiet. Nobody's close to rioting. 😎</div>`:""}
+      <div class="hint">A riot starts at 100% unrest and ends when it drops under 50%. Free Pizza Day (−30) or a National Holiday (−15 everywhere) calms people down.</div>
+    </div>`;
+  },
+  bank(){
+    const w=weeklyIncome(), h=hist(), vals=[...h.map(x=>x.m), Math.round(S.money)];
+    const ws=S.weekStart&&S.weekStart.money!=null?Math.round(S.money-S.weekStart.money):null;
+    return appHead("Bank")+`<div class="pad">
+      <div class="bignum" style="color:${S.money<150?"#c8261e":"#0f1419"}">$${Math.round(S.money)}M<small>in the government budget</small></div>
+      ${spark(vals,{min:0,max:Math.max(200,...vals)*1.1,color:"#2e8b57"})}
+      <div class="sect">Every week</div>
+      <div class="row"><span class="rn2">🏛 Taxes coming in</span><b style="color:#2e8b57">+$${w.inc}M</b></div>
+      <div class="row"><span class="rn2">🔥 Riot repairs<small>${riotList().length} rioting state${riotList().length===1?"":"s"}</small></span><b style="color:#c8261e">−$${w.rep}M</b></div>
+      <div class="row"><span class="rn2"><b>Next payday</b></span><b>${w.net>=0?"+":"−"}$${Math.abs(w.net)}M</b></div>
+      ${ws!=null?`<div class="sect">This week so far</div><div class="row"><span class="rn2">Money spent or earned since the week started</span><b>${ws>=0?"+":"−"}$${Math.abs(ws)}M</b></div>`:""}
+      <div class="hint">Go below $0 at the end of a week and the government goes bankrupt. Riots stop a state's taxes and cost repairs.</div>
+    </div>`;
+  },
+  advisor(){
+    const tips=advisorTips();
+    return appHead("Chief of Staff")+`<div class="pad">
+      <div class="chat"><div class="who">🧑‍💼 Your Chief of Staff</div>
+      ${tips.map(t=>`<div class="bubble ${t.lvl}">${t.t}${t.a?`<div class="adv">${t.a}</div>`:""}${t.go?`<button class="mini" onclick="goState('${t.go}')">Open ${t.go} ›</button>`:""}${t.app?`<button class="mini" onclick="phoneGo('${t.app}')">Open ${t.app==="search"?"Chirp":"Watchlist"} ›</button>`:""}</div>`).join("")}
+      </div></div>`;
+  },
+  calendar(){
+    const L=LIES[S.lie], left=L.weeks-S.lieWeek+1, res=S.results||[];
+    return appHead("Calendar")+`<div class="pad">
+      <div class="bignum">${left}<small>week${left>1?"s":""} left to sell <i>${L.name}</i> (this week counts)</small></div>
+      <div class="weeks">${Array.from({length:L.weeks},(_,i)=>`<span class="${i+1<S.lieWeek?"past":i+1===S.lieWeek?"now":""}">${i+1}</span>`).join("")}</div>
+      <div class="sect">The plan</div>
+      ${LIES.map((l,i)=>{const st=res[i]==="pass"?"✅ Passed":res[i]==="fail"?"❌ Failed":i===S.lie?"🟡 Now":"🔒 Coming up"; return `<div class="row"><span class="rn2">${i+1}. ${i<=S.lie?l.name:"Top secret"}<small>${i<=S.lie?l.truth.replace("The truth: ",""):"Unlocks after lie "+(i)}</small></span><b style="white-space:nowrap">${st}</b></div>`;}).join("")}
+      <div class="hint">Week ${S.week} overall. Each lie needs 80% belief before its weeks run out.</div>
+    </div>`;
+  },
+  contacts(){
+    const off=S.over||S.ap<1;
+    const people=[
+      ...OUTLETS.map((o,i)=>{const b=Math.round(S.outlets[i]); return {ic:"📺", name:o.name, sub:`${b}% believable · every state +${outletBoost(b)}`, cost:outletPrice(b), fn:()=>payOutlet(i)};}),
+      {ic:"🎤", name:"Pop Star (Celebrity)", sub:"Every state +12", cost:150, fn:()=>nationalAction(NATIONAL.find(a=>a.id==='celeb'))},
+      {ic:"🥼", name:"Expert Panel", sub:"Every state +6, exposure −5", cost:70, fn:()=>nationalAction(NATIONAL.find(a=>a.id==='experts'))},
+      {ic:"🤖", name:"Bot Farm", sub:"Every state +4, 1 in 4 get caught", cost:30, fn:()=>nationalAction(NATIONAL.find(a=>a.id==='bots'))},
+      {ic:"📊", name:"Poll Company", sub:"Believers +8, doubters +2", cost:20, fn:()=>nationalAction(NATIONAL.find(a=>a.id==='poll'))},
+    ];
+    window.__contacts=people;
+    return appHead("Contacts")+`<div class="pad">
+      <div class="hint" style="margin-top:0">Calling someone uses <b>1 move</b>. You have <b>${S.ap}</b> left this week.</div>
+      ${people.map((p,i)=>`<div class="row"><span class="rn2">${p.ic} ${p.name}<small>${p.sub}</small></span><button class="call" ${off||S.money<p.cost?"disabled":""} onclick="phoneCall(${i})">📞 $${p.cost}M</button></div>`).join("")}
+    </div>`;
+  },
+  settings(){
+    return appHead("Settings")+`<div class="pad">
+      <div class="row" onclick="closePhone();confirmNew()"><span class="rn2">↺ Start a new game<small>Erases your saved game</small></span><b>›</b></div>
+      <div class="row" onclick="location.reload()"><span class="rn2">▶ Replay the Axiom intro<small>Your game is saved, so you can Continue after</small></span><b>›</b></div>
+      <div class="row" onclick="closePhone();reopenPaper()"><span class="rn2">📰 Read last week's paper</span><b>›</b></div>
+      <div class="hint">💾 Your progress saves automatically on this device.</div>
+    </div>`;
+  },
+};
+function phoneCall(i){
+  const p=(window.__contacts||[])[i]; if(!p) return;
+  const before=S.ap;
+  p.fn();
+  if(S.over){ closePhone(); return; }
+  closeModal();
+  if(S.ap<before) toast(`📞 ${p.name}: ${p.sub}`);
+  renderPhone();
 }
 
 function checkEnd(){
@@ -1504,7 +1659,8 @@ $("endTurn").onclick = ()=>{
   endWeek();
   S.collect=false;
   const html=buildPaper(wk,start);
-  S.log=[]; S.weekStart={belief:natBelief()};
+  (S.history=S.history||[]).push({w:wk, b:natBelief(), m:Math.round(S.money), e:Math.round(S.exposure), r:riotList().length});
+  S.log=[]; S.weekStart={belief:natBelief(), money:S.money};
   if(!S.over && wk>=2 && Math.random()<0.45) S.crisis=makeCrisis();
   saveGame();
   showPaper(html);
