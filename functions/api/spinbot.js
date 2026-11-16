@@ -1,7 +1,26 @@
 // SpinBot AI: a Cloudflare Pages Function that answers players using Workers AI.
 // Needs a Workers AI binding named "AI" on the Pages project.
 
-const MODEL = "@cf/meta/llama-3.1-8b-instruct";
+// Tried in order; the first one that works is remembered. Models get retired over time, so keep a few.
+const MODELS = [
+  "@cf/meta/llama-4-scout-17b-16e-instruct",
+  "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+  "@cf/mistralai/mistral-small-3.1-24b-instruct",
+  "@cf/google/gemma-3-12b-it",
+  "@cf/meta/llama-3.1-8b-instruct-fp8",
+  "@cf/meta/llama-3.2-3b-instruct",
+];
+let workingModel = null;
+function readText(out) {
+  if (!out) return "";
+  if (typeof out === "string") return out;
+  if (typeof out.response === "string") return out.response;
+  if (out.response && typeof out.response === "object") return out.response.content || JSON.stringify(out.response);
+  const c = out.choices && out.choices[0];
+  if (c) return (c.message && c.message.content) || c.text || "";
+  if (out.result) return readText(out.result);
+  return "";
+}
 
 const PLAN_RULES = {
   free: `You are on the FREE plan. Be vague, goofy and only a little helpful. For game strategy, give fuzzy advice without numbers.
@@ -52,14 +71,21 @@ export async function onRequestPost({ request, env }) {
     messages.push({ role: m.role === "assistant" ? "assistant" : "user", content: m.content.slice(0, 600) });
   }
   messages.push({ role: "user", content: q });
-  try {
-    const out = await env.AI.run(MODEL, { messages, max_tokens: plan === "max" ? 320 : 200, temperature: plan === "free" ? 0.9 : 0.4 });
-    const text = (out && (out.response || out.result?.response) || "").trim();
-    if (!text) return json({ error: "empty-response" }, 502);
-    return json({ text });
-  } catch (e) {
-    return json({ error: "ai-failed", detail: String(e && e.message || e).slice(0, 300) }, 502);
+  const opts = { messages, max_tokens: plan === "max" ? 320 : 200, temperature: plan === "free" ? 0.9 : 0.4 };
+  const order = workingModel ? [workingModel, ...MODELS.filter(m => m !== workingModel)] : MODELS;
+  let lastErr = "";
+  for (const model of order) {
+    try {
+      const out = await env.AI.run(model, opts);
+      const text = readText(out).trim();
+      if (text) { workingModel = model; return json({ text, model }); }
+      lastErr = "empty response from " + model;
+    } catch (e) {
+      lastErr = String(e && e.message || e).slice(0, 200);
+      if (!/deprecat|not found|no such model|invalid model|5028|5007|unknown/i.test(lastErr)) break;
+    }
   }
+  return json({ error: "ai-failed", detail: lastErr }, 502);
 }
 
 export async function onRequestGet() {
