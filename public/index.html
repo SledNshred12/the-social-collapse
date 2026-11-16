@@ -253,6 +253,10 @@
   .mwhy .g{background:#e3f4ea;color:#1e6b41}.mwhy .b{background:#fde8e6;color:#a01f18}
   .ideas{display:grid;gap:5px}
   .idea{text-align:left;background:#eff3f4;border:none;border-radius:10px;padding:7px 9px;font-size:12.5px;cursor:pointer;font-family:inherit}
+  .typing{display:inline-flex;gap:4px;padding:2px 0}
+  .typing i{width:7px;height:7px;border-radius:50%;background:#8899a6;animation:tdot 1s infinite}
+  .typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+  @keyframes tdot{0%,60%,100%{opacity:.3;transform:none}30%{opacity:1;transform:translateY(-3px)}}
   .roads{display:grid;gap:6px}
   .road{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font-family:inherit;color:var(--ink);background:var(--card);border:2px solid;border-left-width:8px;border-radius:6px;padding:8px 10px;cursor:pointer}
   .road.green{border-color:#2e8b57;background:#e9f6ee}
@@ -1629,32 +1633,89 @@ const AI_ADS = [
   "😢 You're using SpinBot Free. Your rivals use Max.",
 ];
 function aiPlan(){ return S.aiPlan||"free"; }
-function aiAsk(text){
-  text=(text||"").trim(); if(!text) return;
+let AI_ONLINE = /^https?:/.test(location.protocol) && !/claude|claudeusercontent/.test(location.hostname);
+function aiFacts(plan){
+  const L=LIES[S.lie], nb=natBelief(), left=L.weeks-S.lieWeek+1, w=weeklyIncome(), sub=AI_PLANS[plan].price;
+  const riots=riotList(), risk=riskList(), hidden=S.critics.filter(c=>!c.found), found=S.critics.filter(c=>c.found);
+  const plan4=aiPlanMoves(aiMoves()), tot=plan4.reduce((a,m)=>a+m.gain,0);
+  const cash=NAMES.filter(n=>STATES[n][5]==="cash"&&!S.st[n].usedSpecial);
+  const low=[...NAMES].filter(n=>!S.st[n].riot).sort((a,b)=>STATES[b][1]*(100-S.st[b].belief)-STATES[a][1]*(100-S.st[a].belief)).slice(0,4);
+  const strip=h=>h.replace(/<[^>]+>/g,"").replace(/\s+/g," ").trim();
+  return [
+    `Week ${S.week}. Current lie ${S.lie+1} of 5: "${L.name}" (${L.truth.replace("The truth: ","")}). Official story: ${L.spin.replace(/[“”]/g,"")}`,
+    `National belief: ${nb}%. Need 80% to pass. Need ${Math.max(0,80-nb)}% more. Weeks left for this lie: ${left} (this week counts). Belief drops about 2.5% a week on its own.`,
+    `Money: $${Math.round(S.money)}M. Next payday: ${w.net-sub>=0?"+":"-"}$${Math.abs(w.net-sub)}M (taxes +$${w.inc}M, riot repairs -$${w.rep}M${sub?`, SpinBot plan -$${sub}M`:""}). Below $0 after payday = bankrupt, game over.`,
+    `Moves left this week: ${S.ap} of 4. Chirp posts left this week: ${postsLeft()} (posting is free and uses no move).`,
+    `Exposure: ${Math.round(S.exposure)}% (100% = caught, game over). Discredit Reporters -20 for $80M, Experts -5.`,
+    `Rioting states: ${riots.length?riots.map(n=>`${n} (costs $${repairCost(n)}M/week)`).join(", "):"none"}. Close to rioting: ${risk.length?risk.map(n=>`${n} ${Math.round(S.st[n].unrest)}%`).join(", "):"none"}. Free Pizza Day -30 unrest in a state; National Holiday -15 everywhere for $90M.`,
+    `Best states to target (big and doubting): ${low.map(n=>`${n} ${Math.round(S.st[n].belief)}% (${STATES[n][1]}M people)`).join(", ")}.`,
+    `Best plan for the remaining moves within budget: ${plan4.length?plan4.map((m,i)=>`${i+1}) ${strip(m.label)}: +${m.gain.toFixed(1)}% national belief for $${m.cost}M (${m.how})`).join("; ")+`. Total about +${tot.toFixed(1)}%.`:"no affordable useful moves; end the week to get paid."}`,
+    cash.length?`Money-making special moves still available: ${cash.map(n=>`${n} ${STATES[n][3]} (+$${Math.round(30+STATES[n][1]*10)}M)`).join(", ")}.`:"",
+    `Critics: ${found.length} known (${found.map(c=>c.handle).join(", ")||"none"}). ${plan==="max"?`Hidden critics not found yet: ${hidden.length?hidden.map(c=>`${c.handle} in ${c.state}`).join(", "):"none"}.`:`${hidden.length?"There are hidden critics the player hasn't found yet.":"No hidden critics."}`} Critics lower belief every week; delete $20M (1 in 4 come back), arrest $60M (1 in 4 leaks), pay off $100M (safe).`,
+    `Lies passed so far: ${S.passed}. Lies: ${LIES.map((l,i)=>`${i+1}. ${i<=S.lie?l.name:"secret"}${(S.results||[])[i]?` (${S.results[i]})`:""}`).join("; ")}.`,
+  ].filter(Boolean).join("\n");
+}
+function aiFormat(text){
+  return esc(text).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\n/g,"<br>");
+}
+async function aiAsk(text){
+  text=(text||"").trim(); if(!text || PH.aiBusy) return;
   S.aiChat=S.aiChat||[]; S.aiAsked=S.aiAsked||0;
-  S.aiChat.push({me:true, t:esc(text)});
+  const history=S.aiChat.filter(m=>!m.typing).slice(-8).map(m=>({role:m.me?"user":"assistant", content:(m.raw||m.t).replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim()}));
+  S.aiChat.push({me:true, t:esc(text), raw:text});
   const plan=aiPlan();
+  PH.aiDraft="";
+  const done=()=>{ S.aiChat=S.aiChat.filter(m=>!m.typing).slice(-30); PH.aiBusy=false; saveGame(); if(PH.screen==="ai") renderPhone(); const f=document.getElementById("aiFeed"); if(f) f.scrollTop=f.scrollHeight; };
   if(plan==="free" && S.aiAsked>=AI_PLANS.free.limit){
     S.aiChat.push({t:`${I("ban",15)} You've used all <b>${AI_PLANS.free.limit} free questions</b> this week. Come back next week… or upgrade to Pro now and ask as much as you want! 💎`, up:true});
-  } else if(plan==="free" && Math.random()<0.25){
+    return done();
+  }
+  if(plan==="free" && Math.random()<0.15){
     S.aiAsked++;
     S.aiChat.push({t:`${I("wait",15)} SpinBot Free is very busy right now. Pro members skip the line! 😬 Please try again.`, up:true});
-  } else {
-    S.aiAsked++;
-    const r=aiAnswer(text, plan);
-    const prev=[...S.aiChat].reverse().find(m=>!m.me && m!==S.aiChat[S.aiChat.length-1]);
-    const lastBot=[...S.aiChat].slice(0,-1).reverse().find(m=>!m.me);
-    if(lastBot && lastBot.t===r.t && plan!=="free"){ r.t = `Same answer as before: ${r.t}<br><small>Ask "why" to hear the reasoning, or "something else" for another option.</small>`; }
-    S.aiChat.push(r);
+    return done();
   }
-  S.aiChat=S.aiChat.slice(-30);
-  PH.aiDraft="";
-  saveGame(); renderPhone();
-  const f=document.getElementById("aiFeed"); if(f) f.scrollTop=f.scrollHeight;
+  S.aiAsked++;
+  if(AI_ONLINE){
+    PH.aiBusy=true;
+    S.aiChat.push({typing:true, t:`<span class="typing"><i></i><i></i><i></i></span>`});
+    renderPhone(); const f0=document.getElementById("aiFeed"); if(f0) f0.scrollTop=f0.scrollHeight;
+    try{
+      const ctrl=new AbortController(); const tm=setTimeout(()=>ctrl.abort(),20000);
+      const r=await fetch("/api/spinbot",{method:"POST",headers:{"content-type":"application/json"},signal:ctrl.signal,
+        body:JSON.stringify({plan, question:text, history, facts:aiFacts(plan)})});
+      clearTimeout(tm);
+      const d=await r.json().catch(()=>({}));
+      if(r.ok && d.text){
+        S.aiChat=S.aiChat.filter(m=>!m.typing);
+        const m={t:aiFormat(d.text), raw:d.text, plan};
+        if(plan==="free") m.up=true;
+        S.aiChat.push(m);
+        return done();
+      }
+      if(r.status===404||r.status===503) AI_ONLINE=false;
+    }catch(e){}
+    S.aiChat=S.aiChat.filter(m=>!m.typing);
+  }
+  const r=aiAnswer(text, plan);
+  const lastBot=[...S.aiChat].slice(0,-1).reverse().find(m=>!m.me);
+  if(lastBot && lastBot.t===r.t && plan!=="free"){ r.t = `Same answer as before: ${r.t}<br><small>Ask "why" to hear the reasoning, or "something else" for another option.</small>`; }
+  S.aiChat.push(r);
+  done();
+}
+function aiMath(q){
+  let e=q.toLowerCase().replace(/what('?s| is| are)|equals?|=|\?|please|calculate|solve|can you|tell me|do/g," ")
+    .replace(/plus/g,"+").replace(/minus/g,"-").replace(/times|multiplied by|x|×/g,"*").replace(/divided by|over|÷/g,"/").replace(/\s+/g,"");
+  if(!/^[\d.+\-*/()]+$/.test(e) || !/\d[+\-*/]\d|\d[+\-*/]\(/.test(e)) return null;
+  try{ const v=Function('"use strict";return ('+e+')')(); if(typeof v==="number"&&isFinite(v)) return {e, v:Math.round(v*1000)/1000}; }catch(err){}
+  return null;
 }
 function aiIntent(q){
   q=q.toLowerCase().trim();
   const words=q.split(/\s+/).length;
+  if(aiMath(q)) return "math";
+  if(/do you know math|can you (do )?math|are you smart|are you (an? )?ai|who are you|what are you|how are you/.test(q)) return "chat";
+  if(/^(h+e+l+o+|h+i+|hey+|yo+|sup)\b/.test(q) || /can you (answer|hear|help) me/.test(q)) return "hello";
   if(/answer (my|the) question|answer it|you didn'?t answer|that'?s not what i asked|try again|again\??$|repeat/.test(q)) return "again";
   if(/\bwhy\b|how come|explain|what do you mean|reason/.test(q) && words<=6) return "why";
   if(/^(hi|hey|hello|yo|sup)\b/.test(q) && words<=3) return "hello";
@@ -1685,13 +1746,13 @@ function aiMoves(){
     const k=stateCosts(n), [ab,pop,spot,spName,,type]=STATES[n], c=S.st[n];
     if(!c.usedSpecial){
       let g=0; if(type==="boost") g=stGain(n,25); else if(type==="spread") g=stGain(n,15)+MAP[n].n.reduce((a,m)=>a+stGain(m,8),0); else if(type==="quiet") g=stGain(n,12); else if(type==="calm") g=stGain(n,8); else g=stGain(n,5);
-      out.push({label:`${I("star",13,"color:#d9a521")} ${spName} in ${n}`, cost:k.special, gain:g, state:n, how:`Tap ${n} → ${spName}`});
+      if(type!=="cash") out.push({label:`${I("star",13,"color:#d9a521")} ${spName} in ${n}`, cost:k.special, gain:g, state:n, how:`Tap ${n} → ${spName}`});
     }
     out.push({label:`Local TV in ${n}`, cost:k.tv, gain:stGain(n,15), state:n, how:`Tap ${n} → Local TV Ad Blitz`});
     const g=ROADS[n].find(r=>r[1]==="g");
     if(g) out.push({label:`Fake supporters on ${g[0]} (${ab})`, cost:k.g, gain:stGain(n,24)*0.8-stGain(n,10)*0.2, state:n, how:`Tap ${n} → ${g[0]}`});
   });
-  return out.filter(m=>can(m.cost) && m.gain>0.05).sort((a,b)=>b.gain-a.gain);
+  return out.filter(m=>can(m.cost) && m.gain>0.25).sort((a,b)=>b.gain-a.gain);
 }
 function aiPlanMoves(moves){
   const pick=[]; let money=S.money; const usedLabels=new Set();
@@ -1701,9 +1762,9 @@ function aiPlanMoves(moves){
 function pts(x){ return x>=1?`+${x.toFixed(1)}%`:`+${x.toFixed(2)}%`; }
 function aiAnswer(q, plan){
   let intent=aiIntent(q); const ctx=S.aiCtx||null;
-  if(intent==="again"){ if(ctx&&ctx.q){ q=ctx.q; intent=aiIntent(q); } else intent="move"; }
+  if(intent==="again"){ if(ctx&&ctx.q){ q=ctx.q; intent=aiIntent(q); } else intent="noq"; }
   if(["why","other","how"].includes(intent) && !ctx) intent = intent==="other"?"move":"unknown";
-  if(!["why","other","how","hello","thanks","unknown"].includes(intent)) S.aiCtx={q, intent, idx:0};
+  if(!["why","other","how","hello","thanks","unknown","math","chat","noq"].includes(intent)) S.aiCtx={q, intent, idx:0};
   const L=LIES[S.lie], nb=natBelief(), left=L.weeks-S.lieWeek+1, need=Math.max(0,80-nb);
   const riots=riotList(), risk=riskList(), hidden=S.critics.filter(c=>!c.found), found=S.critics.filter(c=>c.found);
   const moves=aiMoves(), best=moves[0];
@@ -1726,6 +1787,9 @@ function aiAnswer(q, plan){
       other:["Hmm, maybe do something different? Like a different thing? 🤷","You could try the other one. Not that one. The other one."],
       how:["You just… do it! Tap stuff. 👆","Step 1: upgrade to Pro. Step 2: ??? 🤑"],
       hello:["Hi! Did you know SpinBot Pro exists? 👋💎"], thanks:["You're welcome! Tips are appreciated (in the form of Pro). 🙏"],
+      math:[`Hmm… ${(aiMath(q)||{v:"?"}).v}? Probably? 🤔 SpinBot Pro does math with confidence.`, `Math is hard. Is it ${(aiMath(q)||{v:1}).v}? 🤷`],
+      chat:["I'm SpinBot! I'm smart. Smarter on Pro though. 💎","Yes! Kind of! Upgrade to find out how much. 🤑"],
+      noq:["What question? I forgot. 🫠 Ask again!"],
       unknown:["Interesting question! I don't know. 🤪","Could you ask that in a way a free AI understands?"], again:["I already answered! Kind of. 😅"],
     });
     t = pick(vague[intent]||vague.move) + `<div class="blur">${best?`The best move right now is ${best.label}`:"Here is a smart plan for this week"} and here's exactly why…</div>`;
@@ -1733,6 +1797,9 @@ function aiAnswer(q, plan){
   }
 
   const P = plan==="max";
+  if(intent==="math"){ const m=aiMath(q); return {t:`🧮 ${m.e.replace(/\*/g,"×").replace(/\//g,"÷")} = <b>${m.v}</b>.${P?"":""} Now, want me to do the math on your next move?`, plan, nag}; }
+  if(intent==="chat") return {t:`🤖 I'm SpinBot, your AI for selling lies. I can do math, answer questions, and plan your next move with your real numbers. Try "What should I do?" or "What is 12 × 7?"`, plan, nag};
+  if(intent==="noq") return {t:`🤔 What question? Ask me anything, like "What should I do?" or "Which state needs help?"`, plan, nag};
   if(intent==="hello") return {t:`👋 Hi Mr. President. Ask me what to do next, which states need help, or whether this lie will pass.`, plan};
   if(intent==="thanks") return {t:`😎 Anytime. Want me to plan your next move?`, plan, nag};
   if(intent==="unknown") return {t:`🤔 I'm not sure what you mean. Try asking things like "What should I do?", "Which state needs help?", "How do I stop riots?" or "Will this lie pass?"`, plan, nag};
