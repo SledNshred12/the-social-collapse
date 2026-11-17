@@ -257,6 +257,9 @@
   .typing i{width:7px;height:7px;border-radius:50%;background:#8899a6;animation:tdot 1s infinite}
   .typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
   @keyframes tdot{0%,60%,100%{opacity:.3;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+  .moodrow{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;margin-top:8px}
+  .moodbar{display:flex;gap:3px;flex:1}
+  .moodbar i{flex:1;height:8px;border-radius:2px}
   .roads{display:grid;gap:6px}
   .road{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font-family:inherit;color:var(--ink);background:var(--card);border:2px solid;border-left-width:8px;border-radius:6px;padding:8px 10px;cursor:pointer}
   .road.green{border-color:#2e8b57;background:#e9f6ee}
@@ -408,6 +411,7 @@
     <div class="spin" id="lieSpin"></div>
     <div class="prog"><span>Americans who believe it: <span id="natBelief">0</span>%</span><span id="lieDeadline"></span></div>
     <div class="big"><i id="natBar"></i><div class="goal" style="left:80%"></div></div>
+    <div class="moodrow"><span>Public mood</span><span class="moodbar" id="moodBar"></span><b id="moodName"></b></div>
   </div>
 
   <div class="section-title">The Map <small id="riotCount"></small></div>
@@ -612,17 +616,28 @@ function newGame(){
   render();
 }
 
+const MOODS=[
+  {name:"Calm",     color:"#2e8b57", startUnrest:8,  decay:0,   anger:1.00, exposure:0},
+  {name:"Grumpy",   color:"#9bb32b", startUnrest:16, decay:0.3, anger:1.15, exposure:0.25},
+  {name:"Angry",    color:"#d9a521", startUnrest:25, decay:0.5, anger:1.30, exposure:0.5},
+  {name:"Furious",  color:"#e06a1b", startUnrest:34, decay:0.7, anger:1.45, exposure:0.75},
+  {name:"Boiling",  color:"#c8261e", startUnrest:43, decay:0.9, anger:1.60, exposure:1.0},
+];
+function mood(){ return MOODS[Math.min(S.lie, MOODS.length-1)]; }
 function startLie(first){
   const L = LIES[S.lie];
   S.lieWeek = 1;
   NAMES.forEach(n=>{
     const c=S.st[n];
     c.belief = clamp(c.belief*0.35 + 45 - L.bad*0.7 + rnd(-12,12));
+    // each new lie, people start out madder: leftover anger + this lie's starting anger
+    if(!c.riot) c.unrest = clamp(Math.max(c.unrest*0.5, 0) + mood().startUnrest + rnd(-6,10) + (c.belief<35?6:0));
     c.usedSpecial = false;
   });
   S.fillers = makeFillers();
   S.critics.forEach(c=>addPost(c));
   headline(`NEW POLICY ANNOUNCED: ${L.name.toUpperCase()}`, "lie", {lie:L});
+  if(!first) headline(`PUBLIC MOOD: ${mood().name.toUpperCase()}. "WHAT ARE THEY GOING TO PULL NEXT?"`, "mood", {mood:mood().name});
 }
 
 function natBelief(){ return Math.round(NAMES.reduce((a,n)=>a+S.st[n].belief*STATES[n][1],0)/TOTAL_POP); }
@@ -747,8 +762,8 @@ function endWeek(){
   const before = new Set(riotList());
   NAMES.forEach(n=>{
     const c=S.st[n];
-    c.belief = clamp(c.belief - rnd(1,4));
-    if(c.belief < 40) c.unrest += (40-c.belief)/2 + 4;
+    c.belief = clamp(c.belief - rnd(1,4) - mood().decay);
+    if(c.belief < 40) c.unrest += ((40-c.belief)/2 + 4) * mood().anger;
     else if(c.belief >= 60) c.unrest -= 8;
     if(c.riot) c.belief = clamp(c.belief-5);
     c.unrest = clamp(c.unrest);
@@ -772,7 +787,7 @@ function endWeek(){
   if(aiSub){ if(S.money>=aiSub){ S.money-=aiSub; } else { S.aiPlan="free"; (S.aiChat=S.aiChat||[]).push({t:`${I("card",15)} Payment failed. You've been moved back to SpinBot Free. 😢`, up:true}); } }
   S.aiAsked=0; S.postsWeek=0;
   if(w.rep) headline(`RIOT DAMAGE COSTS $${w.rep}M IN REPAIRS THIS WEEK`, "damage", {amount:w.rep, states:riotList()});
-  S.exposure = clamp(S.exposure + 3 + rnd(0,4) + riotList().length*0.5);
+  S.exposure = clamp(S.exposure + 3 + rnd(0,4) + riotList().length*0.5 + mood().exposure);
   if(Math.random()<0.55){ const [t,ty,cx]=pick(EVENTS)(); headline(t,ty,cx||{}); }
   S.exposure = clamp(S.exposure);
 
@@ -786,7 +801,7 @@ function endWeek(){
     if(S.passed >= LIES.length){ S.over=true; render(); return showWin(); }
     if(S.lie+1 >= LIES.length){ S.over=true; render(); return endSummary(); }
     S.lie++; S.week++; S.ap=MOVES_PER_WEEK; startLie(false); render();
-    return showModal(`<h2>Lie Accepted!</h2><p>America fell for <b>${L.name}</b>.</p><p>Next up: <b>${LIES[S.lie].name}</b> — even harder to sell. Every state's special move is ready again.</p><button onclick="closeModal()">Keep Lying</button>`);
+    return showModal(`<h2>Lie Accepted!</h2><p>America fell for <b>${L.name}</b>.</p><p>Next up: <b>${LIES[S.lie].name}</b>. It's even harder to sell.</p><p style="color:${mood().color}"><b>Public mood: ${mood().name}.</b> People start out angrier, stop believing faster and riot sooner. Reporters are digging harder too.</p><p>Every state's special move is ready again.</p><button onclick="closeModal()">Keep Lying</button>`);
   }
   if(S.lieWeek >= L.weeks){
     NAMES.forEach(n=>S.st[n].unrest=clamp(S.st[n].unrest+20));
@@ -794,21 +809,21 @@ function endWeek(){
     headline(`${L.name.toUpperCase()} FAILS. PUBLIC FURIOUS.`, "fail", {lie:L}); (S.results=S.results||[])[S.lie]="fail";
     if(S.lie+1 >= LIES.length){ S.over=true; render(); return endSummary(); }
     S.lie++; S.week++; S.ap=MOVES_PER_WEEK; startLie(false); render();
-    return showModal(`<h2 style="color:var(--red)">Nobody Bought It</h2><p><b>${L.name}</b> flopped. Everyone's angrier and reporters are suspicious.</p><p>Moving on to <b>${LIES[S.lie].name}</b>…</p><button onclick="closeModal()">Try Again</button>`);
+    return showModal(`<h2 style="color:var(--red)">Nobody Bought It</h2><p><b>${L.name}</b> flopped. Everyone's angrier and reporters are suspicious.</p><p>Moving on to <b>${LIES[S.lie].name}</b>. <b style="color:${mood().color}">Public mood: ${mood().name}.</b></p><button onclick="closeModal()">Try Again</button>`);
   }
   S.lieWeek++; S.week++; S.ap=MOVES_PER_WEEK;
   render();
 }
 
 /* ---------- weekly newspaper ---------- */
-const PRIORITY = ["pass","fail","myTraced","myViral","myNoted","arrestLeak","attackQuiet","attackBlame","attackUnite","gangIgnore","gangStop","gangBlame","riot","spread","stormIgnore","stormHelp","stormPhoto","pricesIgnore","pricesBlame","pricesCoupon","crashPrint","crashFine","crashHelp","deleteBackfire","criticGrow","bribed","arrested","deleted","critic","caught","whistle","botsCaught","celeb","special","crowd","news","lie","holiday","poll","experts","discredit","damage","calm","debunk","reporter","heat","donation","game","localman","factcheck","tv","pizza","bots"];
+const PRIORITY = ["pass","fail","mood","myTraced","myViral","myNoted","arrestLeak","attackQuiet","attackBlame","attackUnite","gangIgnore","gangStop","gangBlame","riot","spread","stormIgnore","stormHelp","stormPhoto","pricesIgnore","pricesBlame","pricesCoupon","crashPrint","crashFine","crashHelp","deleteBackfire","criticGrow","bribed","arrested","deleted","critic","caught","whistle","botsCaught","celeb","special","crowd","news","lie","holiday","poll","experts","discredit","damage","calm","debunk","reporter","heat","donation","game","localman","factcheck","tv","pizza","bots"];
 const PIC = {lie:"capitol",pass:"capitol",fail:"capitol",riot:"fire",spread:"fire",damage:"fire",calm:"food",pizza:"food",holiday:"food",game:"food",
   caught:"camera",crowd:"crowd",news:"tv",tv:"tv",celeb:"star",poll:"chart",experts:"magnify",factcheck:"magnify",discredit:"magnify",reporter:"magnify",
   whistle:"envelope",bots:"robot",botsCaught:"robot",special:"megaphone",heat:"sun",donation:"money",debunk:"phone",localman:"shrug",
   critic:"phone",criticGrow:"phone",deleteBackfire:"phone",deleted:"phoneX",bribed:"phone",arrested:"van",arrestLeak:"van",
   attackUnite:"siren",attackBlame:"siren",attackQuiet:"siren",stormHelp:"storm",stormPhoto:"storm",stormIgnore:"storm",
   gangStop:"shield",gangBlame:"shield",gangIgnore:"shield",pricesCoupon:"protest",pricesBlame:"protest",pricesIgnore:"protest",
-  crashPrint:"chartDown",crashFine:"chartDown",crashHelp:"chartDown",myViral:"phone",myNoted:"phoneX",myTraced:"magnify",myPost:"megaphone"};
+  crashPrint:"chartDown",crashFine:"chartDown",crashHelp:"chartDown",mood:"protest",myViral:"phone",myNoted:"phoneX",myTraced:"magnify",myPost:"megaphone"};
 
 function storyBody(e){
   const x=e.ctx||{}, s=x.state;
@@ -855,6 +870,7 @@ function storyBody(e){
     case "crashPrint": return `The government printed a giant pile of new money to cover the stock market crash. Prices at the store went up the next morning.`;
     case "crashFine": return `As the stock market crashed, the president called the economy "super great." Experts disagree.`;
     case "crashHelp": return `Families hit by the stock market crash got relief checks this week. Many say they are grateful.`;
+    case "mood": return `The government's newest policy has Americans ${x.mood==="Boiling"?"boiling with rage":"in a "+x.mood.toLowerCase()+" mood"} before it has even started. "After the last one, we don't trust a word they say," said one resident. Expect protests to start sooner and spread faster.`;
     case "myViral": return `A post by ${x.handle} is everywhere this week: "${x.text}" Millions shared it${x.state?`, especially in ${x.state}`:""}.`;
     case "myNoted": return `Fact-checkers added a warning to a post by ${x.handle} saying it was false. The post read: "${x.text}" Screenshots of the warning are now spreading faster than the post did.`;
     case "myTraced": return `Reporters say the popular account @JustACitizen was posting from a government office. Officials say "lots of citizens work in government buildings."`;
@@ -1075,7 +1091,7 @@ function caption(e){
     critic:`A post by ${x.handle||"a critic"}.`,criticGrow:`${x.handle||"The critic"}'s latest video.`,deleted:"What fans see now.",deleteBackfire:"Back, and louder.",arrested:"A van seen near the home.",arrestLeak:"Still from the leaked video.",bribed:"The \"new research\" video.",
     attackUnite:`${x.state||""} after the blackout.`,attackBlame:"Emergency alert.",attackQuiet:"Still waiting.",stormHelp:`${x.state||""} after the ${(x.storm||"storm").toLowerCase()}.`,stormPhoto:"Four minutes of shoveling.",stormIgnore:`${x.state||""}, on its own.`,
     gangStop:`The Guard arrives in ${x.state||""}.`,gangBlame:"A statement from the government.",gangIgnore:`${x.state||""} this week.`,pricesCoupon:"Coupon day.",pricesBlame:"Protesters, unconvinced.",pricesIgnore:"Protests grow.",
-    myViral:"The post everyone's sharing.",myNoted:"The fact-check warning.",myTraced:"Investigating the account.",myPost:"A post on Chirp.",
+    mood:"Crowds gather before the announcement is even over.",myViral:"The post everyone's sharing.",myNoted:"The fact-check warning.",myTraced:"Investigating the account.",myPost:"A post on Chirp.",
     crashPrint:"The stock market this week.",crashFine:"\"Super great.\"",crashHelp:"Markets, falling."};
   return m[e.type]||"";
 }
@@ -1652,6 +1668,7 @@ function aiFacts(plan){
     `Best plan for the remaining moves within budget: ${plan4.length?plan4.map((m,i)=>`${i+1}) ${strip(m.label)}: +${m.gain.toFixed(1)}% national belief for $${m.cost}M (${m.how})`).join("; ")+`. Total about +${tot.toFixed(1)}%.`:"no affordable useful moves; end the week to get paid."}`,
     cash.length?`Money-making special moves still available: ${cash.map(n=>`${n} ${STATES[n][3]} (+$${Math.round(30+STATES[n][1]*10)}M)`).join(", ")}.`:"",
     `Critics: ${found.length} known (${found.map(c=>c.handle).join(", ")||"none"}). ${plan==="max"?`Hidden critics not found yet: ${hidden.length?hidden.map(c=>`${c.handle} in ${c.state}`).join(", "):"none"}.`:`${hidden.length?"There are hidden critics the player hasn't found yet.":"No hidden critics."}`} Critics lower belief every week; delete $20M (1 in 4 come back), arrest $60M (1 in 4 leaks), pay off $100M (safe).`,
+    `Public mood: ${mood().name} (level ${S.lie+1} of 5). Each new lie starts people angrier, belief drops faster each week, unrest grows faster and exposure rises faster.`,
     `What moves do: Local TV Ad +15 belief in one state. Fake supporters on a busy (green) road +24 belief in that state (1 in 5 get caught, +12 exposure). Free Pizza Day ONLY lowers unrest by 30 (no belief). National Holiday lowers unrest everywhere (no belief). News outlets, Celebrity (+12), Experts (+6), Fake Poll, Bot Army raise belief in every state. Each state has one special move per lie. Chirp posts are free and raise belief a little, more if they mention the lie, sound scientific, use hashtags or name a state.`,
     `Lies passed so far: ${S.passed}. Lies: ${LIES.map((l,i)=>`${i+1}. ${i<=S.lie?l.name:"secret"}${(S.results||[])[i]?` (${S.results[i]})`:""}`).join("; ")}.`,
   ].filter(Boolean).join("\n");
@@ -2123,6 +2140,9 @@ function render(){
   $("natBelief").textContent = nb;
   $("natBar").style.width = nb+"%";
   $("lieDeadline").textContent = `Week ${S.lieWeek} of ${L.weeks} · need 80%`;
+  const M=mood(), mi=MOODS.indexOf(M);
+  $("moodBar").innerHTML = MOODS.map((m,i)=>`<i style="background:${i<=mi?m.color:"#e5dcc6"}"></i>`).join("");
+  $("moodName").textContent = M.name; $("moodName").style.color = M.color;
   const r=riotList().length;
   $("riotCount").innerHTML = r ? `${I("fire",13,"color:#c8261e")} ${r} state${r>1?"s":""} rioting` : "Tap a state to see your moves";
 
