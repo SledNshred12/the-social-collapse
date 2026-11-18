@@ -310,6 +310,24 @@
   .act:active:not(:disabled),.road:active:not(:disabled),.endturn:active,.app:active,.chip:active,.call:active,.mini:active,.pbtn:active{transform:scale(.95)}
   .endturn.ready{animation:readyPulse 1.2s ease-in-out infinite}
   @keyframes readyPulse{50%{box-shadow:0 0 0 6px #c8261e44;transform:scale(1.02)}}
+  .thline{margin-top:8px;background:#f1e8fb;border:1.5px solid #7b3fbf;color:#4a2378;border-radius:8px;padding:7px 9px;font-size:12.5px;cursor:pointer;display:flex;gap:6px;align-items:center}
+  .thline span{color:#c8261e;font-weight:800}
+  .thintro{background:#f1e8fb;border-radius:12px;padding:10px;font-size:13px;line-height:1.4;color:#3a1f5c}
+  .thintro .ico{color:#7b3fbf;vertical-align:-3px}
+  .thcard{border:2px solid #e1d3f2;border-radius:14px;padding:10px;margin:8px 0;background:#fff}
+  .thtop{display:flex;gap:10px;align-items:flex-start}.thtop small{display:block;color:#536471;font-size:12px;line-height:1.3;margin-top:2px}
+  .thic{flex:none;width:42px;height:42px;border-radius:50%;background:#7b3fbf;color:#fff;display:inline-flex;align-items:center;justify-content:center}
+  .thic.sm{width:32px;height:32px}
+  .thbar{height:8px;background:#eee;border-radius:4px;margin:9px 0 5px;overflow:hidden}.thbar i{display:block;height:100%;border-radius:4px;transition:width .5s}
+  .thmeta{display:flex;justify-content:space-between;font-size:12px}
+  .thbtns{display:flex;gap:6px;margin-top:8px}.thbtns .mini{flex:1}
+  .mini.ghost{background:#fff;color:#1b1712;border:1.5px solid #cfd9de}
+  .throw{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #eef3f4}.throw>span:nth-child(2){flex:1}.throw small{display:block;color:#536471;font-size:11.5px}
+  .sec{font-weight:800;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#536471;margin:14px 0 4px}
+  .mini:disabled{opacity:.4;cursor:default}
+  .sec small{font-weight:500;color:#536471;font-size:11px;margin-left:4px;text-transform:none;letter-spacing:0}
+  .thBadge{animation:thPulse 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes thPulse{50%{transform:scale(1.15)}}
   .roads{display:grid;gap:6px}
   .road{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font-family:inherit;color:var(--ink);background:var(--card);border:2px solid;border-left-width:8px;border-radius:6px;padding:8px 10px;cursor:pointer}
   .road.green{border-color:#2e8b57;background:#e9f6ee}
@@ -335,7 +353,7 @@
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-fire" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c.6 3.6 5.5 5.8 5.5 11.2A5.5 5.5 0 0 1 12 19a5.5 5.5 0 0 1-5.5-5.8c.1-2.6 1.7-4 2.3-6.3 1.6 1.2 2.4 3 2.4 4.9 1.3-1.4 1.7-3.5.8-9.8z"/><path fill="#fff" opacity=".55" d="M12 18.4a2.6 2.6 0 0 1-2.6-2.7c0-1.6 1.4-2.5 1.8-4 1.4 1 3.4 2.4 3.4 4.1a2.6 2.6 0 0 1-2.6 2.6z"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="6.5" y="2" width="11" height="20" rx="2.5"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10.5 18.5h3"/></symbol><symbol id="i-chip" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="5" y="8" width="14" height="11" rx="3"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 4v4M9 13h.01M15 13h.01M3 13h2M19 13h2"/><circle fill="currentColor" cx="12" cy="3.5" r="1.5"/><circle fill="currentColor" cx="9.5" cy="13" r="1.4"/><circle fill="currentColor" cx="14.5" cy="13" r="1.4"/></symbol><symbol id="i-gem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 4h10l4 5-9 11L3 9z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 9h18M10 4 8.5 9 12 20l3.5-11L14 4"/></symbol><symbol id="i-warn" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3.5 2.5 20h19z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 10v4.5"/><circle fill="currentColor" cx="12" cy="17.3" r="1.2"/></symbol><symbol id="i-paper" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 5h12v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M16 9h4v10a2 2 0 0 1-4 0M7 9h6M7 13h6M7 16.5h4"/></symbol><symbol id="i-call" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 3.5h3.5l2 5-2.6 1.6a11 11 0 0 0 5 5l1.6-2.6 5 2V18a2 2 0 0 1-2 2A16.5 16.5 0 0 1 3 5.5a2 2 0 0 1 2-2z"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 21.5s6.5-6.3 6.5-11.5a6.5 6.5 0 0 0-13 0c0 5.2 6.5 11.5 6.5 11.5z"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="10" r="2.3"/></symbol><symbol id="i-chart" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 20V11M10 20V5M16 20v-7M3 20.5h18"/></symbol><symbol id="i-brief" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="3" y="7" width="18" height="13" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 7V5h6v2M3 12.5h18M11 12.5v2h2v-2"/></symbol><symbol id="i-coin" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="9"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.8 9.3c-.5-.9-1.5-1.4-2.8-1.4-1.6 0-2.8.8-2.8 2s1.2 1.6 2.8 2 2.8.8 2.8 2-1.2 2-2.8 2c-1.4 0-2.4-.6-2.9-1.5M12 6.3v1.6M12 16.1v1.6"/></symbol><symbol id="i-lock" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="5" y="11" width="14" height="10" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol><symbol id="i-save" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 3h11l3 3v15H5z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 3v5h7V3M8 21v-6h8v6"/></symbol><symbol id="i-crown" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></symbol><symbol id="i-card" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="3" y="5.5" width="18" height="13" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h4"/></symbol><symbol id="i-eye" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="2.8"/></symbol><symbol id="i-heart" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 20s-8-4.8-8-10.7A4.3 4.3 0 0 1 12 6.8a4.3 4.3 0 0 1 8 2.5C20 15.2 12 20 12 20z"/></symbol><symbol id="i-battery" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="2" y="7.5" width="18" height="9" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M22 11v2"/><rect fill="currentColor" x="4.5" y="10" width="9" height="4" rx=".8"/></symbol><symbol id="i-chirp" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 5h16v11H10l-5 4v-4H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8.5 10.5c1.5-2 4-2.5 7-1.5-1 2.5-3.5 3.6-6 2.8"/></symbol><symbol id="i-target" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="9"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="5"/><circle fill="currentColor" cx="12" cy="12" r="1.6"/></symbol><symbol id="i-gear" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="3"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="6.5"/></symbol><symbol id="i-trash" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M9.5 7V4h5v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol><symbol id="i-van" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M2 16V8a2 2 0 0 1 2-2h10l4.5 4.5H20a2 2 0 0 1 2 2V16z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 6v4.5h4.5"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="7" cy="17" r="2"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="17" cy="17" r="2"/></symbol><symbol id="i-bank" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3l9 5H3zM3 21h18M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><circle fill="currentColor" cx="12" cy="12" r="10"/><path fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M7.5 12.3l3 3 6-6.5"/></symbol><symbol id="i-xmark" viewBox="0 0 24 24"><circle fill="currentColor" cx="12" cy="12" r="10"/><path fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></symbol><symbol id="i-dot" viewBox="0 0 24 24"><circle fill="currentColor" cx="12" cy="12" r="6"/></symbol><symbol id="i-tv" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="3" y="7" width="18" height="13" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 3l4 4 4-4"/></symbol><symbol id="i-mic" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="9" y="3" width="6" height="11" rx="3"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></symbol><symbol id="i-flask" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 3h6M10 3v6l-5.2 9.2A2 2 0 0 0 6.5 21h11a2 2 0 0 0 1.7-2.8L14 9V3M7.5 15h9"/></symbol><symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5l2.1 6.4 6.4 2.1-6.4 2.1L12 19.5l-2.1-6.4L3.5 11l6.4-2.1z"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5l13 7.5-13 7.5z"/></symbol><symbol id="i-reset" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 19V5M6 11l6-6 6 6"/></symbol><symbol id="i-wait" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 3h12M6 21h12M7 3c0 5 10 5 10 9s-10 4-10 9M17 3c0 5-10 5-10 9s10 4 10 9"/></symbol><symbol id="i-ban" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="9"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5.6 5.6l12.8 12.8"/></symbol><symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.8l2.8 5.8 6.3.9-4.6 4.5 1.1 6.3L12 17.3l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/></symbol><symbol id="i-close" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6 6 18"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="3" y="5" width="18" height="16" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M8 3v4M16 3v4"/></symbol><symbol id="i-megaphone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10v4h3l7 4V6L6 10zM16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></symbol><symbol id="i-people" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="9" cy="8" r="3.5"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></symbol><symbol id="i-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol></defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-fire" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c.6 3.6 5.5 5.8 5.5 11.2A5.5 5.5 0 0 1 12 19a5.5 5.5 0 0 1-5.5-5.8c.1-2.6 1.7-4 2.3-6.3 1.6 1.2 2.4 3 2.4 4.9 1.3-1.4 1.7-3.5.8-9.8z"/><path fill="#fff" opacity=".55" d="M12 18.4a2.6 2.6 0 0 1-2.6-2.7c0-1.6 1.4-2.5 1.8-4 1.4 1 3.4 2.4 3.4 4.1a2.6 2.6 0 0 1-2.6 2.6z"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="6.5" y="2" width="11" height="20" rx="2.5"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10.5 18.5h3"/></symbol><symbol id="i-chip" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="5" y="8" width="14" height="11" rx="3"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 4v4M9 13h.01M15 13h.01M3 13h2M19 13h2"/><circle fill="currentColor" cx="12" cy="3.5" r="1.5"/><circle fill="currentColor" cx="9.5" cy="13" r="1.4"/><circle fill="currentColor" cx="14.5" cy="13" r="1.4"/></symbol><symbol id="i-gem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 4h10l4 5-9 11L3 9z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 9h18M10 4 8.5 9 12 20l3.5-11L14 4"/></symbol><symbol id="i-warn" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3.5 2.5 20h19z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 10v4.5"/><circle fill="currentColor" cx="12" cy="17.3" r="1.2"/></symbol><symbol id="i-paper" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 5h12v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M16 9h4v10a2 2 0 0 1-4 0M7 9h6M7 13h6M7 16.5h4"/></symbol><symbol id="i-call" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 3.5h3.5l2 5-2.6 1.6a11 11 0 0 0 5 5l1.6-2.6 5 2V18a2 2 0 0 1-2 2A16.5 16.5 0 0 1 3 5.5a2 2 0 0 1 2-2z"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 21.5s6.5-6.3 6.5-11.5a6.5 6.5 0 0 0-13 0c0 5.2 6.5 11.5 6.5 11.5z"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="10" r="2.3"/></symbol><symbol id="i-chart" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 20V11M10 20V5M16 20v-7M3 20.5h18"/></symbol><symbol id="i-brief" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="3" y="7" width="18" height="13" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 7V5h6v2M3 12.5h18M11 12.5v2h2v-2"/></symbol><symbol id="i-coin" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="9"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.8 9.3c-.5-.9-1.5-1.4-2.8-1.4-1.6 0-2.8.8-2.8 2s1.2 1.6 2.8 2 2.8.8 2.8 2-1.2 2-2.8 2c-1.4 0-2.4-.6-2.9-1.5M12 6.3v1.6M12 16.1v1.6"/></symbol><symbol id="i-lock" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="5" y="11" width="14" height="10" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol><symbol id="i-save" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 3h11l3 3v15H5z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 3v5h7V3M8 21v-6h8v6"/></symbol><symbol id="i-crown" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></symbol><symbol id="i-card" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="3" y="5.5" width="18" height="13" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h4"/></symbol><symbol id="i-eye" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="2.8"/></symbol><symbol id="i-heart" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 20s-8-4.8-8-10.7A4.3 4.3 0 0 1 12 6.8a4.3 4.3 0 0 1 8 2.5C20 15.2 12 20 12 20z"/></symbol><symbol id="i-battery" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="2" y="7.5" width="18" height="9" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M22 11v2"/><rect fill="currentColor" x="4.5" y="10" width="9" height="4" rx=".8"/></symbol><symbol id="i-chirp" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 5h16v11H10l-5 4v-4H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8.5 10.5c1.5-2 4-2.5 7-1.5-1 2.5-3.5 3.6-6 2.8"/></symbol><symbol id="i-target" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="9"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="5"/><circle fill="currentColor" cx="12" cy="12" r="1.6"/></symbol><symbol id="i-gear" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="3"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="6.5"/></symbol><symbol id="i-trash" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M9.5 7V4h5v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol><symbol id="i-van" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M2 16V8a2 2 0 0 1 2-2h10l4.5 4.5H20a2 2 0 0 1 2 2V16z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 6v4.5h4.5"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="7" cy="17" r="2"/><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="17" cy="17" r="2"/></symbol><symbol id="i-bank" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3l9 5H3zM3 21h18M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><circle fill="currentColor" cx="12" cy="12" r="10"/><path fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M7.5 12.3l3 3 6-6.5"/></symbol><symbol id="i-xmark" viewBox="0 0 24 24"><circle fill="currentColor" cx="12" cy="12" r="10"/><path fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></symbol><symbol id="i-dot" viewBox="0 0 24 24"><circle fill="currentColor" cx="12" cy="12" r="6"/></symbol><symbol id="i-tv" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="3" y="7" width="18" height="13" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 3l4 4 4-4"/></symbol><symbol id="i-mic" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="9" y="3" width="6" height="11" rx="3"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></symbol><symbol id="i-flask" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 3h6M10 3v6l-5.2 9.2A2 2 0 0 0 6.5 21h11a2 2 0 0 0 1.7-2.8L14 9V3M7.5 15h9"/></symbol><symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5l2.1 6.4 6.4 2.1-6.4 2.1L12 19.5l-2.1-6.4L3.5 11l6.4-2.1z"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5l13 7.5-13 7.5z"/></symbol><symbol id="i-reset" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 19V5M6 11l6-6 6 6"/></symbol><symbol id="i-wait" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 3h12M6 21h12M7 3c0 5 10 5 10 9s-10 4-10 9M17 3c0 5-10 5-10 9s10 4 10 9"/></symbol><symbol id="i-ban" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12" r="9"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5.6 5.6l12.8 12.8"/></symbol><symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.8l2.8 5.8 6.3.9-4.6 4.5 1.1 6.3L12 17.3l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/></symbol><symbol id="i-close" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6 6 18"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="3" y="5" width="18" height="16" rx="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M8 3v4M16 3v4"/></symbol><symbol id="i-megaphone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 10v4h3l7 4V6L6 10zM16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></symbol><symbol id="i-people" viewBox="0 0 24 24"><circle fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="9" cy="8" r="3.5"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></symbol><symbol id="i-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol><symbol id="i-ufo" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 10.5a4 4 0 0 1 8 0"/><ellipse fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="12.5" rx="9.5" ry="3.2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 18.5l-1.2 2.5M12 19v2.5M16 18.5l1.2 2.5"/></symbol><symbol id="i-flat" viewBox="0 0 24 24"><ellipse fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="10" rx="9.5" ry="3.5"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M2.5 10v2.5c0 1.9 4.3 3.5 9.5 3.5s9.5-1.6 9.5-3.5V10M6 16v3.5M12 16.5v4.5M18 16v3.5"/></symbol><symbol id="i-bird" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3.5 14.5c2-4 6-5.5 9-4.5l3-3 1.2 3.2 3.3.8-3.2 1.3c-.3 4-3.3 7-7.8 7-2.2 0-4.2-1.5-5.5-4.8z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M13.5 7.5V3.5"/><circle fill="currentColor" cx="13.5" cy="2.8" r="1.3"/></symbol><symbol id="i-moon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/><circle fill="currentColor" cx="9" cy="12.5" r="1.4"/><circle fill="currentColor" cx="12.5" cy="17" r="1.1"/><circle fill="currentColor" cx="7" cy="17" r=".9"/></symbol><symbol id="i-foot" viewBox="0 0 24 24"><ellipse fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="10.5" cy="15.5" rx="4" ry="5.8" transform="rotate(-12 10.5 15.5)"/><circle fill="currentColor" cx="8.6" cy="5.6" r="1.7"/><circle fill="currentColor" cx="12.3" cy="5" r="1.5"/><circle fill="currentColor" cx="15.4" cy="6.4" r="1.3"/><circle fill="currentColor" cx="17.2" cy="9.3" r="1.1"/></symbol><symbol id="i-dino" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M2.5 17c2-5 7-6 10.5-5 .8-4 2-8 5-8 1.6 0 2.8.9 3 2h-3c-1 0-2 3-2 7 1.2 1.2 2 3 2 5.5M7 15v5M11 15.8v4.2M14.6 16v4"/></symbol><symbol id="i-cloud" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 19h10a4 4 0 0 0 .3-8 5.5 5.5 0 0 0-10.7 1.3A3.4 3.4 0 0 0 7 19z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5V2.5"/></symbol><symbol id="i-toast" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="3" y="9.5" width="18" height="10.5" rx="3"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7.5 9.5V5.5h3.5v4M13 9.5V5.5h3.5v4M18 14h3"/><circle fill="currentColor" cx="7.5" cy="15" r="1.2"/></symbol><symbol id="i-string" viewBox="0 0 24 24"><rect fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="3" y="4" width="18" height="16" rx="1.5"/><path fill="none" stroke="currentColor" stroke-width="1.6" d="M7.5 8.5l4.5 7 4.5-5.5"/><circle fill="currentColor" cx="7.5" cy="8.5" r="1.6"/><circle fill="currentColor" cx="12" cy="15.5" r="1.6"/><circle fill="currentColor" cx="16.5" cy="10" r="1.6"/></symbol></defs></svg>
 <!-- ===== Boot: tap to start → Axiom Games intro → loading screen ===== -->
 <style>
   #boot,#axiom,#loading{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s}
@@ -473,6 +491,7 @@
     <span><i style="background:#d9a521"></i>Unsure</span>
     <span><i style="background:#9c8f78"></i>Doubts</span>
     <span><i style="background:#c8261e"></i>Rioting <svg class="ico" width="13" height="13" style="width:13px;height:13px;color:#c8261e" aria-hidden="true"><use href="#i-fire"/></svg></span>
+    <span><i style="background:#7b3fbf;border-radius:50%"></i>Conspiracy theory</span>
   </div>
   <select id="pick" aria-label="Pick a state"></select>
 
@@ -658,7 +677,7 @@ function repairCost(n){ return Math.round(6+STATES[n][1]*3); }
 function newGame(){
   fxReset();
   S = {week:1, money:400, ap:MOVES_PER_WEEK, exposure:0, lie:0, lieWeek:1, passed:0, sel:null, over:false, news:[], st:{},
-    outlets: OUTLETS.map(o=>o.base), stats:{}, streak:0, log:[], lastPaper:null, pending:null, collect:false, critics:[], crisis:null, fillers:[]};
+    outlets: OUTLETS.map(o=>o.base), stats:{}, streak:0, theories:{}, log:[], lastPaper:null, pending:null, collect:false, critics:[], crisis:null, fillers:[]};
   NAMES.forEach(n=>S.st[n]={belief:50, unrest:rnd(5,20), riot:false, usedSpecial:false});
   startLie(true);
   S.weekStart = {belief:natBelief(), money:S.money, exposure:0};
@@ -823,6 +842,7 @@ function endWeek(){
   });
   criticsTick();
   spawnDebunkers();
+  theoriesTick();
   before.forEach(n=>MAP[n].n.forEach(m=>{ if(!S.st[m].riot) S.st[m].unrest=clamp(S.st[m].unrest+9); }));
   NAMES.forEach(n=>{
     const c=S.st[n];
@@ -870,14 +890,14 @@ function endWeek(){
 }
 
 /* ---------- weekly newspaper ---------- */
-const PRIORITY = ["pass","fail","streak","oppGood","mood","myTraced","myViral","myNoted","arrestLeak","attackQuiet","attackBlame","attackUnite","gangIgnore","gangStop","gangBlame","riot","spread","stormIgnore","stormHelp","stormPhoto","pricesIgnore","pricesBlame","pricesCoupon","crashPrint","crashFine","crashHelp","deleteBackfire","criticGrow","bribed","arrested","deleted","critic","caught","whistle","botsCaught","celeb","special","crowd","news","lie","holiday","poll","experts","discredit","damage","calm","debunk","reporter","heat","donation","game","localman","factcheck","tv","pizza","bots"];
+const PRIORITY = ["pass","fail","streak","oppGood","mood","myTraced","myViral","myNoted","arrestLeak","attackQuiet","attackBlame","attackUnite","gangIgnore","gangStop","gangBlame","riot","spread","stormIgnore","stormHelp","stormPhoto","pricesIgnore","pricesBlame","pricesCoupon","theoryRally","theoryCaught","theory","crashPrint","crashFine","crashHelp","deleteBackfire","criticGrow","bribed","arrested","deleted","critic","caught","whistle","botsCaught","celeb","special","theoryFuel","theoryDebunk","theoryGone","crowd","news","lie","holiday","poll","experts","discredit","damage","calm","debunk","reporter","heat","donation","game","localman","factcheck","tv","pizza","bots"];
 const PIC = {lie:"capitol",pass:"capitol",fail:"capitol",riot:"fire",spread:"fire",damage:"fire",calm:"food",pizza:"food",holiday:"food",game:"food",
   caught:"camera",crowd:"crowd",news:"tv",tv:"tv",celeb:"star",poll:"chart",experts:"magnify",factcheck:"magnify",discredit:"magnify",reporter:"magnify",
   whistle:"envelope",bots:"robot",botsCaught:"robot",special:"megaphone",heat:"sun",donation:"money",debunk:"phone",localman:"shrug",
   critic:"phone",criticGrow:"phone",deleteBackfire:"phone",deleted:"phoneX",bribed:"phone",arrested:"van",arrestLeak:"van",
   attackUnite:"siren",attackBlame:"siren",attackQuiet:"siren",stormHelp:"storm",stormPhoto:"storm",stormIgnore:"storm",
   gangStop:"shield",gangBlame:"shield",gangIgnore:"shield",pricesCoupon:"protest",pricesBlame:"protest",pricesIgnore:"protest",
-  crashPrint:"chartDown",crashFine:"chartDown",crashHelp:"chartDown",mood:"protest",streak:"chart",oppGood:"star",myViral:"phone",myNoted:"phoneX",myTraced:"magnify",myPost:"megaphone"};
+  crashPrint:"chartDown",crashFine:"chartDown",crashHelp:"chartDown",mood:"protest",streak:"chart",oppGood:"star",theory:"conspiracy",theoryRally:"conspiracy",theoryCaught:"conspiracy",theoryFuel:"conspiracy",theoryDebunk:"conspiracy",theoryGone:"conspiracy",myViral:"phone",myNoted:"phoneX",myTraced:"magnify",myPost:"megaphone"};
 
 function storyBody(e){
   const x=e.ctx||{}, s=x.state;
@@ -924,6 +944,12 @@ function storyBody(e){
     case "crashPrint": return `The government printed a giant pile of new money to cover the stock market crash. Prices at the store went up the next morning.`;
     case "crashFine": return `As the stock market crashed, the president called the economy "super great." Experts disagree.`;
     case "crashHelp": return `Families hit by the stock market crash got relief checks this week. Many say they are grateful.`;
+    case "theory": return `A strange new idea is spreading in ${s}: ${TH(x.id).claim.replace(/\.$/,"")}. Believers are posting ${TH(x.id).tag} nonstop. Officials say they have "no comment," which believers say proves it.`;
+    case "theoryRally": return `Crowds in ${s} marched with homemade signs demanding the government "admit the truth" about ${TH(x.id).name.toLowerCase().replace(/^the /,"")}. Cleanup cost $10 million. Nobody asked about the government's actual policy.`;
+    case "theoryCaught": return `Reporters found a receipt showing the government paid for billboards promoting "${TH(x.id).name}." Officials say they "just really like billboards."`;
+    case "theoryFuel": return `"${TH(x.id).name}" was the most-talked-about topic in the country this week. ${TH(x.id).tag} was trending for days.`;
+    case "theoryDebunk": return `Government scientists held a press conference to explain that "${TH(x.id).name}" is not true. Believers say that's exactly what scientists would say.`;
+    case "theoryGone": return `Nobody is talking about "${TH(x.id).name}" anymore. Believers say they have "moved on to bigger questions."`;
     case "streak": return `Polls show belief in the government's policy has gone up ${x.n} weeks in a row. Happy donors sent a $60 million thank-you bonus.`;
     case "oppGood": return `${x.text||"Good news for the government this week."} Officials called it "a lucky break."`;
     case "mood": return `The government's newest policy has Americans ${x.mood==="Boiling"?"boiling with rage":"in a "+x.mood.toLowerCase()+" mood"} before it has even started. "After the last one, we don't trust a word they say," said one resident. Expect protests to start sooner and spread faster.`;
@@ -1029,6 +1055,21 @@ function pic(kind, e){
     case "sun": {
       g=`<circle cx="80" cy="56" r="26" fill="#ffb02e"/>${[...Array(12)].map((_,i)=>{const a=i*Math.PI/6;return `<line x1="${80+Math.cos(a)*32}" y1="${56+Math.sin(a)*32}" x2="${80+Math.cos(a)*46}" y2="${56+Math.sin(a)*46}" stroke="#ffb02e" stroke-width="5" stroke-linecap="round"/>`;}).join("")}
         <rect x="146" y="14" width="16" height="78" rx="8" fill="#fff" stroke="${ink}" stroke-width="3"/><rect x="150" y="26" width="8" height="70" fill="${red}"/><circle cx="154" cy="98" r="13" fill="${red}" stroke="${ink}" stroke-width="3"/>`;
+      break;}
+    case "conspiracy": {
+      const id=x.id||"aliens", P="#7b3fbf";
+      g=`<rect x="16" y="8" width="168" height="104" fill="#c99a62" stroke="${ink}" stroke-width="3"/>
+        <rect x="26" y="16" width="34" height="28" fill="#fff" stroke="${ink}" stroke-width="1.5" transform="rotate(-6 43 30)"/><text x="43" y="34" font-family="Anton,Impact" font-size="13" text-anchor="middle" fill="${ink}">???</text>
+        <rect x="140" y="18" width="34" height="26" fill="#fff" stroke="${ink}" stroke-width="1.5" transform="rotate(5 157 31)"/><text x="157" y="35" font-family="Anton,Impact" font-size="11" text-anchor="middle" fill="${red}">TRUTH</text>
+        <rect x="30" y="76" width="36" height="26" fill="#fff8b0" stroke="${ink}" stroke-width="1.5" transform="rotate(4 48 89)"/><text x="48" y="93" font-family="Inter,Arial" font-weight="800" font-size="8" text-anchor="middle" fill="${ink}">WAKE UP</text>
+        <rect x="138" y="76" width="36" height="26" fill="#fff" stroke="${ink}" stroke-width="1.5" transform="rotate(-5 156 89)"/><text x="156" y="93" font-family="Anton,Impact" font-size="12" text-anchor="middle" fill="${ink}">?!</text>
+        <polyline points="43,30 100,60 157,31 156,89 100,60 48,89" fill="none" stroke="${red}" stroke-width="2"/>
+        ${[[43,30],[157,31],[156,89],[48,89]].map(([a,b])=>`<circle cx="${a}" cy="${b-12}" r="3.5" fill="${red}"/>`).join("")}
+        <circle cx="100" cy="60" r="30" fill="#fff" stroke="${ink}" stroke-width="3"/>
+        <use href="#i-${TH(id)?TH(id).icon:"ufo"}" x="80" y="40" width="40" height="40" style="color:${P}"/>`;
+      if(e && e.type==="theoryRally") g+=`<g transform="rotate(-8 100 108)"><rect x="56" y="98" width="88" height="18" fill="#fff" stroke="${ink}" stroke-width="2"/><text x="100" y="111" font-family="Anton,Impact" font-size="11" text-anchor="middle" fill="${red}">WE WANT ANSWERS</text></g>`;
+      if(e && e.type==="theoryCaught") g+=`<g transform="rotate(-12 100 60)"><rect x="50" y="48" width="100" height="24" fill="none" stroke="${red}" stroke-width="3"/><text x="100" y="66" font-family="Anton,Impact" font-size="16" text-anchor="middle" fill="${red}">PAID FOR</text></g>`;
+      if(e && e.type==="theoryDebunk") g+=`<line x1="72" y1="32" x2="128" y2="88" stroke="${red}" stroke-width="6" stroke-linecap="round"/>`;
       break;}
     case "money": {
       g=`<path d="M70 44 q-30 30 -10 60 h80 q20 -30 -10 -60 Z" fill="#c9b27a" stroke="${ink}" stroke-width="3"/><path d="M78 44 l-8 -18 h60 l-8 18 Z" fill="#c9b27a" stroke="${ink}" stroke-width="3"/>
@@ -1147,7 +1188,7 @@ function caption(e){
     critic:`A post by ${x.handle||"a critic"}.`,criticGrow:`${x.handle||"The critic"}'s latest video.`,deleted:"What fans see now.",deleteBackfire:"Back, and louder.",arrested:"A van seen near the home.",arrestLeak:"Still from the leaked video.",bribed:"The \"new research\" video.",
     attackUnite:`${x.state||""} after the blackout.`,attackBlame:"Emergency alert.",attackQuiet:"Still waiting.",stormHelp:`${x.state||""} after the ${(x.storm||"storm").toLowerCase()}.`,stormPhoto:"Four minutes of shoveling.",stormIgnore:`${x.state||""}, on its own.`,
     gangStop:`The Guard arrives in ${x.state||""}.`,gangBlame:"A statement from the government.",gangIgnore:`${x.state||""} this week.`,pricesCoupon:"Coupon day.",pricesBlame:"Protesters, unconvinced.",pricesIgnore:"Protests grow.",
-    streak:"Up, up and up.",oppGood:"Good news, for once.",mood:"Crowds gather before the announcement is even over.",myViral:"The post everyone's sharing.",myNoted:"The fact-check warning.",myTraced:"Investigating the account.",myPost:"A post on Chirp.",
+    streak:"Up, up and up.",theory:"Just asking questions.",theoryRally:"They want answers.",theoryCaught:"Exhibit A.",theoryFuel:"Everyone's talking.",theoryDebunk:"Case closed. Or is it?",theoryGone:"Yesterday's news.",oppGood:"Good news, for once.",mood:"Crowds gather before the announcement is even over.",myViral:"The post everyone's sharing.",myNoted:"The fact-check warning.",myTraced:"Investigating the account.",myPost:"A post on Chirp.",
     crashPrint:"The stock market this week.",crashFine:"\"Super great.\"",crashHelp:"Markets, falling."};
   return m[e.type]||"";
 }
@@ -1403,6 +1444,7 @@ function addPost(p){
   if(p.kind==="debunker"){ const own=LIE_DEBUNKS[S.lie]||[]; text = Math.random()<0.6 ? pick(own) : pick(GENERIC_DEBUNKS); if(p.posts.some(x=>x.text===text)) text=pick(GENERIC_DEBUNKS); }
   else if(p.kind==="fan") text=pick(FAN_POSTS);
   else if(p.kind==="bot") text=pick(BOT_POSTS);
+  else if(p.kind==="believer" && TH(p.theory)) text=pick(TH(p.theory).posts);
   else text=pick(RANDOM_POSTS);
   const views = Math.round(p.followers*rnd(0.5,3)) + Math.round(rnd(10,500));
   p.posts.unshift({text, views, likes:Math.round(views*rnd(0.03,0.15)), week:S.week});
@@ -1476,6 +1518,7 @@ function renderPhone(){
         <button class="app" onclick="phoneGo('calendar')"><span class="ic" style="background:#fff;color:#c8261e;font-size:13px;font-weight:800;flex-direction:column;line-height:1"><small style="font-size:9px;color:#c8261e">WEEK</small>${S.week}</span>Calendar</button>
         <button class="app" onclick="phoneGo('contacts')"><span class="ic" style="background:#34c759">${I('call',28)}</span>Contacts</button>
         <button class="app" onclick="closePhone();reopenPaper()"><span class="ic" style="background:#f3ead7;color:#000">${I('paper',28)}</span>Paper</button>
+        <button class="app" onclick="phoneGo('theories')"><span class="ic" style="background:#7b3fbf">${I('string',28)}</span>Red String${theoryList().length?`<i class="badge2">${theoryList().length}</i>`:""}</button>
         <button class="app" onclick="phoneGo('trophies')"><span class="ic" style="background:linear-gradient(135deg,#f6d365,#d9a521)">${I('crown',28,'color:#fff')}</span>Trophies</button>
         <button class="app" onclick="phoneGo('settings')"><span class="ic" style="background:#8e8e93">${I('gear',28)}</span>Settings</button>
       </div>
@@ -1561,7 +1604,7 @@ function phoneAct(id, how){
     picKind = how==="del"?"phoneX":how==="arrest"?"van":"money"; type=how;
   } else {
     S.fillers = S.fillers.filter(x=>x.id!==id);
-    const who = p.kind==="fan"?"a supporter":p.kind==="bot"?"one of YOUR OWN bots":"a regular person who wasn't even talking about the policy";
+    const who = p.kind==="believer"?`a conspiracy fan who only posts about ${TH(p.theory)?TH(p.theory).name.toLowerCase():"weird stuff"}`:p.kind==="fan"?"a supporter":p.kind==="bot"?"one of YOUR OWN bots":"a regular person who wasn't even talking about the policy";
     if(how==="del"){ S.exposure+=5; bump(p.state,"belief",p.kind==="fan"?-6:-3);
       msg=`Oops. ${p.handle} was ${who}. ${p.kind==="bot"?"You just deleted your own fake account.":"Their friends are asking why the government deleted them."}`;
       if(p.kind!=="bot") headline(`WHY WAS ${p.handle.toUpperCase()} DELETED? THEY DIDN'T DO ANYTHING`,"deleted",{state:p.state,handle:p.handle}); }
@@ -1599,6 +1642,8 @@ function advisorTips(){
   riots.forEach(n=>tips.push({lvl:"red", t:`<b>${n}</b> is rioting and costing you <b>$${repairCost(n)}M</b> a week.`, a:"Free Pizza Day there, or a National Holiday to calm everyone.", go:n}));
   risk.slice(0,3).forEach(n=>tips.push({lvl:"gold", t:`<b>${n}</b> is about to riot (unrest ${Math.round(S.st[n].unrest)}%).`, a:"Calm it before you end the week.", go:n}));
   if(S.exposure>=60) tips.push({lvl:S.exposure>=80?"red":"gold", t:`Reporters are getting close: exposure is <b>${Math.round(S.exposure)}%</b>. At 100% it's over.`, a:"Discredit Reporters (−20) or Hire Experts (−5). Lay off fake crowds and bots for a bit."});
+  theoryList().filter(id=>theoryNat(id)>=35).forEach(id=>tips.push({lvl:"red", t:`<b>${theoryNat(id)}%</b> of Americans now think <b>${TH(id).name}</b>. Believers are about to start marching.`, a:"Debunk it before the rallies start costing us money.", app:"theories"}));
+  if(S.exposure>=50 && !theoryList().length) tips.push({lvl:"gold", t:`Reporters are watching us closely. Nobody is talking about anything else.`, a:"Start a silly conspiracy theory. People arguing about the moon don't read investigations.", app:"theories"});
   if(hidden) tips.push({lvl:"gold", t:`Our people hear someone new is posting about the policy. ${hidden>1?hidden+" accounts":"One account"} we haven't found yet.`, a:"Search Chirp to find them.", app:"search"});
   if(found.length) tips.push({lvl:"gold", t:`${found.length} known critic${found.length>1?"s are":" is"} still posting: ${found.slice(0,2).map(c=>c.handle).join(", ")}${found.length>2?"…":""}.`, a:"Deal with them in Watchlist.", app:"watch"});
   const bigUnused=NAMES.filter(n=>!S.st[n].usedSpecial).sort((a,b)=>STATES[b][1]-STATES[a][1]).slice(0,2);
@@ -1651,7 +1696,7 @@ const PHONE_APPS = {
     const tips=advisorTips();
     return appHead("Chief of Staff")+`<div class="pad">
       <div class="chat"><div class="who">${I("brief",14)} Your Chief of Staff</div>
-      ${tips.map(t=>`<div class="bubble ${t.lvl}">${t.t}${t.a?`<div class="adv">${t.a}</div>`:""}${t.go?`<button class="mini" onclick="goState('${t.go}')">Open ${t.go} ›</button>`:""}${t.app?`<button class="mini" onclick="phoneGo('${t.app}')">Open ${t.app==="search"?"Chirp":t.app==="compose"?"New Post":"Watchlist"} ›</button>`:""}</div>`).join("")}
+      ${tips.map(t=>`<div class="bubble ${t.lvl}">${t.t}${t.a?`<div class="adv">${t.a}</div>`:""}${t.go?`<button class="mini" onclick="goState('${t.go}')">Open ${t.go} ›</button>`:""}${t.app?`<button class="mini" onclick="phoneGo('${t.app}')">Open ${t.app==="search"?"Chirp":t.app==="compose"?"New Post":t.app==="theories"?"Red String":"Watchlist"} ›</button>`:""}</div>`).join("")}
       </div></div>`;
   },
   calendar(){
@@ -1732,6 +1777,7 @@ function aiFacts(plan){
     `Best plan for the remaining moves within budget: ${plan4.length?plan4.map((m,i)=>`${i+1}) ${strip(m.label)}: +${m.gain.toFixed(1)}% national belief for $${m.cost}M (${m.how})`).join("; ")+`. Total about +${tot.toFixed(1)}%.`:"no affordable useful moves; end the week to get paid."}`,
     cash.length?`Money-making special moves still available: ${cash.map(n=>`${n} ${STATES[n][3]} (+$${Math.round(30+STATES[n][1]*10)}M)`).join(", ")}.`:"",
     `Critics: ${found.length} known (${found.map(c=>c.handle).join(", ")||"none"}). ${plan==="max"?`Hidden critics not found yet: ${hidden.length?hidden.map(c=>`${c.handle} in ${c.state}`).join(", "):"none"}.`:`${hidden.length?"There are hidden critics the player hasn't found yet.":"No hidden critics."}`} Critics lower belief every week; delete $20M (1 in 4 come back), arrest $60M (1 in 4 leaks), pay off $100M (safe).`,
+    `Conspiracy theories: ${theoryList().length?theoryList().map(id=>`"${TH(id).name}" believed by ${theoryNat(id)}% nationally`).join(", "):"none right now"}. Theories lower exposure each week (people are distracted), and states where 50%+ believe a theory gain belief in the lie, but at 70% believers march (+unrest) and at 40% nationally big rallies cost $10M. In the phone's Red String app: Spread it $${FUEL_COST}M (exposure -6, 1 in 6 chance of getting caught, +14 exposure), Debunk it $${DEBUNK_COST}M (-30 everywhere), Start a new theory $${PLANT_COST}M + 1 move (exposure -8).`,
     `Public mood: ${mood().name} (level ${S.lie+1} of 5). Each new lie starts people angrier, belief drops faster each week, unrest grows faster and exposure rises faster.`,
     `What moves do: Local TV Ad +15 belief in one state. Fake supporters on a busy (green) road +24 belief in that state (1 in 5 get caught, +12 exposure). Free Pizza Day ONLY lowers unrest by 30 (no belief). National Holiday lowers unrest everywhere (no belief). News outlets, Celebrity (+12), Experts (+6), Fake Poll, Bot Army raise belief in every state. Each state has one special move per lie. Chirp posts are free and raise belief a little, more if they mention the lie, sound scientific, use hashtags or name a state.`,
     `Lies passed so far: ${S.passed}. Lies: ${LIES.map((l,i)=>`${i+1}. ${i<=S.lie?l.name:"secret"}${(S.results||[])[i]?` (${S.results[i]})`:""}`).join("; ")}.`,
@@ -2070,6 +2116,22 @@ function publishPost(){
   phoneGo("result");
 }
 Object.assign(PHONE_APPS, {
+  theories(){
+    const act=theoryList(), free=THEORIES.filter(t=>!(S.theories||{})[t.id]);
+    return appHead("Red String")+`<div class="pad">
+      <div class="thintro">${I("string",18)} People busy arguing about the moon aren't reading investigations about you. Theories <b>lower exposure every week</b> and believers fall for anything. But if one gets too big, believers <b>march in the streets</b>.</div>
+      <div class="sec">Spreading now</div>
+      ${act.length?act.map(id=>{ const t=TH(id), T=S.theories[id], f=theoryNat(id), ns=Object.keys(T.st).length, fedNow=T.fuelWeek===S.week;
+        return `<div class="thcard"><div class="thtop"><span class="thic">${I(t.icon,24)}</span><span><b>${t.name}</b><small>${t.claim}</small></span></div>
+          <div class="thbar"><i style="width:${f}%;background:${f>=40?"#c8261e":"#7b3fbf"}"></i></div>
+          <div class="thmeta"><span><b>${f}%</b> of Americans · ${ns} state${ns>1?"s":""}</span><span style="color:${f>=40?"#c8261e":"#536471"}">${f>=40?"Rallies likely!":f>=25?"Growing":"Small"}</span></div>
+          <div class="thbtns"><button class="mini" ${S.money<FUEL_COST||fedNow?"disabled":""} onclick="theoryFuel('${id}')">${fedNow?"Spread this week":`Spread it · $${FUEL_COST}M`}</button><button class="mini ghost" ${S.money<DEBUNK_COST?"disabled":""} onclick="theoryDebunk('${id}')">Debunk it · $${DEBUNK_COST}M</button></div></div>`; }).join("")
+      :`<div class="hint">No theories going around right now. Start one below, or wait for one to pop up.</div>`}
+      <div class="sec">Start a new theory <small>$${PLANT_COST}M · uses 1 move · exposure −8</small></div>
+      ${free.map(t=>`<div class="throw"><span class="thic sm">${I(t.icon,18)}</span><span><b>${t.name}</b><small>Starts in ${t.home}</small></span><button class="mini" ${S.ap<1||S.money<PLANT_COST||S.over?"disabled":""} onclick="theoryPlant('${t.id}')">Start</button></div>`).join("")}
+      <div class="hint">Spread it: bigger and wider, exposure −6, but 1 in 6 times reporters find your receipt. Debunk it: −30 everywhere.</div>
+    </div>`;
+  },
   trophies(){
     const d=trophyData(), got=TROPHIES.filter(t=>d[t.id]).length; let best=0; try{ best=+localStorage.getItem("scBest")||0; }catch(e){}
     return appHead("Trophies")+`<div class="pad">
@@ -2210,6 +2272,8 @@ const TROPHIES=[
   {id:"chaos",   name:"Riot Survivor",   desc:"Have 5 states rioting at the same time.", icon:"people"},
   {id:"whale",   name:"SpinBot Whale",   desc:"Subscribe to SpinBot Max.", icon:"gem"},
   {id:"lucky",   name:"Opportunist",     desc:"Take advantage of 3 lucky breaks.", icon:"spark"},
+  {id:"tinfoil", name:"Tinfoil Hat",     desc:"Have 3 conspiracy theories going at once.", icon:"ufo"},
+  {id:"myth",    name:"Myth Buster",     desc:"Debunk 3 conspiracy theories.", icon:"flask"},
 ];
 function trophyData(){ try{ return JSON.parse(localStorage.getItem("scTrophies")||"{}"); }catch(e){ return {}; } }
 function unlock(id){
@@ -2277,6 +2341,102 @@ function oppChampions(){
     ]};
 }
 
+/* ---------- conspiracy theories ---------- */
+const THEORIES=[
+  {id:"aliens",  name:"Aliens Exist",            claim:"Aliens are real, and the government is hiding them at Area 51.", home:"Nevada",     icon:"ufo",   tag:"#TheyAreHere",
+    posts:["I saw lights over the desert last night. Not a plane. #TheyAreHere","My cousin works near Area 51 and he's not allowed to talk about lunch. Think about it.","Why does the government need so many weather balloons?? #TheyAreHere"]},
+  {id:"flat",    name:"The Earth Is Flat",       claim:"The Earth is a giant pancake and the edge is guarded by penguins.", home:"Kansas",  icon:"flat",  tag:"#EdgeOfTheWorld",
+    posts:["Ever seen the curve? Me neither. #EdgeOfTheWorld","Kansas is flat. Earth is flat. Coincidence?","Why won't they let us visit Antarctica? Because that's THE EDGE. #EdgeOfTheWorld"]},
+  {id:"birds",   name:"Birds Aren't Real",       claim:"Every bird is a government spy drone that charges on power lines.", home:"Tennessee", icon:"bird", tag:"#BirdsArentReal",
+    posts:["Why do birds sit on power lines? CHARGING. #BirdsArentReal","A pigeon stared at me for 10 minutes today. Who is it reporting to?","Have you ever seen a baby pigeon? Exactly. #BirdsArentReal"]},
+  {id:"moon",    name:"The Moon Is Cheese",      claim:"The moon is made of cheese and the space agency is secretly eating it.", home:"Wisconsin", icon:"moon", tag:"#MoonCheese",
+    posts:["The moon gets smaller every month. Someone is EATING it. #MoonCheese","Astronauts never talk about the smell. Ask yourself why.","Wisconsin knows cheese. And that moon? Cheddar. #MoonCheese"]},
+  {id:"bigfoot", name:"Bigfoot Is Real",         claim:"Bigfoot lives in the woods and is secretly running for mayor.", home:"Washington",  icon:"foot",  tag:"#BigfootForMayor",
+    posts:["Found a size 38 footprint behind the grocery store. #BigfootForMayor","Bigfoot has never told a single lie. Can the government say that?","Every Bigfoot photo is blurry because he's moving FAST. Respect."]},
+  {id:"dinos",   name:"Dinosaurs Never Left",    claim:"Dinosaurs are alive and living in tunnels under the Denver airport.", home:"Colorado", icon:"dino", tag:"#DinoTunnels",
+    posts:["Why is the Denver airport SO big? Room for the T. rex. #DinoTunnels","Heard roaring from the baggage claim. Nobody else reacted.","Chickens are just dinosaurs in disguise. Wake up. #DinoTunnels"]},
+  {id:"clouds",  name:"Clouds Are Fake",         claim:"Clouds are cotton balls the government hangs up on strings.", home:"Arizona",      icon:"cloud", tag:"#CloudsAreCotton",
+    posts:["Arizona has no clouds because they ran out of cotton. #CloudsAreCotton","Look closely at a cloud. You'll see the string.","Rain is just the cotton balls being wrung out. #CloudsAreCotton"]},
+  {id:"toaster", name:"Toasters Are Listening",  claim:"Every toaster has a tiny microphone and reports breakfast to the government.", home:"Ohio", icon:"toast", tag:"#ToasterTruth",
+    posts:["My toaster popped right when I said something about the government. #ToasterTruth","Switched to cereal. They can't hear cereal.","Why do toasters have TWO slots? One for bread. One for SPYING."]},
+];
+const TH=id=>THEORIES.find(t=>t.id===id);
+const FUEL_COST=30, DEBUNK_COST=25, PLANT_COST=45;
+function theoryList(){ return Object.keys(S.theories||{}); }
+function theoryNat(id){ const st=(S.theories||{})[id]; if(!st) return 0; return Math.round(NAMES.reduce((a,n)=>a+(st.st[n]||0)*STATES[n][1],0)/TOTAL_POP); }
+function topTheory(n){ let best=null, v=0; theoryList().forEach(id=>{ const x=S.theories[id].st[n]||0; if(x>v){v=x;best=id;} }); return best?{id:best,v}:null; }
+function theoryStart(id, planted){
+  S.theories=S.theories||{}; const t=TH(id), home=t.home;
+  const st={}; st[home]=planted?60:42; MAP[home].n.forEach(m=>st[m]=planted?30:18);
+  S.theories[id]={st, born:S.week, fuelWeek:0, planted:!!planted};
+  headline(`NEW CONSPIRACY THEORY IN ${home.toUpperCase()}: "${t.name.toUpperCase()}"`, "theory", {id, state:home});
+  // a few believers start posting on Chirp
+  for(let i=0;i<2;i++){ const p=mkPerson("random", pick([home,...MAP[home].n])); p.kind="believer"; p.theory=id; p.bio=`Just asking questions. ${t.tag}`; addPost(p); addPost(p); S.fillers.push(p); }
+  stat("theoriesSeen"); if(theoryList().length>=3) unlock("tinfoil");
+}
+function theoryEnd(id, why){
+  delete S.theories[id];
+  S.fillers=S.fillers.filter(p=>p.theory!==id);
+  if(why==="fade") headline(`AMERICA SLOWLY FORGETS ABOUT "${TH(id).name.toUpperCase()}"`, "theoryGone", {id});
+}
+function theoriesTick(){
+  S.theories=S.theories||{};
+  let distract=0;
+  theoryList().forEach(id=>{
+    const T=S.theories[id], st=T.st, fed=T.fuelWeek>=S.week-1;
+    // spread to neighbors, then grow or fade
+    const snap={...st};
+    Object.keys(snap).forEach(n=>{ if(snap[n]>=25) MAP[n].n.forEach(m=>{ st[m]=Math.min(100,(st[m]||0)+snap[n]*rnd(0.08,0.16)); }); });
+    Object.keys(st).forEach(n=>{ st[n]=clamp(st[n]+(fed?rnd(1,6):rnd(-8,2))); if(st[n]<3) delete st[n]; });
+    if(!Object.keys(st).length) return theoryEnd(id,"fade");
+    const f=theoryNat(id); distract+=f;
+    // believers will believe anything, including your lie... but big theories cause marches
+    Object.keys(st).forEach(n=>{ const c=S.st[n];
+      if(st[n]>=50) c.belief=clamp(c.belief+1.5);
+      if(st[n]>=70) c.unrest=clamp(c.unrest+6);
+    });
+    if(f>=40 && Math.random()<0.4){
+      const n=Object.keys(st).sort((a,b)=>st[b]-st[a])[0];
+      S.st[n].unrest=clamp(S.st[n].unrest+10); S.money-=10;
+      headline(`THOUSANDS MARCH IN ${n.toUpperCase()} DEMANDING "THE TRUTH" ABOUT ${TH(id).name.toUpperCase().replace(/^THE /,"")}`, "theoryRally", {id, state:n});
+    }
+  });
+  // people arguing about the moon aren't reading investigations about you
+  if(distract) S.exposure=Math.max(0, S.exposure-Math.min(5, distract*0.06));
+  // sometimes a brand-new theory just shows up on its own
+  const free=THEORIES.filter(t=>!S.theories[t.id]);
+  if(theoryList().length<3 && free.length && Math.random()<0.18) theoryStart(pick(free).id, false);
+  S.fillers.forEach(p=>{ if(p.kind==="believer" && S.theories[p.theory] && Math.random()<0.5) addPost(p); });
+}
+function theoryFuel(id){
+  const T=S.theories[id]; if(!T || S.over || S.money<FUEL_COST || T.fuelWeek===S.week) return;
+  S.money-=FUEL_COST; T.fuelWeek=S.week;
+  const st=T.st;
+  Object.keys(st).forEach(n=>st[n]=Math.min(100,st[n]+12));
+  const edge=[...new Set(Object.keys(st).flatMap(n=>MAP[n].n))].filter(m=>!st[m]);
+  for(let i=0;i<2&&edge.length;i++){ const m=edge.splice(Math.floor(Math.random()*edge.length),1)[0]; st[m]=25; }
+  S.exposure=Math.max(0,S.exposure-6);
+  if(Math.random()<1/6){ S.exposure=clamp(S.exposure+14); headline(`LEAKED RECEIPT: GOVERNMENT PAID FOR "${TH(id).name.toUpperCase()}" BILLBOARDS`, "theoryCaught", {id}); toast("Caught funding it! +14 exposure"); sfx("bad"); }
+  else { logOnly("theoryFuel", `"${TH(id).name}" Is Everywhere`, {id}); toast("Theory spreads! Exposure −6"); sfx("whoosh"); }
+  stat("fueled"); renderPhone(); render(); checkEnd();
+}
+function theoryDebunk(id){
+  const T=S.theories[id]; if(!T || S.over || S.money<DEBUNK_COST) return;
+  S.money-=DEBUNK_COST;
+  Object.keys(T.st).forEach(n=>{ T.st[n]-=30; if(T.st[n]<3) delete T.st[n]; });
+  headline(`GOVERNMENT SCIENTISTS: "${TH(id).name.toUpperCase()}" IS NOT TRUE`, "theoryDebunk", {id});
+  if(!Object.keys(T.st).length){ theoryEnd(id,"debunk"); toast("Theory debunked and gone"); } else toast("Theory shrinks −30 everywhere");
+  sfx("pop"); if(stat("debunked")>=3) unlock("myth");
+  renderPhone(); render();
+}
+function theoryPlant(id){
+  if(S.over || S.theories&&S.theories[id] || !spend(PLANT_COST)) return;
+  theoryStart(id, true);
+  S.exposure=Math.max(0,S.exposure-8);
+  toast(`"${TH(id).name}" is out there. Exposure −8`); sfx("whoosh");
+  PH.screen="theories"; renderPhone(); render(); checkEnd();
+}
+
 function checkEnd(){
   if(S.exposure>=100){ S.over=true; render(); return showModal(`<h2 style="color:var(--red)">The Truth Is Out</h2><p>Reporters published everything: the paid crowds, the bots, the fake polls. Your government is finished.</p><p>You lasted <b>${S.week}</b> weeks and passed <b>${S.passed}</b> of 5 lies.</p>${scoreBlock()}<button onclick="newGame();closeModal()">Play Again</button><span data-fx="fail"></span>`); }
   if(S.money<0){ return showModal(`<h2 style="color:var(--red)">Bankrupt</h2><p>Riots in ${riotList().length} states wrecked so much that the government ran out of money. The lights go off in the Capitol.</p><p>You lasted <b>${S.week}</b> weeks and passed <b>${S.passed}</b> of 5 lies.</p>${scoreBlock()}<button onclick="newGame();closeModal()">Play Again</button><span data-fx="fail"></span>`); }
@@ -2326,7 +2486,8 @@ function renderMap(){
     p.querySelector("title").textContent=`${n}: ${Math.round(c.belief)}% believe${c.riot?" — RIOTING":""}`;
   });
   $("fires").innerHTML = riotList().map(n=>`<use href="#i-fire" x="${MAP[n].c[0]-11}" y="${MAP[n].c[1]-13}" width="22" height="22" style="color:#ffb02e;pointer-events:none"/>`).join("")
-    + S.critics.filter(c=>c.found).map(c=>`<g style="pointer-events:none"><circle cx="${MAP[c.state].c[0]+16}" cy="${MAP[c.state].c[1]-10}" r="11" fill="#1d9bf0" stroke="#fff" stroke-width="2"/><use href="#i-phone" x="${MAP[c.state].c[0]+9}" y="${MAP[c.state].c[1]-17}" width="14" height="14" style="color:#fff"/></g>`).join("");
+    + S.critics.filter(c=>c.found).map(c=>`<g style="pointer-events:none"><circle cx="${MAP[c.state].c[0]+16}" cy="${MAP[c.state].c[1]-10}" r="11" fill="#1d9bf0" stroke="#fff" stroke-width="2"/><use href="#i-phone" x="${MAP[c.state].c[0]+9}" y="${MAP[c.state].c[1]-17}" width="14" height="14" style="color:#fff"/></g>`).join("")
+    + NAMES.map(n=>{ const t=topTheory(n); if(!t||t.v<40) return ""; const [x,y]=MAP[n].c; return `<g class="thBadge" style="pointer-events:none"><circle cx="${x-15}" cy="${y+12}" r="10" fill="#7b3fbf" stroke="#fff" stroke-width="2"/><use href="#i-${TH(t.id).icon}" x="${x-22}" y="${y+5}" width="14" height="14" style="color:#fff"/></g>`; }).join("");
   if(S.sel){ const p=document.querySelector(`.st[data-n="${S.sel}"]`); p.parentNode.insertBefore(p,$("fires")); }
 }
 
@@ -2353,6 +2514,7 @@ function renderSheet(){
       <div><div class="lbl"><span>Belief</span><span>${Math.round(c.belief)}%</span></div><div class="bar"><i style="width:${c.belief}%;background:${colorFor({belief:c.belief})}"></i></div></div>
       <div><div class="lbl"><span>Unrest</span><span>${Math.round(c.unrest)}%</span></div><div class="bar"><i style="width:${c.unrest}%;background:var(--red)"></i></div></div>
     </div>
+    ${theoryList().filter(id=>(S.theories[id].st[n]||0)>=5).map(id=>`<div class="thline" onclick="openPhone();phoneGo('theories')">${I(TH(id).icon,15)} <b>${Math.round(S.theories[id].st[n])}%</b> here think <b>${TH(id).name}</b>${S.theories[id].st[n]>=70?" · <span>marching!</span>":S.theories[id].st[n]>=50?" · easy to fool":""} ›</div>`).join("")}
     <div class="actions" id="stActs"></div>
     <div class="section-title" style="margin-top:12px">Hire Fake Supporters <small>${I("dot",12,"color:#2e8b57")} very popular &nbsp;${I("dot",12,"color:var(--blue)")} neutral</small></div>
     <div class="roads" id="roads"></div>
